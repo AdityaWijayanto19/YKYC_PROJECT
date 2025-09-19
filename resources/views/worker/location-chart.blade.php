@@ -22,7 +22,7 @@ Contoh:
     Ubah $workerType menjadi 'Keliling' atau 'Mangkal' untuk melihat perbedaannya.
     --}}
     @php
-        $workerType = 'Keliling'; // Atau ganti menjadi 'Keliling'
+        $workerType = 'Mangkal'; // Atau ganti menjadi 'Keliling'
 
         $fixedLocations = [
             'stasiun_ub' => 'Stasiun Universitas Brawijaya',
