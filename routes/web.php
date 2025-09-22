@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 
 // ===================================================================
 // HALAMAN PUBLIK & OTENTIKASI
@@ -163,3 +164,9 @@ Route::post('/login', function () {
 Route::post('/logout', function () {
     return redirect()->route('landing')->with('message', 'Simulasi Logout Berhasil!');
 })->name('logout');
+
+// ===================================================================
+//                          ROUTE PAYMENT
+// ===================================================================
+
+Route::get('/checkout', [PaymentController::class, 'checkout']);

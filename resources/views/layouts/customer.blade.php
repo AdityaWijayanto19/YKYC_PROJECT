@@ -77,7 +77,7 @@
 </head>
 
 <body class="bg-light font-sans">
-    {{-- <x-sidebar-customer></x-sidebar-customer> --}}
+    <x-sidebar-customer></x-sidebar-customer>
 
     <!-- Wrapper Utama -->
     <div class="flex flex-col h-screen">
@@ -85,7 +85,7 @@
         <header class="flex justify-between items-center px-6 py-3 bg-white shadow-sm z-20">
             <!-- Logo di Kiri -->
             <a href="#">
-                <img class="h-10" src="/images/favicon-dark.svg"">
+                <img class="h-10" src="/images/favicon-dark.svg">
             </a>
 
             <!-- Grup Tombol di Kanan -->
