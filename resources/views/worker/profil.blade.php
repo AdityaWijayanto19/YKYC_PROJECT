@@ -23,8 +23,8 @@ Contoh:
     --}}
     @php
         $worker = (object) [
-            'name' => 'Budi Santoso',
-            'profile_picture' => 'https://via.placeholder.com/150', // Ganti dengan URL foto profil asli
+            'name' => 'Santoso Suka Ngocok',
+            'profile_picture' => 'https://i.ibb.co.com/BHs9DfNK/2025-02-16-17-23-IMG-0201.jpg', // Ganti dengan URL foto profil asli
             'phone' => '0812-3456-7890',
             'email' => 'budi.santoso@gerobakclean.com',
             'type' => 'Keliling', // atau 'Mangkal'

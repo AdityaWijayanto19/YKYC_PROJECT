@@ -56,7 +56,7 @@
         ];
         $worker = (object) [
             'type' => 'Keliling',
-            'profile_image' => 'https://via.placeholder.com/150',
+            'profile_image' => 'https://i.ibb.co.com/BHs9DfNK/2025-02-16-17-23-IMG-0201.jpg',
         ];
       @endphp
 

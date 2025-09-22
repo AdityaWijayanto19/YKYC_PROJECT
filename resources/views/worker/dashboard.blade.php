@@ -5,7 +5,7 @@
 @section('content')
     @php
         // Bisa diambil dari database / session user
-        $workerType = 'Keliling'; // ganti 'Mangkal' atau 'Keliling'
+        $workerType = 'Mangkal'; // ganti 'Mangkal' atau 'Keliling'
         $workerName = 'Budi Santoso';
         $isOnline = true;
     @endphp
