@@ -16,7 +16,12 @@
 
     <style>
         body { font-family: 'Poppins', sans-serif; }
-        .hero-section { background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg'); background-size: cover; background-position: center; }
+        
+        .hero-section { 
+            position: relative;
+            overflow: hidden;
+            background-color: #333;
+        }
         .text-cyan-custom { color: #00B2EE; }
         .bg-cyan-custom { background-color: #00B2EE; }
         .bg-cyan-custom:hover { background-color: #009BD6; }
@@ -43,7 +48,6 @@
         .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
         .faq-content.open { max-height: 200px; }
         
-        /* CSS Kartu Layanan yang Baru */
         .service-card {
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
@@ -51,13 +55,60 @@
             transform: translateY(-8px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
+
+        /* CSS untuk Hero Slideshow */
+        .hero-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .hero-slideshow-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.15);
+            transition: opacity 2s ease-in-out;
+            animation: ken-burns 20s infinite;
+        }
+        .hero-slideshow-image.active {
+            opacity: 1;
+        }
+        @keyframes ken-burns {
+            0% {
+                transform: scale(1.15) translate(0, 0);
+            }
+            50% {
+                transform: scale(1.05) translate(2%, -2%);
+            }
+            100% {
+                transform: scale(1.15) translate(0, 0);
+            }
+        }
+
+        /* --- KODE GLASSMORPHISM: Kelas untuk efek Glassmorphism pada Navbar --- */
+        .nav-glassmorphism {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        /* --- AKHIR KODE GLASSMORPHISM --- */
     </style>
 </head>
 <body class="bg-white text-gray-800">
     
     <svg class="absolute w-0 h-0"><defs><clipPath id="waterdrop-shape-solid" clipPathUnits="objectBoundingBox"><path d="M0.5,1 C0.15,1 0,0.8 0.3,0.4 C0.4,0.25 0.5,0.1 0.5,0.1 C0.5,0.1 0.6,0.25 0.7,0.4 C1,0.8 0.85,1 0.5,1 Z" /></clipPath></defs></svg>
     
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300">
+    <!-- KODE GLASSMORPHISM: Tambahkan class 'nav-glassmorphism' sebagai state awal -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300 nav-glassmorphism">
         <nav class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
                 <a href="#home"><img id="header-logo" class="h-10 brightness-0 invert transition-all duration-300" src="/images/favicon-dark.svg" alt="YKYc Logo"></a>
@@ -81,7 +132,23 @@
     </header>
 
     <main>
-        <section id="home" class="hero-section h-screen flex items-center justify-center text-white text-center"><div class="bg-black bg-opacity-50 inset-0 absolute"></div><div class="relative z-10 px-4"><h1 class="text-5xl md:text-7xl font-extrabold leading-tight">Ya Kotor Ya Cuci</h1><p class="mt-4 text-xl md:text-2xl font-semibold max-w-3xl mx-auto">Solusi laundry sepatu cepat dan praktis langsung dari gerobak portabel kami. Sepatu bersih kinclong dalam sekejap!</p><a href="#layanan" class="mt-8 inline-block bg-cyan-custom text-white font-bold py-3 px-10 rounded-full transition">Lihat Layanan Kami</a></div></section>
+        <section id="home" class="hero-section h-screen flex items-center justify-center text-white text-center">
+            
+            <div class="hero-slideshow">
+                <div class="hero-slideshow-image active" style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');"></div>
+                <div class="hero-slideshow-image" style="background-image: url('https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="hero-slideshow-image" style="background-image: url('https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop');"></div>
+                <div class="hero-slideshow-image" style="background-image: url('https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop');"></div>
+            </div>
+            
+            <div class="bg-black bg-opacity-50 inset-0 absolute z-10"></div>
+            
+            <div class="relative z-20 px-4">
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight">Ya Kotor Ya Cuci</h1>
+                <p class="mt-4 text-xl md:text-2xl font-semibold max-w-3xl mx-auto">Solusi laundry sepatu cepat dan praktis langsung dari gerobak portabel kami. Sepatu bersih kinclong dalam sekejap!</p>
+                <a href="#layanan" class="mt-8 inline-block bg-cyan-custom text-white font-bold py-3 px-10 rounded-full transition">Lihat Layanan Kami</a>
+            </div>
+        </section>
         
         <section class="py-20 px-6 overflow-hidden"><div class="container mx-auto"><div class="text-center mb-12"><h2 class="text-3xl md:text-4xl font-bold">KENAPA YKYc?</h2><div class="w-24 h-1 bg-cyan-custom mx-auto mt-4"></div></div><p class="max-w-4xl mx-auto text-center text-gray-600 mb-8 md:mb-16">Ya Kotor Ya Cuci (YKYc) adalah revolusi dalam perawatan sepatu, menghadirkan jasa laundry profesional langsung ke tempat Anda melalui konsep gerobak portabel yang unik. Kami percaya bahwa sepatu bersih adalah hak semua orang, di mana pun mereka berada.</p><div class="relative flex flex-col md:flex-row justify-center items-center md:min-h-[550px]"><div class="md:hidden flex flex-col items-center gap-8 w-full"><h3 class="text-xl font-bold mb-1">Cepat & Praktis</h3><p class="text-gray-500 max-w-xs">Layanan ekspres di tempat, tak perlu menunggu berhari-hari.</p><h3 class="text-xl font-bold mb-1">Teknisi Profesional</h3><p class="text-gray-500 max-w-xs">Dikerjakan oleh tim yang ahli di bidang perawatan sepatu.</p><div class="w-72 h-96 my-4 clip-waterdrop-solid shadow-2xl"><img src="https://i.ibb.co.com/BHs9DfNK/2025-0_2-16-17-23-IMG-0201.jpg" alt="Pembersihan sepatu" class="w-full h-full object-cover"></div><h3 class="text-xl font-bold mb-1">Hasil Maksimal</h3><p class="text-gray-500 max-w-xs">Menggunakan pembersih premium yang aman untuk semua bahan.</p><h3 class="text-xl font-bold mb-1">Harga Terjangkau</h3><p class="text-gray-500 max-w-xs">Kualitas premium dengan harga yang ramah di kantong.</p></div><div id="interactive-container" class="hidden md:block relative w-full min-h-[550px]"><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-96 h-[480px] clip-waterdrop-solid shadow-2xl"><img src="https://i.ibb.co.com/BHs9DfNK/2025-02-16-17-23-IMG-0201.jpg" alt="Pembersihan sepatu" class="w-full h-full object-cover"></div><div class="absolute top-0 left-0 right-0 bottom-0 z-20"><div class="group draggable-group absolute top-[15%] left-[12%]"><div class="relative flex flex-row-reverse items-center gap-4"><div class="animate-float" style="animation-delay: 0s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-bolt text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-right"><h3 class="text-xl font-bold mb-1">Cepat & Praktis</h3><p class="text-gray-500 w-52">Layanan ekspres di tempat, tak perlu menunggu.</p></div></div></div><div class="group draggable-group absolute bottom-[15%] left-[16%]"><div class="relative flex flex-row-reverse items-center gap-4"><div class="animate-float" style="animation-delay: 1s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-user-gear text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-right"><h3 class="text-xl font-bold mb-1">Teknisi Profesional</h3><p class="text-gray-500 w-52">Dikerjakan oleh tim yang ahli di bidangnya.</p></div></div></div><div class="group draggable-group absolute top-[15%] right-[12%]"><div class="relative flex flex-row items-center gap-4"><div class="animate-float" style="animation-delay: 2s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-gem text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 text-left"><h3 class="text-xl font-bold mb-1">Hasil Maksimal</h3><p class="text-gray-500 w-52">Pembersih premium yang aman untuk semua bahan.</p></div></div></div><div class="group draggable-group absolute bottom-[15%] right-[16%]"><div class="relative flex flex-row items-center gap-4"><div class="animate-float" style="animation-delay: 3s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-wallet text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 text-left"><h3 class="text-xl font-bold mb-1">Harga Terjangkau</h3><p class="text-gray-500 w-52">Kualitas premium dengan harga yang ramah di kantong.</p></div></div></div></div></div></div></section>
         
@@ -311,21 +378,25 @@
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
+        // --- KODE GLASSMORPHISM: Logika scroll diupdate ---
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
+                // Saat di-scroll ke bawah
                 header.classList.add('bg-white', 'text-gray-800', 'shadow-md');
-                header.classList.remove('text-white');
+                header.classList.remove('text-white', 'nav-glassmorphism'); // Hapus glassmorphism
                 headerLogo.classList.remove('brightness-0', 'invert');
                 mobileMenuButton.classList.remove('text-white');
                 mobileMenuButton.classList.add('text-gray-800');
             } else {
+                // Saat kembali di atas
                 header.classList.remove('bg-white', 'text-gray-800', 'shadow-md');
-                header.classList.add('text-white');
+                header.classList.add('text-white', 'nav-glassmorphism'); // Tambahkan kembali glassmorphism
                 headerLogo.classList.add('brightness-0', 'invert');
                 mobileMenuButton.classList.add('text-white');
                 mobileMenuButton.classList.remove('text-gray-800');
             }
         });
+        // --- AKHIR KODE GLASSMORPHISM ---
 
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
@@ -442,6 +513,18 @@
                 element.addEventListener('touchstart', startDrag);
             });
         }
+
+        // JavaScript untuk mengontrol slideshow
+        const slideshowImages = document.querySelectorAll('.hero-slideshow-image');
+        let currentImageIndex = 0;
+
+        function changeBackgroundImage() {
+            slideshowImages[currentImageIndex].classList.remove('active');
+            currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
+            slideshowImages[currentImageIndex].classList.add('active');
+        }
+
+        setInterval(changeBackgroundImage, 7000);
     });
     </script>
 

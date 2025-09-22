@@ -29,12 +29,12 @@
 
     <div class="min-h-screen md:flex">
         
-        <div class="hidden md:block md:w-1/2 relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=2070&auto=format&fit=crop');">
+        <div class="hidden md:block md:w-1/2 relative bg-cover bg-center" style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');">
             <div class="p-12 flex flex-col justify-between h-full">
                 <div class="absolute inset-0 bg-black opacity-20"></div>
                 
                 <div class="relative z-10">
-                    <a href="/" class="text-3xl font-bold text-white tracking-wider">YKYc</a>
+                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--</a>
                 </div>
                 <div class="relative z-10">
                     <h2 class="text-3xl font-bold text-white">Capturing Moments, Creating Memories.</h2>
