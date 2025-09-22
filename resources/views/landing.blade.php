@@ -53,7 +53,9 @@
     <header class="bg-white/80 backdrop-blur-lg shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
-                <a href="#home" class="text-2xl font-bold text-primary">YKYc</a>
+                <a href="#home" class="">
+                    <img class="h-10" src="/images/favicon-dark.svg" alt="">
+                </a>
                 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-6 items-center">
