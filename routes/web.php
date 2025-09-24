@@ -150,7 +150,51 @@ Route::prefix('worker')->name('worker.')->group(function () {
     Route::get('/profil', function () {
         return view('worker.profil');
     })->name('profil');
+});
 
+// ===================================================================
+//                           HALAMAN ADMIN
+// ===================================================================
+Route::prefix('admin')->name('admin.')->group(function () {
+
+    // Halaman Dashboard Utama
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/worker/index', function () {
+        return view('admin.worker.index');
+    })->name('worker.index');
+
+    Route::get('/worker/location-chart', function () {
+        $active_locations = [
+            ['worker' => 'Budi Santoso', 'location' => ['lat' => -6.2088, 'lng' => 106.8456]],
+            ['worker' => 'Ahmad Fauzi', 'location' => ['lat' => -6.2297, 'lng' => 106.809]],
+            ['worker' => 'Eko Prasetyo', 'location' => ['lat' => -6.1751, 'lng' => 106.865]],
+        ];
+
+        return view('admin.worker.location-chart');
+    })->name('worker.location-chart');
+
+    Route::get('/worker/tambah', function () {
+        return view('admin.worker.tambah');
+    })->name('worker.tambah');
+
+    Route::get('/worker/edit', function () {
+        return view('admin.worker.edit');
+    })->name('worker.edit');
+
+    Route::get('/customer/index', function () {
+        return view('admin.customer.index');
+    })->name('customer.index');
+
+    Route::get('/customer/edit', function () {
+        return view('admin.customer.edit');
+    })->name('customer.edit');
+
+    Route::get('/pesanan', function () {
+        return view('admin.pesanan');
+    })->name('pesanan');
 });
 
 // ===================================================================
