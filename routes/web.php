@@ -1,26 +1,47 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\SocialiteController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Auth\AuthController;
 
 // ===================================================================
 // HALAMAN PUBLIK & OTENTIKASI
 // ===================================================================
-
 Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Form Login & Register (GET)
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
+// Proses Login & Register (POST)
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout.post');
+
+// ===================================================================
+//                              EMAIL
+// ===================================================================
+
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('customer/dashboard'); // Ganti '/dashboard' dengan halaman tujuan Anda
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('resent', 'Link verifikasi baru telah dikirimkan ke alamat email Anda.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // ===================================================================
 // HALAMAN CUSTOMER (AKSES LANGSUNG UNTUK DEVELOPMENT)
@@ -31,7 +52,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('/dashboard', function () {
         view()->share('user', (object)['name' => 'Aditya']);
         return view('customer.dashboard');
-    })->name('dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::get('/order', function () {
         return view('customer.order');
@@ -41,26 +62,18 @@ Route::prefix('customer')->name('customer.')->group(function () {
         return view('customer.order_status');
     })->name('order.status');
 
-    // BARU: Route untuk Peta Lokasi Umum
     Route::get('/locations', function () {
-        // --- SIMULASI BACKEND ---
-        // Ambil SEMUA lokasi gerobak yang aktif dari database
         $all_active_locations = [
             ['worker' => 'Gerobak Senayan Park', 'location' => ['lat' => -6.2297, 'lng' => 106.8093]],
             ['worker' => 'Gerobak Stasiun Gambir', 'location' => ['lat' => -6.1751, 'lng' => 106.8650]],
             ['worker' => 'Gerobak Blok M Square', 'location' => ['lat' => -6.2415, 'lng' => 106.8242]]
         ];
-        // --- AKHIR SIMULASI ---
+
         return view('customer.locations', ['active_locations' => $all_active_locations]);
-    })->name('locations'); // Nama: customer.locations
+    })->name('locations');
 
-    // routes/web.php
-
-    // Route untuk Pelacakan Pesanan Spesifik
     Route::get('/tracking/{order}', function ($orderId) {
-        // --- SIMULASI BACKEND YANG LEBIH CERDAS ---
 
-        // 1. Definisikan "database" dummy kita
         $all_orders_database = [
             'YKYC-221' => [
                 'order_id' => 'YKYC-221',
@@ -82,22 +95,14 @@ Route::prefix('customer')->name('customer.')->group(function () {
             ]
         ];
 
-        // 2. "Cari" pesanan di "database" menggunakan ID dari URL ($orderId)
-        // Jika ID tidak ditemukan, kembalikan null.
         $tracked_order = $all_orders_database[$orderId] ?? null;
 
-        // 3. Siapkan array kosong untuk dikirim ke view
         $data_to_send = [];
 
-        // 4. Jika pesanan ditemukan, masukkan ke dalam array
         if ($tracked_order) {
             $data_to_send[] = $tracked_order;
         }
-        // Jika tidak ditemukan, $data_to_send akan tetap kosong, dan view akan menampilkan pesan "Tidak Ada Lokasi"
 
-        // --- AKHIR SIMULASI ---
-
-        // 5. Kirim data yang sudah difilter ke view
         return view('customer.tracking', ['tracked_orders' => $data_to_send]);
     })->name('tracking');
 
@@ -105,11 +110,9 @@ Route::prefix('customer')->name('customer.')->group(function () {
         return view('customer.history');
     })->name('history');
 
-    // ========== KOREKSI DI SINI ==========
-    // URL, nama file view, dan nama route harus konsisten
     Route::get('/notifications', function () {
-        return view('customer.notifications'); // Mengarah ke file notifications.blade.php
-    })->name('notifications'); // Nama route-nya 'notifications'
+        return view('customer.notifications');
+    })->name('notifications');
 
     Route::get('/feedback', function () {
         return view('customer.feedback');
@@ -197,20 +200,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('pesanan');
 });
 
-// ===================================================================
-// ROUTE DUMMY UNTUK AKSI FORM
-// ===================================================================
-
-Route::post('/login', function () {
-    return back()->with('message', 'Simulasi Login Berhasil!');
-});
-
-Route::post('/logout', function () {
-    return redirect()->route('landing')->with('message', 'Simulasi Logout Berhasil!');
-})->name('logout');
 
 // ===================================================================
 //                          ROUTE PAYMENT
 // ===================================================================
 
 Route::get('/checkout', [PaymentController::class, 'checkout']);
+
+// ===================================================================
+//                          Authentication
+// ===================================================================
+
+Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [SocialiteController::class, 'callback']);

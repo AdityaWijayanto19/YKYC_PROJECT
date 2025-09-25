@@ -55,9 +55,11 @@
         /* Styling untuk panah navigasi Swiper */
         .swiper-button-next,
         .swiper-button-prev {
-            color: #4F46E5; /* Menggunakan warna primer baru */
+            color: #4F46E5;
+            /* Menggunakan warna primer baru */
             transition: background-color 0.3s ease;
         }
+
         .swiper-button-next:hover,
         .swiper-button-prev:hover {
             background-color: rgba(0, 0, 0, 0.05);
@@ -91,7 +93,8 @@
             <!-- Grup Tombol di Kanan -->
             <div class="flex items-center space-x-5">
                 <!-- Tombol Notifikasi -->
-                <button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                <button
+                    class="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                     <span class="sr-only">Lihat Notifikasi</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="h-6 w-6">
@@ -103,8 +106,10 @@
                 <!-- Ikon Profil Dropdown -->
                 <div class="relative">
                     <!-- Tombol Ikon Profil -->
-                    <button id="profile-button" class="block rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                        <img class="h-10 w-10 rounded-full object-cover" src="https://i.ibb.co.com/DHKNjW33/aditya.jpg" alt="Foto Profil">
+                    <button id="profile-button"
+                        class="block rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <img class="h-10 w-10 rounded-full object-cover" src="https://i.ibb.co.com/DHKNjW33/aditya.jpg"
+                            alt="Foto Profil">
                     </button>
 
                     <!-- Menu Dropdown -->
@@ -115,21 +120,41 @@
                             <p class="text-xs text-gray-500 truncate">aditya.pratama@example.com</p>
                         </div>
                         <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                           <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                           Profil Saya
+                            <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Profil Saya
                         </a>
                         <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                           <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                           Pengaturan
+                            <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Pengaturan
                         </a>
                         <div class="border-t border-gray-100 my-1"></div>
-                        <a href="#" class="flex items-center px-4 py-2 text-sm text-danger hover:bg-red-50">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            Logout
-                        </a>
+                        <form method="POST" action="{{ route('logout.post') }}"
+                            class="flex items-center px-4 py-2 text-sm text-danger hover:bg-red-50">
+                            @csrf
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                </path>
+                            </svg>
+                            <a class="dropdown-item" href="{{ route('logout.post') }}"
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                Logout
+                            </a>
+                        </form>
                     </div>
                 </div>
-
             </div>
         </header>
 
@@ -144,7 +169,7 @@
 
     <!-- Script untuk toggle menu dropdown profil -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const profileButton = document.getElementById('profile-button');
             const profileDropdown = document.getElementById('profile-dropdown');
             let isDropdownOpen = false;
@@ -159,18 +184,18 @@
                 }
             };
 
-            profileButton.addEventListener('click', function(event) {
+            profileButton.addEventListener('click', function (event) {
                 event.stopPropagation();
                 toggleDropdown();
             });
 
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
                     toggleDropdown(true);
                 }
             });
 
-            document.addEventListener('keydown', function(event) {
+            document.addEventListener('keydown', function (event) {
                 if (event.key === 'Escape') {
                     toggleDropdown(true);
                 }
