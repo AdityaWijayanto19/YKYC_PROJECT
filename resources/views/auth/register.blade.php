@@ -31,23 +31,17 @@
     </style>
 </head>
 
-<body class="font-sans overflow-hidden"> <!-- Opsional: tambahkan overflow-hidden ke body untuk keamanan ekstra -->
+<body class="font-sans">
 
     <div class="min-h-screen md:flex">
 
-        <!-- Left side with Image Carousel -->
-        <div class="hidden md:block md:w-1/2 h-screen relative h-screen">
-            <div class="swiper h-full w-full">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"
-                        style="background-image: url('https://images.unsplash.com/photo-1582735689369-4fe89db7957e?q=80&w=1887&auto=format&fit=crop');">
-                    </div>
-                    <div class="swiper-slide"
-                        style="background-image: url('https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?q=80&w=1887&auto=format&fit=crop');">
-                    </div>
-                    <div class="swiper-slide"
-                        style="background-image: url('https://images.unsplash.com/photo-1601121141499-17ae80afc03a?q=80&w=1887&auto=format&fit=crop');">
-                    </div>
+        <div class="hidden md:block md:w-1/2 relative bg-cover bg-center h-screen"
+            style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');">
+            <div class="p-12 flex flex-col justify-between h-full">
+                <div class="absolute inset-0 bg-black opacity-20"></div>
+
+                <div class="relative z-10">
+                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--</a>
                 </div>
             </div>
             <div class="absolute inset-0 bg-black opacity-25"></div>
@@ -73,19 +67,19 @@
                 </p>
 
                 @if(session('error'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg my-4">
-                    {{ session('error') }}
-                </div>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+                        {{ session('error') }}
+                    </div>
                 @endif
 
                 @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg my-4">
-                    <ul class="list-disc ml-5 text-sm">
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+                        <ul class="list-disc ml-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
 
                 <form method="POST" action="{{ route('register.post') }}" class="mt-8 space-y-5">

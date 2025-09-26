@@ -48,6 +48,8 @@
 
 <body class="font-sans">
 
+    <x-toastify></x-toastify>
+
     <div class="min-h-screen md:flex">
 
         <!-- Left side with Image Carousel -->
@@ -104,7 +106,7 @@
                 </p>
 
                 {{-- @if ($errors->has('login'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg my-4" role="alert">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
                     {{ $errors->first('login') }}
                 </div>
                 @endif --}}
@@ -173,33 +175,25 @@
 
     </div>
 
+    {{--
     <script>
-        // Initialize Swiper Carousel
-        const swiper = new Swiper('.swiper', {
-            // Optional parameters
-            loop: true,
-            effect: 'fade', // Use fade effect for smooth transition
-            fadeEffect: {
-                crossFade: true
-            },
-            autoplay: {
-                delay: 4000, // Change image every 4 seconds
-                disableOnInteraction: false,
-            },
-        });
+        window.flashMessage = {
+            text: "{{ session('success') ?? session('error') ?? '' }}",
+            type: "{{ session('success') ? 'success' : (session('error') ? 'error' : '') }}"
+        };
+    </script> --}}
 
-        // Your existing script for Toastify notifications
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
-            {{--
-            @if ($errors->has('login'))
+            if ($errors -> has('login')) {
                 Toastify({
-                    text: "{{ $errors->first('login') }}",
+                    text: "{{ $errors->first('login') }}",,
                     duration: 3000,
                     gravity: "top",
                     position: "right",
                     backgroundColor: 'red',
                 }).showToast();
-            @endif
+            }
 
             @if (session('success'))
                 Toastify({
@@ -210,7 +204,6 @@
                     backgroundColor: "green",
                 }).showToast();
             @endif
-            --}}
         });
     </script>
 </body>
