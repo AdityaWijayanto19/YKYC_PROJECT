@@ -29,22 +29,31 @@
 
     <div class="min-h-screen md:flex">
         
-        <div class="hidden md:block md:w-1/2 relative bg-cover bg-center" style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');">
-            <div class="p-12 flex flex-col justify-between h-full">
-                <div class="absolute inset-0 bg-black opacity-20"></div>
-                
-                <div class="relative z-10">
-                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--</a>
-                </div>
-                <div class="relative z-10">
+        <!-- Panel Gambar (Kiri) -->
+        <div id="image-container" class="hidden md:block md:w-1/2 relative bg-cover bg-center">
+            <div class="absolute inset-0 bg-black opacity-20"></div>
+            <div class="p-12 flex flex-col justify-end h-full relative z-10">
+                <div>
                     <h2 class="text-3xl font-bold text-white">Selamat Datang Kembali!</h2>
                     <p class="text-white text-opacity-90 mt-2">Masukkan detail akun Anda untuk melanjutkan.</p>
                 </div>
             </div>
         </div>
 
+        <!-- Panel Form (Kanan) -->
         <div class="w-full md:w-1/2 bg-white flex flex-col justify-center">
             <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto">
+                
+                <!-- Tombol Kembali yang Baru -->
+                <div class="mb-8">
+                    <a href="/" class="text-gray-500 hover:text-gray-800 transition-colors duration-200 flex items-center gap-2 font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Kembali
+                    </a>
+                </div>
+
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Login ke Akun Anda</h1>
                 <p class="text-gray-600 mt-2">
                     Belum punya akun?
@@ -126,6 +135,30 @@
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Daftar URL gambar Anda. Ganti dengan gambar-gambar yang Anda inginkan.
+            const imageUrls = [
+                'https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg',
+                'https://images.unsplash.com/photo-1582735689369-389ae1b3c938?q=80&w=2574&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1608152137977-83236e78749e?q=80&w=2574&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1545174822-7a13c990b024?q=80&w=2574&auto=format&fit=crop'
+            ];
+
+            // Pilih elemen kontainer gambar
+            const imageContainer = document.getElementById('image-container');
+
+            // Pilih gambar acak dari daftar
+            const randomIndex = Math.floor(Math.random() * imageUrls.length);
+            const randomImage = imageUrls[randomIndex];
+
+            // Atur sebagai gambar latar belakang
+            if (imageContainer) {
+                imageContainer.style.backgroundImage = `url('${randomImage}')`;
+            }
+        });
+    </script>
 
 </body>
 </html>
