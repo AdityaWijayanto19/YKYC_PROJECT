@@ -75,17 +75,16 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Validasi input
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // Coba login
+        // login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Arahkan ke dashboard sesuai role
+            // dashboard sesuai role
             if (Auth::user()->role === 'customer') {
                 return redirect()->route('customer.dashboard');
             } elseif (Auth::user()->role === 'worker') {
@@ -95,7 +94,7 @@ class AuthController extends Controller
             }
         }
 
-        // Kalau gagal login
+        // gagal login
         return back()->withErrors([
             'login' => 'Email atau password yang Anda masukkan salah.',
         ])->withInput();

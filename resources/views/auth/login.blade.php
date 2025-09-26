@@ -7,12 +7,14 @@
     <title>Login - Ya Kotor Ya Cuci</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#3490dc', // Warna biru utama Anda
+                        'primary': '#3490dc', // Warna biru
                     },
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif'],
@@ -37,7 +39,7 @@
                 <div class="absolute inset-0 bg-black opacity-20"></div>
 
                 <div class="relative z-10">
-                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--</a>
+                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--< /a>
                 </div>
                 <div class="relative z-10">
                     <h2 class="text-3xl font-bold text-white">Selamat Datang Kembali!</h2>
@@ -56,11 +58,11 @@
                     </a>
                 </p>
 
-                @if ($errors->has('login'))
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
-                        {{ $errors->first('login') }}
-                    </div>
-                @endif
+                {{-- @if ($errors->has('login'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
+                    {{ $errors->first('login') }}
+                </div>
+                @endif --}}
 
                 <form method="POST" action="{{ route('login.post') }}" class="mt-8 space-y-6">
                     @csrf
@@ -134,6 +136,37 @@
 
     </div>
 
+    {{--
+    <script>
+        window.flashMessage = {
+            text: "{{ session('success') ?? session('error') ?? '' }}",
+            type: "{{ session('success') ? 'success' : (session('error') ? 'error' : '') }}"
+        };
+    </script> --}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if ($errors -> has('login')) {
+                Toastify({
+                    text: "{{ $errors->first('login') }}",,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: 'red',
+                }).showToast();
+            }
+
+            @if (session('success'))
+                Toastify({
+                    text: "{{ session('success') }}",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "green",
+                }).showToast();
+            @endif
+        });
+    </script>
 </body>
 
 </html>

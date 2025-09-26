@@ -35,7 +35,7 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('customer/dashboard'); // Ganti '/dashboard' dengan halaman tujuan Anda
+    return redirect('customer/dashboard'); 
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
@@ -44,7 +44,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // ===================================================================
-// HALAMAN CUSTOMER (AKSES LANGSUNG UNTUK DEVELOPMENT)
+//                           HALAMAN CUSTOMER
 // ===================================================================
 
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -56,11 +56,11 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
     Route::get('/order', function () {
         return view('customer.order');
-    })->name('order.create');
+    })->middleware(['auth', 'verified'])->name('order.create');
 
     Route::get('/order-status', function () {
         return view('customer.order_status');
-    })->name('order.status');
+    })->middleware(['auth', 'verified'])->name('order.status');
 
     Route::get('/locations', function () {
         $all_active_locations = [
@@ -70,7 +70,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ];
 
         return view('customer.locations', ['active_locations' => $all_active_locations]);
-    })->name('locations');
+    })->middleware(['auth', 'verified'])->name('locations');
 
     Route::get('/tracking/{order}', function ($orderId) {
 
@@ -104,19 +104,19 @@ Route::prefix('customer')->name('customer.')->group(function () {
         }
 
         return view('customer.tracking', ['tracked_orders' => $data_to_send]);
-    })->name('tracking');
+    })->middleware(['auth', 'verified'])->name('tracking');
 
     Route::get('/history', function () {
         return view('customer.history');
-    })->name('history');
+    })->middleware(['auth', 'verified'])->name('history');
 
     Route::get('/notifications', function () {
         return view('customer.notifications');
-    })->name('notifications');
+    })->middleware(['auth', 'verified'])->name('notifications');
 
     Route::get('/feedback', function () {
         return view('customer.feedback');
-    })->name('feedback.create');
+    })->middleware(['auth', 'verified'])->name('feedback.create');
 });
 
 // ===================================================================
