@@ -16,9 +16,9 @@
             </div>
             <div class="flex items-center gap-6 mt-4 sm:mt-0">
                 <div class="flex items-center gap-3">
-                    <img src="https://i.pravatar.cc/40?u=jhontosan" class="w-10 h-10 rounded-full" alt="User Avatar">
+                    <img src="https://i.ibb.co.com/BHs9DfNK/2025-02-16-17-23-IMG-0201.jpg" class="w-10 h-10 rounded-full" alt="User Avatar">
                     <div>
-                        <span class="font-semibold text-navy-dark">Jhontosan</span>
+                        <span class="font-semibold text-navy-dark">Adit Kocok</span>
                     </div>
                 </div>
             </div>
