@@ -264,7 +264,7 @@
                                         <i class="fas fa-envelope w-6 h-6 text-2xl"></i>
                                         <div class="ml-4">
                                             <h4 class="font-semibold text-lg">Email</h4>
-                                            <p class="text-cyan-200">layanan@ykyc.com</p>
+                                            <p class="text-cyan-200">yakotoryacuci@gmail.com</p>
                                         </div>
                                     </div>
                                 </div>
