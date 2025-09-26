@@ -28,7 +28,7 @@
 </head>
 
 <body class="font-sans">
-
+    <x-toastify></x-toastify>
     <div class="min-h-screen md:flex">
 
         <div class="hidden md:block md:w-1/2 relative bg-cover bg-center h-screen"
@@ -37,7 +37,7 @@
                 <div class="absolute inset-0 bg-black opacity-20"></div>
 
                 <div class="relative z-10">
-                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--</a>
+                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--< /a>
                 </div>
                 <div class="relative z-10">
                     <h2 class="text-3xl font-bold text-white">Capturing Moments, Creating Memories.</h2>
@@ -56,22 +56,6 @@
                         Login di sini
                     </a>
                 </p>
-
-                @if(session('error'))
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
-                        <ul class="list-disc ml-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form method="POST" action="{{ route('register.post') }}" class="mt-8 space-y-6">
                     @csrf

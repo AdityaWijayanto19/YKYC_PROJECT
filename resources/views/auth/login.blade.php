@@ -31,6 +31,8 @@
 
 <body class="font-sans">
 
+    <x-toastify></x-toastify>
+
     <div class="min-h-screen md:flex">
 
         <div class="hidden md:block md:w-1/2 relative bg-cover bg-center h-screen"
@@ -57,12 +59,6 @@
                         Buat akun di sini
                     </a>
                 </p>
-
-                {{-- @if ($errors->has('login'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
-                    {{ $errors->first('login') }}
-                </div>
-                @endif --}}
 
                 <form method="POST" action="{{ route('login.post') }}" class="mt-8 space-y-6">
                     @csrf
@@ -135,38 +131,6 @@
         </div>
 
     </div>
-
-    {{--
-    <script>
-        window.flashMessage = {
-            text: "{{ session('success') ?? session('error') ?? '' }}",
-            type: "{{ session('success') ? 'success' : (session('error') ? 'error' : '') }}"
-        };
-    </script> --}}
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if ($errors -> has('login')) {
-                Toastify({
-                    text: "{{ $errors->first('login') }}",,
-                    duration: 3000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: 'red',
-                }).showToast();
-            }
-
-            @if (session('success'))
-                Toastify({
-                    text: "{{ session('success') }}",
-                    duration: 3000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "green",
-                }).showToast();
-            @endif
-        });
-    </script>
 </body>
 
 </html>
