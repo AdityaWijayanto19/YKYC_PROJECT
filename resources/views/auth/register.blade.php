@@ -39,10 +39,6 @@
             style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');">
             <div class="p-12 flex flex-col justify-between h-full">
                 <div class="absolute inset-0 bg-black opacity-20"></div>
-
-                <div class="relative z-10">
-                    <a href="/" class="text-3xl font-bold text-white tracking-wider"><--</a>
-                </div>
             </div>
             <div class="absolute inset-0 bg-black opacity-25"></div>
             <div class="absolute inset-0 p-12 flex flex-col justify-end">
@@ -55,9 +51,18 @@
 
         <!-- Right side with Registration Form -->
         <!-- PERUBAHAN FINAL DI SINI: 'min-h-0' ditambahkan -->
+        
         <div class="w-full md:w-1/2 bg-white flex flex-col h-screen overflow-y-auto min-h-0">
-            
             <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto my-auto">
+                <!-- Back Button -->
+                <div class="mb-6">
+                    <a href="/" class="text-primary font-bold tracking-wider flex items-center gap-2 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Kembali
+                    </a>
+                </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Buat Akun Baru</h1>
                 <p class="text-gray-600 mt-2">
                     Sudah punya akun?
@@ -138,9 +143,7 @@
                 <div class="flex justify-center">
                     <a href="{{ route('google.redirect') }}"
                         class="w-full flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                            <!-- SVG -->
-                        </svg>
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" class="h-5 w-5">
                         <span class="text-sm font-medium text-gray-700">Daftar dengan Google</span>
                     </a>
                 </div>

@@ -93,27 +93,42 @@
             }
         }
 
-        /* --- KODE GLASSMORPHISM: Kelas untuk efek Glassmorphism pada Navbar --- */
         .nav-glassmorphism {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-        /* --- AKHIR KODE GLASSMORPHISM --- */
+        
+        /* Custom scrollbar for gallery */
+        .gallery-scrollbar::-webkit-scrollbar {
+            height: 8px;
+        }
+        .gallery-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .gallery-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        .gallery-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
     </style>
 </head>
 <body class="bg-white text-gray-800">
     
     <svg class="absolute w-0 h-0"><defs><clipPath id="waterdrop-shape-solid" clipPathUnits="objectBoundingBox"><path d="M0.5,1 C0.15,1 0,0.8 0.3,0.4 C0.4,0.25 0.5,0.1 0.5,0.1 C0.5,0.1 0.6,0.25 0.7,0.4 C1,0.8 0.85,1 0.5,1 Z" /></clipPath></defs></svg>
     
-    <!-- KODE GLASSMORPHISM: Tambahkan class 'nav-glassmorphism' sebagai state awal -->
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300 nav-glassmorphism">
         <nav class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
                 <a href="#home"><img id="header-logo" class="h-10 brightness-0 invert transition-all duration-300" src="/images/favicon-dark.svg" alt="YKYc Logo"></a>
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="#home" class="hover:text-cyan-custom transition">Home</a>
+                    <a href="#aboutus" class="hover:text-cyan-custom transition">About Us</a>
                     <a href="#layanan" class="hover:text-cyan-custom transition">Layanan</a>
                     <a href="#faq" class="hover:text-cyan-custom transition">FAQ</a>
                     <a href="#kontak" class="hover:text-cyan-custom transition">Kontak</a>
@@ -135,8 +150,6 @@
         <section id="home" class="hero-section h-screen flex items-center justify-center text-white text-center">
             
             <div class="hero-slideshow">
-                <div class="hero-slideshow-image active" style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');"></div>
-                <div class="hero-slideshow-image" style="background-image: url('https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format&fit=crop');"></div>
                 <div class="hero-slideshow-image" style="background-image: url('https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop');"></div>
                 <div class="hero-slideshow-image" style="background-image: url('https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop');"></div>
             </div>
@@ -150,7 +163,49 @@
             </div>
         </section>
         
-        <section class="py-20 px-6 overflow-hidden"><div class="container mx-auto"><div class="text-center mb-12"><h2 class="text-3xl md:text-4xl font-bold">KENAPA YKYc?</h2><div class="w-24 h-1 bg-cyan-custom mx-auto mt-4"></div></div><p class="max-w-4xl mx-auto text-center text-gray-600 mb-8 md:mb-16">Ya Kotor Ya Cuci (YKYc) adalah revolusi dalam perawatan sepatu, menghadirkan jasa laundry profesional langsung ke tempat Anda melalui konsep gerobak portabel yang unik. Kami percaya bahwa sepatu bersih adalah hak semua orang, di mana pun mereka berada.</p><div class="relative flex flex-col md:flex-row justify-center items-center md:min-h-[550px]"><div class="md:hidden flex flex-col items-center gap-8 w-full"><h3 class="text-xl font-bold mb-1">Cepat & Praktis</h3><p class="text-gray-500 max-w-xs">Layanan ekspres di tempat, tak perlu menunggu berhari-hari.</p><h3 class="text-xl font-bold mb-1">Teknisi Profesional</h3><p class="text-gray-500 max-w-xs">Dikerjakan oleh tim yang ahli di bidang perawatan sepatu.</p><div class="w-72 h-96 my-4 clip-waterdrop-solid shadow-2xl"><img src="/images/rengo__r-skor.webp" alt="Pembersihan sepatu" class="w-full h-full object-cover"></div><h3 class="text-xl font-bold mb-1">Hasil Maksimal</h3><p class="text-gray-500 max-w-xs">Menggunakan pembersih premium yang aman untuk semua bahan.</p><h3 class="text-xl font-bold mb-1">Harga Terjangkau</h3><p class="text-gray-500 max-w-xs">Kualitas premium dengan harga yang ramah di kantong.</p></div><div id="interactive-container" class="hidden md:block relative w-full min-h-[550px]"><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-96 h-[480px] clip-waterdrop-solid shadow-2xl"><img src="/images/rengo__r-skor.webp" alt="Pembersihan sepatu" class="w-full h-full object-cover"></div><div class="absolute top-0 left-0 right-0 bottom-0 z-20"><div class="group draggable-group absolute top-[15%] left-[12%]"><div class="relative flex flex-row-reverse items-center gap-4"><div class="animate-float" style="animation-delay: 0s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-bolt text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-right"><h3 class="text-xl font-bold mb-1">Cepat & Praktis</h3><p class="text-gray-500 w-52">Layanan ekspres di tempat, tak perlu menunggu.</p></div></div></div><div class="group draggable-group absolute bottom-[15%] left-[16%]"><div class="relative flex flex-row-reverse items-center gap-4"><div class="animate-float" style="animation-delay: 1s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-user-gear text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-right"><h3 class="text-xl font-bold mb-1">Teknisi Profesional</h3><p class="text-gray-500 w-52">Dikerjakan oleh tim yang ahli di bidangnya.</p></div></div></div><div class="group draggable-group absolute top-[15%] right-[12%]"><div class="relative flex flex-row items-center gap-4"><div class="animate-float" style="animation-delay: 2s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-gem text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 text-left"><h3 class="text-xl font-bold mb-1">Hasil Maksimal</h3><p class="text-gray-500 w-52">Pembersih premium yang aman untuk semua bahan.</p></div></div></div><div class="group draggable-group absolute bottom-[15%] right-[16%]"><div class="relative flex flex-row items-center gap-4"><div class="animate-float" style="animation-delay: 3s;"><div class="w-20 h-20 rounded-full bg-white border-2 border-cyan-custom shadow-cyan-glow flex items-center justify-center transition-colors duration-300 group-hover:bg-sky-500"><i class="fas fa-wallet text-3xl text-cyan-custom transition-colors duration-300 group-hover:text-white"></i></div></div><div class="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 text-left"><h3 class="text-xl font-bold mb-1">Harga Terjangkau</h3><p class="text-gray-500 w-52">Kualitas premium dengan harga yang ramah di kantong.</p></div></div></div></div></div></div></section>
+        <!-- KODE BARU BAGIAN ABOUT US -->
+        <section id="aboutus" class="py-20 bg-white">
+                <div class="relative p-8 md:p-12 rounded-2xl bg-white overflow-hidden">
+                    <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('https://i.imgur.com/u5ppt3s.png'); opacity: 0.7;"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-10">
+                            <div class="max-w-md text-gray-800">
+                                <h3 class="text-2xl font-semibold">Sepatu kotor? YKYC solusinya!</h3>
+                                <p class="mt-2 text-gray-600">Cuci sepatu makin gampang, hemat waktu, dan pastinya eco-friendly dengan gerobak listrik YKYC. 🌱 Bersih buat sepatumu, baik buat bumi.</p>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button class="w-10 h-10 rounded-full bg-white/50 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition"><i class="fas fa-arrow-left text-gray-700"></i></button>
+                                <button class="w-10 h-10 rounded-full bg-white/50 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition"><i class="fas fa-arrow-right text-gray-700"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="flex -mx-3 overflow-x-auto gallery-scrollbar pb-4">
+                            <div class="flex-none w-full md:w-[45%] lg:w-[40%] px -3">
+                                <div class="bg-black/10 backdrop-blur-lg border border-white/20 hover:not-focus:bg-indigo-700 rounded-2xl p-4 flex items-center h-full">
+                                    <div class="w-2/5 flex-none">
+                                        <img src="https://i.postimg.cc/FfpRHM8B/kopi-keliling-sepeda-listrik.png" alt="Gerobak Listrik YKYC" class="rounded-lg w-full h-full object-cover">
+                                    </div>
+                                    <div class="w-3/5 pl-5 text-blue-400">
+                                        <h4 class="font-semibold text-lg">Gerobak Listrik YKYC</h4>
+                                        <p class="text-sm text-blue-400 mt-2">Inovasi ramah lingkungan untuk cuci sepatu praktis, cepat, dan peduli bumi.</p>
+                                        <button class="mt-4 w-8 h-8 rounded-full border border-blue/40 flex items-center justify-center hover:bg-blue/20 transition"><i class="fas fa-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-none w-full md:w-[30%] lg:w-[28%] px-3">
+                                <img src="https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg" alt="Foam Cuci Sepatu" class="rounded-2xl w-full h-full object-cover">
+                            </div>
+
+                            <div class="flex-none w-full md:w-[30%] lg:w-[28%] px-3">
+                                <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format&fit=crop" alt="Hemat waktu & Tenaga" class="rounded-2xl w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- AKHIR KODE BARU -->
         
         <section id="layanan" class="py-20 px-6 bg-gray-50">
             <div class="container mx-auto">
@@ -378,25 +433,21 @@
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        // --- KODE GLASSMORPHISM: Logika scroll diupdate ---
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
-                // Saat di-scroll ke bawah
                 header.classList.add('bg-white', 'text-gray-800', 'shadow-md');
-                header.classList.remove('text-white', 'nav-glassmorphism'); // Hapus glassmorphism
+                header.classList.remove('text-white', 'nav-glassmorphism');
                 headerLogo.classList.remove('brightness-0', 'invert');
                 mobileMenuButton.classList.remove('text-white');
                 mobileMenuButton.classList.add('text-gray-800');
             } else {
-                // Saat kembali di atas
                 header.classList.remove('bg-white', 'text-gray-800', 'shadow-md');
-                header.classList.add('text-white', 'nav-glassmorphism'); // Tambahkan kembali glassmorphism
+                header.classList.add('text-white', 'nav-glassmorphism');
                 headerLogo.classList.add('brightness-0', 'invert');
                 mobileMenuButton.classList.add('text-white');
                 mobileMenuButton.classList.remove('text-gray-800');
             }
         });
-        // --- AKHIR KODE GLASSMORPHISM ---
 
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
@@ -420,101 +471,7 @@
             });
         }, { threshold: 0.1 });
         fadeInElements.forEach(el => { observer.observe(el); });
-
-        const interactiveContainer = document.getElementById('interactive-container');
-        if (interactiveContainer) {
-            const draggableGroups = interactiveContainer.querySelectorAll('.draggable-group');
-            const containerRect = interactiveContainer.getBoundingClientRect();
-            const centerY = containerRect.height / 2;
-
-            const SAFE_VERTICAL_RADIUS = 150;
-            const SNAP_BACK_VERTICAL_RADIUS = 220;
-            const RESISTANCE_FACTOR = 0.4;
-
-            draggableGroups.forEach(element => {
-                element.dataset.originalTop = element.offsetTop + 'px';
-                element.dataset.originalLeft = element.offsetLeft + 'px';
-            
-                let offsetX, offsetY, isDragging = false;
-
-                const startDrag = (e) => {
-                    isDragging = true;
-                    element.classList.add('dragging');
-                    document.body.classList.add('cursor-hidden');
-                    
-                    const event = e.type.includes('touch') ? e.touches[0] : e;
-                    const rect = element.getBoundingClientRect();
-                    
-                    offsetX = event.clientX - rect.left;
-                    offsetY = event.clientY - rect.top;
-
-                    element.style.right = 'auto';
-                    element.style.bottom = 'auto';
-
-                    document.addEventListener('mousemove', drag);
-                    document.addEventListener('touchmove', drag, { passive: false });
-                    document.addEventListener('mouseup', stopDrag);
-                    document.addEventListener('touchend', stopDrag);
-                };
-
-                const drag = (e) => {
-                    if (!isDragging) return;
-                    e.preventDefault();
-
-                    const event = e.type.includes('touch') ? e.touches[0] : e;
-                    const parentRect = interactiveContainer.getBoundingClientRect();
-                    
-                    let newX = event.clientX - parentRect.left - offsetX;
-                    let newY = event.clientY - parentRect.top - offsetY;
-
-                    const elementCenterY = newY + element.offsetHeight / 2;
-                    const verticalDistance = Math.abs(elementCenterY - centerY);
-
-                    if (verticalDistance > SAFE_VERTICAL_RADIUS) {
-                        const direction = Math.sign(elementCenterY - centerY);
-                        const overDistance = verticalDistance - SAFE_VERTICAL_RADIUS;
-                        const resistedYFromCenter = (SAFE_VERTICAL_RADIUS + (overDistance * RESISTANCE_FACTOR)) * direction;
-                        
-                        newY = (centerY + resistedYFromCenter) - element.offsetHeight / 2;
-                    }
-                    
-                    element.style.left = `${newX}px`;
-                    element.style.top = `${newY}px`;
-                };
-
-                const stopDrag = () => {
-                    if (!isDragging) return;
-                    isDragging = false;
-                    element.classList.remove('dragging');
-                    document.body.classList.remove('cursor-hidden');
-                    
-                    document.removeEventListener('mousemove', drag);
-                    document.removeEventListener('touchmove', drag);
-                    document.removeEventListener('mouseup', stopDrag);
-                    document.removeEventListener('touchend', stopDrag);
-                    
-                    const finalRect = element.getBoundingClientRect();
-                    const parentRect = interactiveContainer.getBoundingClientRect();
-                    const finalCenterY = (finalRect.top - parentRect.top) + finalRect.height / 2;
-                    const finalVerticalDistance = Math.abs(finalCenterY - centerY);
-
-                    if (finalVerticalDistance > SNAP_BACK_VERTICAL_RADIUS) {
-                        element.classList.add('snapping-back');
-                        element.style.left = element.dataset.originalLeft;
-                        element.style.top = element.dataset.originalTop;
-                        
-                        setTimeout(() => {
-                            element.classList.remove('snapping-back');
-                        }, 400);
-                    }
-                };
-
-                element.addEventListener('mousedown', startDrag);
-                element.addEventListener('touchstart', startDrag);
-            });
-        }
-
-        // JavaScript untuk mengontrol slideshow
+        
         const slideshowImages = document.querySelectorAll('.hero-slideshow-image');
         let currentImageIndex = 0;
 
