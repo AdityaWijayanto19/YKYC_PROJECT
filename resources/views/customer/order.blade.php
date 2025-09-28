@@ -52,19 +52,21 @@
                     <!-- Form Card -->
                     <div class="max-w-2xl mx-auto">
                         <div class="bg-white p-8 rounded-xl shadow-lg w-full">
-                            <form method="POST" action="{{-- route('order.store') --}}" class="space-y-6">
+                            <form method="POST" action="{{ route('customer.order.store') }}" class="space-y-6">
                                 @csrf
 
                                 <!-- 1. Jenis Layanan -->
                                 <div>
                                     <label for="service_type" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Jenis Layanan</label>
-                                    <select id="service_type" name="service_type" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent @error('service_type') border-red-500 @enderror">
-                                        <option value="" disabled selected>-- Pilih salah satu --</option>
-                                        <option value="Quick Clean">Quick Clean</option>
-                                        <option value="Deep Clean">Deep Clean</option>
-                                        <option value="Unyellowing">Unyellowing</option>
-                                    </select>
-                                    @error('service_type')<p class="text-red-500 text-xs mt-2">{{ $message }}</p>@enderror
+                                    <select id="service_id" name="service_id" required class="block w-full ...">
+                                    <option value="" data-price="0" disabled selected>-- Pilih salah satu --</option>
+                                    @foreach ($services as $service)
+                                        <option value="{{ $service->id }}" data-price="{{ $service->price }}">
+                                            {{ $service->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('service_id')<p class="text-red-500 text-xs mt-2">{{ $message }}</p>@enderror
                                 </div>
 
                                 <!-- 2. Metode Pengambilan -->
@@ -94,11 +96,11 @@
                                 <!-- 3. Lokasi Gerobak (Conditional) -->
                                 <div id="location-section">
                                     <label for="location_id" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Lokasi Gerobak</label>
-                                    <select id="location_id" name="location_id" class="block w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent @error('location_id') border-red-500 @enderror">
+                                    <select id="location_id" name="location_id" class="block w-full ...">
                                         <option value="" disabled selected>-- Pilih lokasi terdekat --</option>
-                                        <option value="1">Gerobak Senayan Park</option>
-                                        <option value="2">Gerobak Blok M Square</option>
-                                        <option value="3">Gerobak Stasiun Gambir</option>
+                                        @foreach ($locations as $location)
+                                            <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                        @endforeach
                                     </select>
                                     @error('location_id')<p class="text-red-500 text-xs mt-2">{{ $message }}</p>@enderror
                                 </div>
@@ -151,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ========== Form Interactivity ==========
-    const serviceSelect = document.getElementById('service_type');
+   const serviceSelect = document.getElementById('service_id');
     const deliveryOptionCards = document.querySelectorAll('.delivery-option-card');
     const deliveryRadioButtons = document.querySelectorAll('input[name="delivery_method"]');
     const locationSection = document.getElementById('location-section');
@@ -178,17 +180,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     function updateSummary() {
-        const selectedService = serviceSelect.value;
-        const selectedDelivery = document.querySelector('input[name="delivery_method"]:checked').value;
+    const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+    const serviceName = selectedOption.textContent.trim();
+    const servicePrice = parseInt(selectedOption.dataset.price) || 0;
 
-        let servicePrice = prices[selectedService] || 0;
-        let deliveryFee = (selectedDelivery === 'pickup') ? prices.delivery_fee : 0;
-        let totalPrice = servicePrice + deliveryFee;
+    const selectedDelivery = document.querySelector('input[name="delivery_method"]:checked').value;
+    const deliveryFee = (selectedDelivery === 'pickup') ? 15000 : 0;
 
-        summaryService.textContent = selectedService || '-';
-        summaryDeliveryFee.textContent = formatRupiah(deliveryFee);
-        summaryTotal.textContent = formatRupiah(totalPrice);
-    }
+    const totalPrice = servicePrice + deliveryFee;
+
+    summaryService.textContent = serviceName || '-';
+    summaryDeliveryFee.textContent = formatRupiah(deliveryFee);
+    summaryTotal.textContent = formatRupiah(totalPrice);
+}
+
     
     function handleDeliveryChange() {
         const selectedDelivery = document.querySelector('input[name="delivery_method"]:checked').value;
@@ -212,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         updateSummary();
     }
+
+    // const serviceSelect = document.getElementById('service_id');
 
     // Event listeners
     serviceSelect.addEventListener('change', updateSummary);

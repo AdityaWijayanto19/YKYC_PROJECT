@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Controllers\Customer\OrderController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -35,7 +37,7 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('customer/dashboard'); 
+    return redirect('customer/dashboard');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
@@ -54,9 +56,20 @@ Route::prefix('customer')->name('customer.')->group(function () {
         return view('customer.dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::get('/order', function () {
-        return view('customer.order');
-    })->middleware(['auth', 'verified'])->name('order.create');
+
+    // page order
+    Route::get('/order', [OrderController::class, 'create'])
+        ->middleware(['auth', 'verified', 'profile.complete']) // Penjaga: hanya user yang sudah login yang bisa lewat.
+        ->name('order.create'); // Kita beri nama 'order.create' agar mudah dipanggil.
+
+    // Rute ini untuk MEMPROSES data form saat tombol submit ditekan (metode POST).
+    Route::post('/order', [OrderController::class, 'store'])
+        ->middleware(['auth', 'verified'])
+        ->name('order.store');
+
+    Route::get('/order/payment/{order}', [OrderController::class, 'payment'])
+        ->middleware(['auth', 'verified'])
+        ->name('order.payment');
 
     Route::get('/order-status', function () {
         return view('customer.order_status');
@@ -117,6 +130,16 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('/feedback', function () {
         return view('customer.feedback');
     })->middleware(['auth', 'verified'])->name('feedback.create');
+
+    // page profile
+
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->middleware(['auth', 'verified'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->middleware(['auth', 'verified'])
+        ->name('profile.update');
 });
 
 // ===================================================================
@@ -199,13 +222,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.pesanan');
     })->name('pesanan');
 });
-
-
-// ===================================================================
-//                          ROUTE PAYMENT
-// ===================================================================
-
-Route::get('/checkout', [PaymentController::class, 'checkout']);
 
 // ===================================================================
 //                          Authentication

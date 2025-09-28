@@ -108,18 +108,21 @@
                     <!-- Tombol Ikon Profil -->
                     <button id="profile-button"
                         class="block rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                        <img class="h-10 w-10 rounded-full object-cover" src="https://i.ibb.co.com/DHKNjW33/aditya.jpg"
-                            alt="Foto Profil">
-                    </button>
 
+                        <img src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : Avatar::create(Auth::user()->name)->toBase64() }}"
+                            alt="Foto Profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+
+                    </button>
+ 
                     <!-- Menu Dropdown -->
                     <div id="profile-dropdown"
                         class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50 hidden origin-top-right">
                         <div class="px-4 py-2 border-b border-gray-100">
-                            <p class="text-sm font-semibold text-gray-800">Aditya Pratama</p>
-                            <p class="text-xs text-gray-500 truncate">aditya.pratama@example.com</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
                         </div>
-                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <a href="{{ route('customer.profile.edit') }}"
+                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

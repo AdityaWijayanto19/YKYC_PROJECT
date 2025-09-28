@@ -26,7 +26,8 @@ class  User extends Authenticatable implements MustVerifyEmail
         'role',
         'google_id',
         'google_token',
-        'google_refresh_token'
+        'google_refresh_token',
+        'avatar',
     ];
 
     /**
@@ -50,6 +51,39 @@ class  User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+     * Menghitung dan mengembalikan persentase kelengkapan profil.
+     *
+     * @return int
+     */
+    public function getProfileCompletionPercentageAttribute(): int
+    {
+        $score = 0;
+        // Tentukan ada berapa field yang kita hitung
+        $totalFields = 4;
+
+        // Beri 1 poin untuk setiap field yang tidak kosong
+        if (!empty($this->name)) {
+            $score++;
+        }
+        if (!empty($this->number_phone)) {
+            $score++;
+        }
+        if ($this->customer && !empty($this->customer->address)) {
+            $score++;
+        }
+        if (!empty($this->avatar)) {
+            $score++;
+        }
+
+        // Hitung persentase dan bulatkan ke bawah
+        if ($totalFields === 0) {
+            return 100;
+        }
+
+        return floor(($score / $totalFields) * 100);
+    }
+
     public function customer()
     {
         return $this->hasOne(Customer::class);
@@ -63,5 +97,10 @@ class  User extends Authenticatable implements MustVerifyEmail
     public function admin()
     {
         return $this->hasOne(Admin::class);
+    }
+
+     public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

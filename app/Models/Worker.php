@@ -17,10 +17,15 @@ class Worker extends Model
         'current_longitude',
         'is_active',
         'location_name',
-    ];    
+    ];
 
-      public function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function ordes()
+    {
+        return $this->hasMany(Order::class);
     }
 }

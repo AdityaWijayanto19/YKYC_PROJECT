@@ -18,12 +18,13 @@
 {{-- Mulai bagian konten --}}
 @section('content')
     <!-- Content Area -->
+    <x-toastify></x-toastify>
     <main class="flex-1 overflow-y-auto bg-gray-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
 
             <!-- Header Section -->
             <section class="mb-8">
-                <h2 class="text-3xl font-bold text-gray-800">Halo, {{ $user->name ?? 'Pelanggan' }}!</h2>
+                <h2 class="text-3xl font-bold text-gray-800">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</h2>
                 <p class="text-gray-500 mt-1">Siap membuat sepatumu bersih kembali?</p>
             </section>
 
@@ -123,7 +124,7 @@
                 <!-- ========================================================== -->
                 <!-- CARD RIWAYAT (YANG SUDAH DIPERBAIKI DENGAN BENAR) -->
                 <!-- ========================================================== -->
-                
+
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
                     <h3 class="text-xl font-semibold text-gray-700 mb-4 flex-shrink-0">Riwayat Terbaru</h3>
                     <div class="flex-grow overflow-y-auto min-h-0">
@@ -177,7 +178,7 @@
                                 </div>
                                 <span
                                     class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
-                            </div>                          
+                            </div>
                         </div>
                     </div>
 

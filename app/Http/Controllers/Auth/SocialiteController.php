@@ -29,6 +29,8 @@ class SocialiteController extends Controller
                 // Kalau user sudah ada tapi belum punya google_id → update
                 if (is_null($user->google_id)) {
                     $user->update([
+                        'name' => $googleUser->name,
+                        'avatar' => $googleUser->avatar,
                         'google_id' => $googleUser->id,
                         'google_token' => $googleUser->token,
                         'google_refresh_token' => $googleUser->refreshToken,
@@ -42,6 +44,7 @@ class SocialiteController extends Controller
                         'email' => $googleUser->email,
                         'google_id' => $googleUser->id,
                         'password' => null,
+                        'avatar' => $googleUser->avatar,
                         'google_token' => $googleUser->token,
                         'google_refresh_token' => $googleUser->refreshToken,
                         'role' => 'customer',

@@ -7,7 +7,8 @@
         const toastData = {
             errors: @json($errors->all()),
             success: "{{ session('success') ?? '' }}",
-            error: "{{ session('error') ?? '' }}"
+            error: "{{ session('error') ?? '' }}",
+            warning: "{{ session('warning') ?? '' }}"
         };
 
         // Tampilkan error
@@ -29,6 +30,25 @@
                 }
             }).showToast();
         });
+
+        if (toastData.warning) {
+            Toastify({
+                text: toastData.warning,
+                duration: 7000, 
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#F97316", 
+                close: true,
+                style: {
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "white",
+                    borderRadius: "8px",
+                    padding: "12px 24px",
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
+                }
+            }).showToast();
+        }
 
         // Tampilkan flash success
         if (toastData.success) {
