@@ -10,7 +10,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display.swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -36,12 +36,18 @@
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        /* === GAYA CAROUSEL + HOVER === */
+        /* === GAYA CAROUSEL + HOVER + DRAG === */
         #about-gallery-wrapper {
             width: 100%;
-            overflow: hidden;
+            overflow-x: auto; 
             -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
             mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+            user-select: none; /* Mencegah seleksi teks saat dragging */
+        }
+        #about-gallery-wrapper::-webkit-scrollbar {
+            display: none;
         }
         #about-gallery {
             display: flex;
@@ -51,9 +57,6 @@
         @keyframes scroll {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
-        }
-        #about-gallery-wrapper:hover #about-gallery {
-            animation-play-state: paused;
         }
         .gallery-card {
             width: 320px;
@@ -76,6 +79,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            pointer-events: none; /* Mencegah gambar ikut ter-drag */
         }
         .gallery-card-content {
             width: 0;
@@ -97,6 +101,15 @@
         /* === STYLE MODAL/POPUP === */
         #modal-container { transition: opacity 0.3s ease-in-out; }
         #modal-box { transition: transform 0.3s ease-in-out; }
+        #modal-image {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        @media (min-width: 768px) {
+            #modal-image { height: 100%; }
+            #modal-box .grid.md\:grid-cols-2 { grid-template-rows: auto; }
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800">
@@ -198,7 +211,6 @@
             </div>
         </section>
         
-        <!-- KONTEN YANG DIKEMBALIKAN -->
         <section id="layanan" class="py-20 px-6 bg-gray-50">
             <div class="container mx-auto">
                 <div class="text-center mb-16">
@@ -329,22 +341,111 @@
         </div>
     </footer>
     
-    <div id="modal-container" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none z-50"><div id="modal-box" class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden transform scale-95"><div class="grid md:grid-cols-2"><div class="p-8 order-2 md:order-1"><h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-4"></h3><p id="modal-description" class="text-gray-600 leading-relaxed"></p><button id="modal-close-button" class="mt-8 w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90">Tutup</button></div><div class="order-1 md:order-2"><img id="modal-image" src="" alt="Detail Gambar" class="w-full h-64 md:h-full object-cover"></div></div></div></div>
+    <div id="modal-container" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+        <div id="modal-box" class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden transform scale-95">
+            <div class="grid md:grid-cols-2">
+                <div class="p-8 order-2 md:order-1 flex flex-col">
+                    <div class="flex-grow">
+                        <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-4"></h3>
+                        <p id="modal-description" class="text-gray-600 leading-relaxed"></p>
+                    </div>
+                    <button id="modal-close-button" class="mt-8 w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90">Tutup</button>
+                </div>
+                <div class="order-1 md:order-2">
+                    <img id="modal-image" src="" alt="Detail Gambar" class="w-full h-64 md:h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         // SCRIPT NAVBAR, FAQ, FADE-IN, HERO (TIDAK BERUBAH)
         const header = document.getElementById('main-header'); const headerLogo = document.getElementById('header-logo'); const mobileMenuButton = document.getElementById('mobile-menu-button'); const mobileMenu = document.getElementById('mobile-menu'); window.addEventListener('scroll', () => { if (window.scrollY > 50) { header.classList.add('bg-white', 'text-gray-800', 'shadow-md'); header.classList.remove('text-white', 'nav-glassmorphism'); headerLogo.classList.remove('brightness-0', 'invert'); } else { header.classList.remove('bg-white', 'text-gray-800', 'shadow-md'); header.classList.add('text-white', 'nav-glassmorphism'); headerLogo.classList.add('brightness-0', 'invert'); } }); mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); }); const faqToggles = document.querySelectorAll('.faq-toggle'); faqToggles.forEach(toggle => { toggle.addEventListener('click', () => { const content = toggle.nextElementSibling; toggle.classList.toggle('open'); content.classList.toggle('open'); }); }); const fadeInElements = document.querySelectorAll('.fade-in'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); fadeInElements.forEach(el => { observer.observe(el); }); const slideshowImages = document.querySelectorAll('.hero-slideshow-image'); let currentImageIndex = 0; if (slideshowImages.length > 0) slideshowImages[0].classList.add('active'); function changeBackgroundImage() { if (slideshowImages.length === 0) return; slideshowImages[currentImageIndex].classList.remove('active'); currentImageIndex = (currentImageIndex + 1) % slideshowImages.length; slideshowImages[currentImageIndex].classList.add('active'); } setInterval(changeBackgroundImage, 7000);
 
-        // --- SCRIPT CAROUSEL + MODAL ---
+        // --- SCRIPT CAROUSEL + MODAL (DENGAN LOOPING DRAG-TO-SCROLL) ---
+        const galleryWrapper = document.getElementById('about-gallery-wrapper');
         const gallery = document.getElementById('about-gallery');
-        if(gallery) {
+        
+        if (gallery && galleryWrapper) {
+            // 1. Duplikasi kartu untuk efek scroll tanpa akhir
             const originalCards = gallery.querySelectorAll('.gallery-card');
             originalCards.forEach(card => {
                 gallery.appendChild(card.cloneNode(true));
             });
+
+            // --- LOGIKA UNTUK LOOPING MANUAL SCROLL ---
+            let isScrolling = false;
+            const handleInfiniteScroll = () => {
+                if (isScrolling) return;
+                isScrolling = true;
+                // requestAnimationFrame memastikan ini berjalan mulus
+                requestAnimationFrame(() => {
+                    const itemSetWidth = gallery.scrollWidth / 2;
+                    if (itemSetWidth > 0) {
+                        // Loop forward: jika scroll masuk ke area kloningan
+                        if (galleryWrapper.scrollLeft >= itemSetWidth) {
+                            galleryWrapper.scrollLeft -= itemSetWidth;
+                        } 
+                        // Loop backward: jika scroll kembali ke awal
+                        else if (galleryWrapper.scrollLeft <= 0) {
+                            galleryWrapper.scrollLeft += itemSetWidth;
+                        }
+                    }
+                    isScrolling = false;
+                });
+            };
+            galleryWrapper.addEventListener('scroll', handleInfiniteScroll);
+
+            // --- LOGIKA UNTUK GESER (DRAG) ---
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            galleryWrapper.style.cursor = 'grab';
+
+            const startDragging = (e) => {
+                isDown = true;
+                galleryWrapper.style.cursor = 'grabbing';
+                startX = (e.pageX || e.touches[0].pageX) - galleryWrapper.offsetLeft;
+                scrollLeft = galleryWrapper.scrollLeft; // Selalu ambil posisi scroll terbaru
+                gallery.style.animationPlayState = 'paused';
+            };
+
+            const stopDragging = () => {
+                isDown = false;
+                galleryWrapper.style.cursor = 'grab';
+                if (!galleryWrapper.matches(':hover')) {
+                    gallery.style.animationPlayState = 'running';
+                }
+            };
+
+            const whileDragging = (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = (e.pageX || e.touches[0].pageX) - galleryWrapper.offsetLeft;
+                const walk = (x - startX) * 2; // Percepat pergeseran
+                galleryWrapper.scrollLeft = scrollLeft - walk;
+            };
+
+            galleryWrapper.addEventListener('mousedown', startDragging);
+            galleryWrapper.addEventListener('mouseleave', stopDragging);
+            galleryWrapper.addEventListener('mouseup', stopDragging);
+            galleryWrapper.addEventListener('mousemove', whileDragging);
+            galleryWrapper.addEventListener('touchstart', startDragging, { passive: true });
+            galleryWrapper.addEventListener('touchend', stopDragging);
+            galleryWrapper.addEventListener('touchmove', whileDragging);
+            
+            // Logika pause on hover
+            galleryWrapper.addEventListener('mouseenter', () => gallery.style.animationPlayState = 'paused');
+            galleryWrapper.addEventListener('mouseleave', () => {
+                if (!isDown) {
+                    gallery.style.animationPlayState = 'running';
+                }
+            });
         }
         
+        // --- SCRIPT MODAL (TIDAK BERUBAH) ---
         const modalContainer = document.getElementById('modal-container');
         const modalBox = document.getElementById('modal-box');
         const modalCloseButton = document.getElementById('modal-close-button');
