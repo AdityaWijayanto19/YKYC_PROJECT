@@ -16,6 +16,10 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+Route::get('/about_us', function () {
+    return view('about_us');
+})->name('about_us');
+
 // Form Login & Register (GET)
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
