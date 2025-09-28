@@ -96,15 +96,6 @@
         /* === STYLE MODAL/POPUP === */
         #modal-container { transition: opacity 0.3s ease-in-out; }
         #modal-box { transition: transform 0.3s ease-in-out; }
-        #modal-image {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
-        }
-        @media (min-width: 768px) {
-            #modal-image { height: 100%; }
-            #modal-box .grid.md\:grid-cols-2 { grid-template-rows: auto; }
-        }
     </style>
 </head>
 <body class="bg-white text-gray-800">
@@ -152,21 +143,17 @@
                 <div class="relative rounded-2xl bg-white overflow-hidden">
                     <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('https://i.imgur.com/u5ppt3s.png'); opacity: 0.7;"></div>
                     <div class="relative z-10 p-8 md:p-12">
-                        <!-- === PERUBAHAN POSISI DI SINI === -->
                         <div class="flex justify-between items-center mb-12 px-4 flex-col md:flex-row">
-                            <!-- Teks Deskripsi di Kiri -->
                             <div class="text-center md:text-left max-w-2xl mb-6 md:mb-0">
                                 <h3 class="text-3xl font-bold text-gray-800">Kenali Inovasi Kami Lebih Dekat</h3>
                                 <p class="mt-2 text-gray-600">Setiap detail dari layanan kami dirancang untuk memberikan yang terbaik bagi sepatu dan lingkungan Anda.</p>
                             </div>
-                             <!-- Tombol Play/Pause di Kanan -->
                             <div id="carousel-controls">
-                                <button id="play-pause-btn" class="w-16 h-16 rounded-full border-2 border-cyan-custom text-cyan-custom flex items-center justify-center hover:bg-cyan-custom hover:text-blue transition-colors duration-300 focus:outline-none" aria-label="Jeda atau Lanjutkan Carousel">
+                                <button id="play-pause-btn" class="w-16 h-16 rounded-full border-2 border-cyan-custom text-cyan-custom flex items-center justify-center hover:bg-cyan-custom hover:text-white transition-colors duration-300 focus:outline-none" aria-label="Jeda atau Lanjutkan Carousel">
                                     <i id="play-pause-icon" class="fas fa-pause text-2xl"></i>
                                 </button>
                             </div>
                         </div>
-                        <!-- === AKHIR DARI PERUBAHAN POSISI === -->
                         <div id="about-gallery-wrapper">
                             <div id="about-gallery">
                                 <!-- Kartu Asli (akan diduplikasi oleh JS) -->
@@ -349,16 +336,18 @@
     
     <div id="modal-container" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
         <div id="modal-box" class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden transform scale-95">
+            <!-- === PERUBAHAN UTAMA DI SINI === -->
             <div class="grid md:grid-cols-2">
                 <div class="p-8 order-2 md:order-1 flex flex-col">
                     <div class="flex-grow">
                         <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-4"></h3>
                         <p id="modal-description" class="text-gray-600 leading-relaxed"></p>
                     </div>
-                    <button id="modal-close-button" class="mt-8 w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90">Tutup</button>
+                    <button id="modal-close-button" class="mt-8 w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90 flex-shrink-0">Tutup</button>
                 </div>
                 <div class="order-1 md:order-2">
-                    <img id="modal-image" src="" alt="Detail Gambar" class="w-full h-64 md:h-full object-cover">
+                    <!-- Tinggi gambar diatur di sini untuk konsistensi -->
+                    <img id="modal-image" src="" alt="Detail Gambar" class="w-full h-64 md:h-[450px] object-cover">
                 </div>
             </div>
         </div>
@@ -375,20 +364,18 @@
         const playPauseBtn = document.getElementById('play-pause-btn');
         const playPauseIcon = document.getElementById('play-pause-icon');
         
+        let isPaused = false; 
+
         if (gallery && galleryWrapper && playPauseBtn && playPauseIcon) {
-            // Duplikasi kartu untuk efek scroll tanpa akhir
             const originalCards = Array.from(gallery.children);
             originalCards.forEach(card => {
                 gallery.appendChild(card.cloneNode(true));
             });
 
-            // State Variables
-            let isPaused = false;
             let isDown = false;
             let startX;
             let scrollLeft;
 
-            // Fungsi Animasi Otomatis
             const autoScroll = () => {
                 if (!isPaused) {
                     galleryWrapper.scrollLeft += 0.8; 
@@ -396,7 +383,6 @@
                 requestAnimationFrame(autoScroll);
             };
 
-            // Logika Looping (Teleport)
             const handleInfiniteScroll = () => {
                 const itemSetWidth = gallery.scrollWidth / 2;
                 if (itemSetWidth > 0) {
@@ -410,7 +396,6 @@
             };
             galleryWrapper.addEventListener('scroll', handleInfiniteScroll);
 
-            // Kontrol Tombol Play/Pause
             playPauseBtn.addEventListener('click', () => {
                 isPaused = !isPaused;
                 if (isPaused) {
@@ -422,7 +407,6 @@
                 }
             });
 
-            // Logika Geser (Drag)
             galleryWrapper.style.cursor = 'grab';
             const startDragging = (e) => {
                 isDown = true;
@@ -447,7 +431,6 @@
                 galleryWrapper.scrollLeft = scrollLeft - walk;
             };
 
-            // Event Listeners
             galleryWrapper.addEventListener('mousedown', startDragging);
             galleryWrapper.addEventListener('mouseup', stopDragging);
             galleryWrapper.addEventListener('mouseleave', stopDragging);
@@ -456,16 +439,13 @@
             galleryWrapper.addEventListener('touchend', stopDragging);
             galleryWrapper.addEventListener('touchmove', whileDragging);
             
-            // Jeda saat hover
             galleryWrapper.addEventListener('mouseenter', () => { isPaused = true; });
             galleryWrapper.addEventListener('mouseleave', () => {
-                // Lanjutkan hanya jika tidak di-drag DAN tombol tidak dalam status pause manual
                 if (!isDown && playPauseIcon.classList.contains('fa-pause')) {
                     isPaused = false;
                 }
             });
 
-            // Mulai animasi otomatis
             requestAnimationFrame(autoScroll);
         }
         
@@ -478,7 +458,7 @@
         const modalImage = document.getElementById('modal-image');
 
         const openModal = (trigger) => {
-            isPaused = true; // Selalu jeda carousel saat modal terbuka
+            isPaused = true; 
             modalTitle.textContent = trigger.dataset.title;
             modalDescription.textContent = trigger.dataset.description;
             modalImage.src = trigger.dataset.image;
@@ -488,7 +468,6 @@
         const closeModal = () => {
             modalContainer.classList.add('opacity-0', 'pointer-events-none');
             modalBox.classList.add('scale-95');
-            // Lanjutkan carousel hanya jika tombol tidak dalam status pause manual
             if (playPauseIcon && playPauseIcon.classList.contains('fa-pause')) {
                 isPaused = false;
             }
