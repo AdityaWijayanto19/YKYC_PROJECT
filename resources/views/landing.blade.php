@@ -36,7 +36,7 @@
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        /* === GAYA CAROUSEL + HOVER + DRAG === */
+        /* === GAYA CAROUSEL (CSS ANIMATION DIHAPUS) === */
         #about-gallery-wrapper {
             width: 100%;
             overflow-x: auto; 
@@ -52,12 +52,10 @@
         #about-gallery {
             display: flex;
             width: fit-content;
-            animation: scroll 40s linear infinite;
+            /* HAPUS BARIS INI: animation: scroll 40s linear infinite; */
         }
-        @keyframes scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
+        /* HAPUS BLOK INI: @keyframes scroll { ... } */
+
         .gallery-card {
             width: 320px;
             flex-shrink: 0;
@@ -363,60 +361,61 @@
         // SCRIPT NAVBAR, FAQ, FADE-IN, HERO (TIDAK BERUBAH)
         const header = document.getElementById('main-header'); const headerLogo = document.getElementById('header-logo'); const mobileMenuButton = document.getElementById('mobile-menu-button'); const mobileMenu = document.getElementById('mobile-menu'); window.addEventListener('scroll', () => { if (window.scrollY > 50) { header.classList.add('bg-white', 'text-gray-800', 'shadow-md'); header.classList.remove('text-white', 'nav-glassmorphism'); headerLogo.classList.remove('brightness-0', 'invert'); } else { header.classList.remove('bg-white', 'text-gray-800', 'shadow-md'); header.classList.add('text-white', 'nav-glassmorphism'); headerLogo.classList.add('brightness-0', 'invert'); } }); mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); }); const faqToggles = document.querySelectorAll('.faq-toggle'); faqToggles.forEach(toggle => { toggle.addEventListener('click', () => { const content = toggle.nextElementSibling; toggle.classList.toggle('open'); content.classList.toggle('open'); }); }); const fadeInElements = document.querySelectorAll('.fade-in'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); fadeInElements.forEach(el => { observer.observe(el); }); const slideshowImages = document.querySelectorAll('.hero-slideshow-image'); let currentImageIndex = 0; if (slideshowImages.length > 0) slideshowImages[0].classList.add('active'); function changeBackgroundImage() { if (slideshowImages.length === 0) return; slideshowImages[currentImageIndex].classList.remove('active'); currentImageIndex = (currentImageIndex + 1) % slideshowImages.length; slideshowImages[currentImageIndex].classList.add('active'); } setInterval(changeBackgroundImage, 7000);
 
-        // --- SCRIPT CAROUSEL + MODAL (DENGAN LOOPING DRAG-TO-SCROLL) ---
+        // --- SCRIPT CAROUSEL (FULL JAVASCRIPT ANIMATION) ---
         const galleryWrapper = document.getElementById('about-gallery-wrapper');
         const gallery = document.getElementById('about-gallery');
         
         if (gallery && galleryWrapper) {
             // 1. Duplikasi kartu untuk efek scroll tanpa akhir
-            const originalCards = gallery.querySelectorAll('.gallery-card');
+            const originalCards = Array.from(gallery.children);
             originalCards.forEach(card => {
                 gallery.appendChild(card.cloneNode(true));
             });
 
-            // --- LOGIKA UNTUK LOOPING MANUAL SCROLL ---
-            let isScrolling = false;
-            const handleInfiniteScroll = () => {
-                if (isScrolling) return;
-                isScrolling = true;
-                // requestAnimationFrame memastikan ini berjalan mulus
-                requestAnimationFrame(() => {
-                    const itemSetWidth = gallery.scrollWidth / 2;
-                    if (itemSetWidth > 0) {
-                        // Loop forward: jika scroll masuk ke area kloningan
-                        if (galleryWrapper.scrollLeft >= itemSetWidth) {
-                            galleryWrapper.scrollLeft -= itemSetWidth;
-                        } 
-                        // Loop backward: jika scroll kembali ke awal
-                        else if (galleryWrapper.scrollLeft <= 0) {
-                            galleryWrapper.scrollLeft += itemSetWidth;
-                        }
-                    }
-                    isScrolling = false;
-                });
-            };
-            galleryWrapper.addEventListener('scroll', handleInfiniteScroll);
-
-            // --- LOGIKA UNTUK GESER (DRAG) ---
-            let isDown = false;
+            // --- State Variables ---
+            let isPaused = false;   // Untuk mengontrol animasi otomatis
+            let isDown = false;     // Untuk melacak status drag
             let startX;
             let scrollLeft;
 
-            galleryWrapper.style.cursor = 'grab';
+            // --- Animasi Otomatis ---
+            const autoScroll = () => {
+                if (!isPaused) {
+                    galleryWrapper.scrollLeft += 0.8; // Angka ini bisa diubah untuk kecepatan
+                }
+                requestAnimationFrame(autoScroll);
+            };
 
+            // --- Logika Looping (Teleport) ---
+            const handleInfiniteScroll = () => {
+                const itemSetWidth = gallery.scrollWidth / 2;
+                if (itemSetWidth > 0) {
+                    if (galleryWrapper.scrollLeft >= itemSetWidth) {
+                        galleryWrapper.scrollLeft -= itemSetWidth;
+                    }
+                    if (galleryWrapper.scrollLeft <= 0) {
+                        galleryWrapper.scrollLeft += itemSetWidth;
+                    }
+                }
+            };
+            galleryWrapper.addEventListener('scroll', handleInfiniteScroll);
+
+            // --- Logika Geser (Drag) ---
+            galleryWrapper.style.cursor = 'grab';
             const startDragging = (e) => {
                 isDown = true;
+                isPaused = true; // Jeda animasi otomatis saat drag dimulai
                 galleryWrapper.style.cursor = 'grabbing';
                 startX = (e.pageX || e.touches[0].pageX) - galleryWrapper.offsetLeft;
-                scrollLeft = galleryWrapper.scrollLeft; // Selalu ambil posisi scroll terbaru
-                gallery.style.animationPlayState = 'paused';
+                scrollLeft = galleryWrapper.scrollLeft;
             };
 
             const stopDragging = () => {
                 isDown = false;
                 galleryWrapper.style.cursor = 'grab';
+                // Lanjutkan animasi hanya jika kursor tidak sedang hover
                 if (!galleryWrapper.matches(':hover')) {
-                    gallery.style.animationPlayState = 'running';
+                    isPaused = false;
                 }
             };
 
@@ -428,21 +427,25 @@
                 galleryWrapper.scrollLeft = scrollLeft - walk;
             };
 
+            // --- Event Listeners ---
             galleryWrapper.addEventListener('mousedown', startDragging);
-            galleryWrapper.addEventListener('mouseleave', stopDragging);
             galleryWrapper.addEventListener('mouseup', stopDragging);
+            galleryWrapper.addEventListener('mouseleave', stopDragging);
             galleryWrapper.addEventListener('mousemove', whileDragging);
             galleryWrapper.addEventListener('touchstart', startDragging, { passive: true });
             galleryWrapper.addEventListener('touchend', stopDragging);
             galleryWrapper.addEventListener('touchmove', whileDragging);
             
-            // Logika pause on hover
-            galleryWrapper.addEventListener('mouseenter', () => gallery.style.animationPlayState = 'paused');
+            // Jeda/Lanjutkan animasi saat hover
+            galleryWrapper.addEventListener('mouseenter', () => { isPaused = true; });
             galleryWrapper.addEventListener('mouseleave', () => {
-                if (!isDown) {
-                    gallery.style.animationPlayState = 'running';
+                if (!isDown) { // Jangan lanjutkan jika masih dalam mode drag
+                    isPaused = false;
                 }
             });
+
+            // Mulai animasi otomatis
+            requestAnimationFrame(autoScroll);
         }
         
         // --- SCRIPT MODAL (TIDAK BERUBAH) ---
@@ -454,6 +457,7 @@
         const modalImage = document.getElementById('modal-image');
 
         const openModal = (trigger) => {
+            isPaused = true; // Jeda carousel saat modal terbuka
             modalTitle.textContent = trigger.dataset.title;
             modalDescription.textContent = trigger.dataset.description;
             modalImage.src = trigger.dataset.image;
@@ -463,6 +467,7 @@
         const closeModal = () => {
             modalContainer.classList.add('opacity-0', 'pointer-events-none');
             modalBox.classList.add('scale-95');
+            isPaused = false; // Lanjutkan carousel saat modal tertutup
         };
 
         document.body.addEventListener('click', function(e) {
