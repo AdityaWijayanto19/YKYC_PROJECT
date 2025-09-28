@@ -36,7 +36,7 @@
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        /* === GAYA CAROUSEL (CSS ANIMATION DIHAPUS) === */
+        /* === GAYA CAROUSEL === */
         #about-gallery-wrapper {
             width: 100%;
             overflow-x: auto; 
@@ -44,7 +44,7 @@
             mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
             scrollbar-width: none; 
             -ms-overflow-style: none;
-            user-select: none; /* Mencegah seleksi teks saat dragging */
+            user-select: none;
         }
         #about-gallery-wrapper::-webkit-scrollbar {
             display: none;
@@ -52,10 +52,7 @@
         #about-gallery {
             display: flex;
             width: fit-content;
-            /* HAPUS BARIS INI: animation: scroll 40s linear infinite; */
         }
-        /* HAPUS BLOK INI: @keyframes scroll { ... } */
-
         .gallery-card {
             width: 320px;
             flex-shrink: 0;
@@ -77,7 +74,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            pointer-events: none; /* Mencegah gambar ikut ter-drag */
+            pointer-events: none;
         }
         .gallery-card-content {
             width: 0;
@@ -155,10 +152,21 @@
                 <div class="relative rounded-2xl bg-white overflow-hidden">
                     <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('https://i.imgur.com/u5ppt3s.png'); opacity: 0.7;"></div>
                     <div class="relative z-10 p-8 md:p-12">
-                        <div class="text-center mb-12 px-4">
-                            <h3 class="text-3xl font-bold text-gray-800">Kenali Inovasi Kami Lebih Dekat</h3>
-                            <p class="mt-2 text-gray-600 max-w-2xl mx-auto">Setiap detail dari layanan kami dirancang untuk memberikan yang terbaik bagi sepatu dan lingkungan Anda.</p>
+                        <!-- === PERUBAHAN POSISI DI SINI === -->
+                        <div class="flex justify-between items-center mb-12 px-4 flex-col md:flex-row">
+                            <!-- Teks Deskripsi di Kiri -->
+                            <div class="text-center md:text-left max-w-2xl mb-6 md:mb-0">
+                                <h3 class="text-3xl font-bold text-gray-800">Kenali Inovasi Kami Lebih Dekat</h3>
+                                <p class="mt-2 text-gray-600">Setiap detail dari layanan kami dirancang untuk memberikan yang terbaik bagi sepatu dan lingkungan Anda.</p>
+                            </div>
+                             <!-- Tombol Play/Pause di Kanan -->
+                            <div id="carousel-controls">
+                                <button id="play-pause-btn" class="w-16 h-16 rounded-full border-2 border-cyan-custom text-cyan-custom flex items-center justify-center hover:bg-cyan-custom hover:text-blue transition-colors duration-300 focus:outline-none" aria-label="Jeda atau Lanjutkan Carousel">
+                                    <i id="play-pause-icon" class="fas fa-pause text-2xl"></i>
+                                </button>
+                            </div>
                         </div>
+                        <!-- === AKHIR DARI PERUBAHAN POSISI === -->
                         <div id="about-gallery-wrapper">
                             <div id="about-gallery">
                                 <!-- Kartu Asli (akan diduplikasi oleh JS) -->
@@ -361,32 +369,34 @@
         // SCRIPT NAVBAR, FAQ, FADE-IN, HERO (TIDAK BERUBAH)
         const header = document.getElementById('main-header'); const headerLogo = document.getElementById('header-logo'); const mobileMenuButton = document.getElementById('mobile-menu-button'); const mobileMenu = document.getElementById('mobile-menu'); window.addEventListener('scroll', () => { if (window.scrollY > 50) { header.classList.add('bg-white', 'text-gray-800', 'shadow-md'); header.classList.remove('text-white', 'nav-glassmorphism'); headerLogo.classList.remove('brightness-0', 'invert'); } else { header.classList.remove('bg-white', 'text-gray-800', 'shadow-md'); header.classList.add('text-white', 'nav-glassmorphism'); headerLogo.classList.add('brightness-0', 'invert'); } }); mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); }); const faqToggles = document.querySelectorAll('.faq-toggle'); faqToggles.forEach(toggle => { toggle.addEventListener('click', () => { const content = toggle.nextElementSibling; toggle.classList.toggle('open'); content.classList.toggle('open'); }); }); const fadeInElements = document.querySelectorAll('.fade-in'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); fadeInElements.forEach(el => { observer.observe(el); }); const slideshowImages = document.querySelectorAll('.hero-slideshow-image'); let currentImageIndex = 0; if (slideshowImages.length > 0) slideshowImages[0].classList.add('active'); function changeBackgroundImage() { if (slideshowImages.length === 0) return; slideshowImages[currentImageIndex].classList.remove('active'); currentImageIndex = (currentImageIndex + 1) % slideshowImages.length; slideshowImages[currentImageIndex].classList.add('active'); } setInterval(changeBackgroundImage, 7000);
 
-        // --- SCRIPT CAROUSEL (FULL JAVASCRIPT ANIMATION) ---
+        // --- SCRIPT CAROUSEL (DENGAN KONTROL PLAY/PAUSE) ---
         const galleryWrapper = document.getElementById('about-gallery-wrapper');
         const gallery = document.getElementById('about-gallery');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playPauseIcon = document.getElementById('play-pause-icon');
         
-        if (gallery && galleryWrapper) {
-            // 1. Duplikasi kartu untuk efek scroll tanpa akhir
+        if (gallery && galleryWrapper && playPauseBtn && playPauseIcon) {
+            // Duplikasi kartu untuk efek scroll tanpa akhir
             const originalCards = Array.from(gallery.children);
             originalCards.forEach(card => {
                 gallery.appendChild(card.cloneNode(true));
             });
 
-            // --- State Variables ---
-            let isPaused = false;   // Untuk mengontrol animasi otomatis
-            let isDown = false;     // Untuk melacak status drag
+            // State Variables
+            let isPaused = false;
+            let isDown = false;
             let startX;
             let scrollLeft;
 
-            // --- Animasi Otomatis ---
+            // Fungsi Animasi Otomatis
             const autoScroll = () => {
                 if (!isPaused) {
-                    galleryWrapper.scrollLeft += 0.8; // Angka ini bisa diubah untuk kecepatan
+                    galleryWrapper.scrollLeft += 0.8; 
                 }
                 requestAnimationFrame(autoScroll);
             };
 
-            // --- Logika Looping (Teleport) ---
+            // Logika Looping (Teleport)
             const handleInfiniteScroll = () => {
                 const itemSetWidth = gallery.scrollWidth / 2;
                 if (itemSetWidth > 0) {
@@ -400,34 +410,44 @@
             };
             galleryWrapper.addEventListener('scroll', handleInfiniteScroll);
 
-            // --- Logika Geser (Drag) ---
+            // Kontrol Tombol Play/Pause
+            playPauseBtn.addEventListener('click', () => {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    playPauseIcon.classList.remove('fa-pause');
+                    playPauseIcon.classList.add('fa-play');
+                } else {
+                    playPauseIcon.classList.remove('fa-play');
+                    playPauseIcon.classList.add('fa-pause');
+                }
+            });
+
+            // Logika Geser (Drag)
             galleryWrapper.style.cursor = 'grab';
             const startDragging = (e) => {
                 isDown = true;
-                isPaused = true; // Jeda animasi otomatis saat drag dimulai
+                isPaused = true;
+                if (playPauseIcon.classList.contains('fa-pause')) {
+                    playPauseIcon.classList.remove('fa-pause');
+                    playPauseIcon.classList.add('fa-play');
+                }
                 galleryWrapper.style.cursor = 'grabbing';
                 startX = (e.pageX || e.touches[0].pageX) - galleryWrapper.offsetLeft;
                 scrollLeft = galleryWrapper.scrollLeft;
             };
-
             const stopDragging = () => {
                 isDown = false;
                 galleryWrapper.style.cursor = 'grab';
-                // Lanjutkan animasi hanya jika kursor tidak sedang hover
-                if (!galleryWrapper.matches(':hover')) {
-                    isPaused = false;
-                }
             };
-
             const whileDragging = (e) => {
                 if (!isDown) return;
                 e.preventDefault();
                 const x = (e.pageX || e.touches[0].pageX) - galleryWrapper.offsetLeft;
-                const walk = (x - startX) * 2; // Percepat pergeseran
+                const walk = (x - startX) * 2;
                 galleryWrapper.scrollLeft = scrollLeft - walk;
             };
 
-            // --- Event Listeners ---
+            // Event Listeners
             galleryWrapper.addEventListener('mousedown', startDragging);
             galleryWrapper.addEventListener('mouseup', stopDragging);
             galleryWrapper.addEventListener('mouseleave', stopDragging);
@@ -436,10 +456,11 @@
             galleryWrapper.addEventListener('touchend', stopDragging);
             galleryWrapper.addEventListener('touchmove', whileDragging);
             
-            // Jeda/Lanjutkan animasi saat hover
+            // Jeda saat hover
             galleryWrapper.addEventListener('mouseenter', () => { isPaused = true; });
             galleryWrapper.addEventListener('mouseleave', () => {
-                if (!isDown) { // Jangan lanjutkan jika masih dalam mode drag
+                // Lanjutkan hanya jika tidak di-drag DAN tombol tidak dalam status pause manual
+                if (!isDown && playPauseIcon.classList.contains('fa-pause')) {
                     isPaused = false;
                 }
             });
@@ -448,7 +469,7 @@
             requestAnimationFrame(autoScroll);
         }
         
-        // --- SCRIPT MODAL (TIDAK BERUBAH) ---
+        // --- SCRIPT MODAL ---
         const modalContainer = document.getElementById('modal-container');
         const modalBox = document.getElementById('modal-box');
         const modalCloseButton = document.getElementById('modal-close-button');
@@ -457,7 +478,7 @@
         const modalImage = document.getElementById('modal-image');
 
         const openModal = (trigger) => {
-            isPaused = true; // Jeda carousel saat modal terbuka
+            isPaused = true; // Selalu jeda carousel saat modal terbuka
             modalTitle.textContent = trigger.dataset.title;
             modalDescription.textContent = trigger.dataset.description;
             modalImage.src = trigger.dataset.image;
@@ -467,7 +488,10 @@
         const closeModal = () => {
             modalContainer.classList.add('opacity-0', 'pointer-events-none');
             modalBox.classList.add('scale-95');
-            isPaused = false; // Lanjutkan carousel saat modal tertutup
+            // Lanjutkan carousel hanya jika tombol tidak dalam status pause manual
+            if (playPauseIcon && playPauseIcon.classList.contains('fa-pause')) {
+                isPaused = false;
+            }
         };
 
         document.body.addEventListener('click', function(e) {
