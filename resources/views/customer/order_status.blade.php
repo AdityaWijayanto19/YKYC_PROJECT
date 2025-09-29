@@ -1,141 +1,116 @@
 @extends('layouts.customer')
 
-{{-- Push CSS khusus halaman ini --}}
-
-{{-- Set judul halaman ini --}}
 @section('title', 'Status Pesanan - Ya Kotor Ya Cuci')
 
-{{-- Mulai bagian konten --}}
 @section('content')
-
-    {{-- DUMMY DATA: Di controller, Anda akan mengambil data ini dari database --}}
-    @php
-        $active_orders = [
-            [
-                'id' => 'YKYC-221',
-                'service' => 'Deep Clean',
-                'date' => '16 Sep 2025',
-                'status' => 'In Progress',
-                'worker' => 'Gerobak Senayan Park',
-                'location' => ['lat' => -6.2297, 'lng' => 106.8093]
-            ],
-            [
-                'id' => 'YKYC-219',
-                'service' => 'Quick Clean',
-                'date' => '15 Sep 2025',
-                'status' => 'Waiting',
-                'worker' => 'Gerobak Blok M Square',
-                'location' => null
-            ],
-            [
-                'id' => 'YKYC-215',
-                'service' => 'Unyellowing + Deep Clean',
-                'date' => '14 Sep 2025',
-                'status' => 'Ready for Pickup',
-                'worker' => 'Gerobak Stasiun Gambir',
-                'location' => ['lat' => -6.1751, 'lng' => 106.8650]
-            ],
-        ];
-    @endphp
-
-    <div class="flex h-screen bg-gray-100">
-        <x-sidebar-customer></x-sidebar-customer>
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top bar (mobile) -->
-            <header class="flex justify-between items-center p-4 bg-white border-b md:hidden">
-                <h1 class="text-xl font-bold text-primary">Status Pesanan</h1>
-                <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
-                        </path>
-                    </svg>
-                </button>
-            </header>
+    {{-- ... (kode pembuka <div class="flex h-screen ..."> sampai <main>) ... --}}
 
             <!-- Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
                 <div class="container mx-auto">
+                    {{-- Tambahkan ini untuk menampilkan pesan dari redirect (contoh: 'sudah lunas') --}}
+                    @if (session('info'))
+                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6" role="alert">
+                            <p>{{ session('info') }}</p>
+                        </div>
+                    @endif
+
                     <h2 class="text-3xl font-bold text-gray-800 mb-2">Status Pesanan Aktif Anda</h2>
                     <p class="text-gray-500 mb-8">Lacak progres pembersihan sepatumu di sini.</p>
 
                     <!-- Order List -->
                     <div class="space-y-6">
                         @forelse ($active_orders as $order)
-                            <div class="bg-white p-6 rounded-lg shadow-md transition hover:shadow-xl">
+                            {{-- ID unik untuk setiap kartu pesanan agar bisa di-update oleh JS --}}
+                            <div id="order-card-{{ $order->id }}"
+                                class="bg-white p-6 rounded-lg shadow-md transition hover:shadow-xl">
                                 <div class="flex flex-wrap justify-between items-center gap-4">
                                     <!-- Order Details -->
                                     <div class="flex-1 min-w-[250px]">
                                         <div class="flex items-center gap-4">
-                                            <div class="p-3 bg-primary/10 rounded-lg">
-                                                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2 1M4 7l2-1M4 7v2.5M12 21.5V12M12 12l-4.21-6.315A1 1 0 018.63 4.5h6.74a1 1 0 01.84.185L12 12z">
-                                                    </path>
-                                                </svg>
-                                            </div>
+                                            {{-- ... (ikon SVG) ... --}}
                                             <div>
-                                                <p class="font-bold text-lg text-gray-800">{{ $order['service'] }}</p>
-                                                <p class="text-sm text-gray-500">ID: {{ $order['id'] }} &bull;
-                                                    {{ $order['date'] }}
+                                                {{-- Menggunakan relasi untuk mengambil nama service --}}
+                                                <p class="font-bold text-lg text-gray-800">{{ $order->service->name }}</p>
+                                                <p class="text-sm text-gray-500">ID: {{ $order->order_id }} &bull;
+                                                    {{ $order->created_at->format('d M Y') }}
                                                 </p>
+
+                                                {{-- Badge Status Pembayaran dengan ID unik --}}
+                                                <div id="payment-status-{{ $order->id }}" class="mt-1">
+                                                    @if ($order->payment_status == 'paid')
+                                                        <span
+                                                            class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">Lunas</span>
+                                                    @else
+                                                        <span
+                                                            class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Menunggu
+                                                            Pembayaran</span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="mt-4 pl-14">
-                                            <p class="text-sm text-gray-600">Dikerjakan oleh: <span
-                                                    class="font-semibold">{{ $order['worker'] }}</span></p>
-                                        </div>
+                                        {{-- ... (dikerjakan oleh) ... --}}
                                     </div>
 
                                     <!-- Status & Action -->
-                                    <div class="flex flex-col sm:flex-row items-center gap-4">
-                                        <!-- Status Badge -->
+                                    <div id="action-buttons-{{ $order->id }}"
+                                        class="flex flex-col sm:flex-row items-center gap-4">
+                                        <!-- Status Pengerjaan -->
                                         @php
-                                            $statusClass = '';
-                                            if ($order['status'] == 'Waiting')
-                                                $statusClass = 'bg-warning/20 text-warning-800';
-                                            elseif ($order['status'] == 'In Progress')
-                                                $statusClass = 'bg-primary/20 text-primary-800';
-                                            elseif ($order['status'] == 'Ready for Pickup')
-                                                $statusClass = 'bg-success/20 text-success-800';
+                                            $status = strtolower($order->status);
+                                            $statusClass = 'bg-gray-200 text-gray-800'; // Default
+                                            if (in_array($status, ['diproses', 'in progress']))
+                                                $statusClass = 'bg-blue-100 text-blue-800';
+                                            elseif ($status === 'ready for pickup')
+                                                $statusClass = 'bg-green-100 text-green-800';
                                         @endphp
-                                        <span class="px-4 py-1.5 text-sm font-semibold rounded-full {{ $statusClass }}">
-                                            {{ $order['status'] }}
+                                        <span
+                                            class="px-4 py-1.5 text-sm font-semibold rounded-full capitalize {{ $statusClass }}">
+                                            {{ $order->status }}
                                         </span>
 
-                                        <!-- Action Button -->
-                                        @if ($order['status'] == 'In Progress' || $order['status'] == 'Ready for Pickup')
-                                            {{-- Mengubah <button> menjadi <a> yang diarahkan ke route tracking --}}
-                                                    {{-- Kita mengirimkan ID pesanan sebagai parameter --}}
-                                                    <a href="{{ route('customer.tracking', ['order' => $order['id']]) }}"
-                                                        class="text-white bg-primary hover:bg-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center gap-2">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                                            </path>
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                        </svg>
-                                                        Lacak Gerobak
-                                                    </a>
+                                        {{-- Tombol Bayar Sekarang (Conditional) --}}
+                                        @if ($order->payment_status == 'pending')
+                                            {{-- INI BAGIAN PENTING: Arahkan ke rute payment yang sudah ada --}}
+                                            <a href="{{ route('customer.order.payment', $order) }}"
+                                                class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center gap-2">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                                                    </path>
+                                                </svg>
+                                                Bayar Sekarang
+                                            </a>
+                                        @endif
+
+                                        <!-- Tombol Lacak Gerobak (Conditional) -->
+                                        @if ($order->payment_status == 'paid' && in_array(strtolower($order->status), ['diproses', 'in progress', 'ready for pickup']))
+                                            <button type="button" class="track-button ..." {{-- ... (data attributes) ... --}}>
+                                                Lacak Gerobak
+                                            </button>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="bg-white p-8 text-center rounded-lg shadow-md">
-                                <p class="text-gray-600">Anda belum memiliki pesanan aktif saat ini.</p>
-                                <a href="{{-- route('order.create') --}}"
-                                    class="mt-4 inline-block bg-primary text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition">Buat
-                                    Pesanan Sekarang</a>
+                            <div class="text-center bg-white p-8 rounded-lg shadow-md border-2 border-dashed">
+                                {{-- Ikon SVG untuk menandakan 'kosong' --}}
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M8.25 6.75h7.5M8.25 12h7.5m-7.5 5.25h7.5m3-15H5.25A2.25 2.25 0 003 5.25v13.5A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V5.25A2.25 2.25 0 0018.75 3z" />
+                                </svg>
+
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Belum Ada Pesanan Aktif</h3>
+                                <p class="mt-2 text-base text-gray-500">
+                                    Anda saat ini tidak memiliki pesanan yang sedang diproses. Saatnya membuat sepatumu bersih
+                                    kembali!
+                                </p>
                             </div>
                         @endforelse
                     </div>
                 </div>
             </main>
-        </div>
     </div>
 
     <!-- Modal for Map Tracking -->
@@ -154,7 +129,8 @@
 {{-- Akhir bagian konten --}}
 
 @push('scripts')
-     <script>
+    <script>
+        // Kode JavaScript Anda tetap sama seperti sebelumnya, tidak perlu diubah.
         document.addEventListener('DOMContentLoaded', function () {
             // ========== Mobile Menu Toggle ==========
             const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -169,11 +145,11 @@
             const closeModalButton = document.getElementById('close-modal');
             const trackButtons = document.querySelectorAll('.track-button');
             const modalTitle = document.getElementById('modal-title');
-            let map = null; // Variable to hold map instance
-            let marker = null; // Variable to hold marker instance
+            let map = null;
+            let marker = null;
 
             const openModal = (lat, lng, workerName) => {
-                if (!lat || !lng) {
+                if (!lat || !lng || lat === '' || lng === '') {
                     alert('Lokasi untuk gerobak ini tidak tersedia.');
                     return;
                 }
@@ -181,7 +157,6 @@
                 modalTitle.textContent = `Lokasi ${workerName}`;
                 mapModal.classList.remove('hidden');
 
-                // Initialize map if it hasn't been, otherwise set new view
                 if (!map) {
                     map = L.map('track-map').setView([lat, lng], 15);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -191,7 +166,6 @@
                     map.setView([lat, lng], 15);
                 }
 
-                // Add or move marker
                 if (!marker) {
                     marker = L.marker([lat, lng]).addTo(map);
                 } else {
@@ -199,7 +173,6 @@
                 }
                 marker.bindPopup(`<b>${workerName}</b>`).openPopup();
 
-                // IMPORTANT: Invalidate map size after modal is shown to prevent gray tiles
                 setTimeout(() => map.invalidateSize(), 10);
             };
 
@@ -217,7 +190,6 @@
             });
 
             closeModalButton.addEventListener('click', closeModal);
-            // Close modal if user clicks outside the content
             mapModal.addEventListener('click', (event) => {
                 if (event.target === mapModal) {
                     closeModal();

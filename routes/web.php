@@ -6,7 +6,7 @@ use App\Http\Controllers\Customer\OrderController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Controllers\Auth\AuthController;
 
 // ===================================================================
@@ -75,52 +75,17 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('order.payment');
 
-    Route::get('/order-status', function () {
-        return view('customer.order_status');
-    })->middleware(['auth', 'verified'])->name('order.status');
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/order-status', [OrderController::class, 'status'])
+            ->name('order.status');
+    });
 
     Route::get('/locations', function () {
-        $all_active_locations = [
-            ['worker' => 'Gerobak Senayan Park', 'location' => ['lat' => -6.2297, 'lng' => 106.8093]],
-            ['worker' => 'Gerobak Stasiun Gambir', 'location' => ['lat' => -6.1751, 'lng' => 106.8650]],
-            ['worker' => 'Gerobak Blok M Square', 'location' => ['lat' => -6.2415, 'lng' => 106.8242]]
-        ];
-
-        return view('customer.locations', ['active_locations' => $all_active_locations]);
+        return view('customer.locations');
     })->middleware(['auth', 'verified'])->name('locations');
 
     Route::get('/tracking/{order}', function ($orderId) {
-
-        $all_orders_database = [
-            'YKYC-221' => [
-                'order_id' => 'YKYC-221',
-                'worker' => 'Gerobak Senayan Park',
-                'status' => 'In Progress',
-                'location' => ['lat' => -6.2297, 'lng' => 106.8093]
-            ],
-            'YKYC-215' => [
-                'order_id' => 'YKYC-215',
-                'worker' => 'Gerobak Stasiun Gambir',
-                'status' => 'Ready for Pickup',
-                'location' => ['lat' => -6.1751, 'lng' => 106.8650]
-            ],
-            'YKYC-209' => [
-                'order_id' => 'YKYC-209',
-                'worker' => 'Worker Keliling - Budi',
-                'status' => 'In Progress',
-                'location' => ['lat' => -6.2415, 'lng' => 106.8242]
-            ]
-        ];
-
-        $tracked_order = $all_orders_database[$orderId] ?? null;
-
-        $data_to_send = [];
-
-        if ($tracked_order) {
-            $data_to_send[] = $tracked_order;
-        }
-
-        return view('customer.tracking', ['tracked_orders' => $data_to_send]);
+        return view('customer.tracking');
     })->middleware(['auth', 'verified'])->name('tracking');
 
     Route::get('/history', function () {
@@ -197,12 +162,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('worker.index');
 
     Route::get('/worker/location-chart', function () {
-        $active_locations = [
-            ['worker' => 'Budi Santoso', 'location' => ['lat' => -6.2088, 'lng' => 106.8456]],
-            ['worker' => 'Ahmad Fauzi', 'location' => ['lat' => -6.2297, 'lng' => 106.809]],
-            ['worker' => 'Eko Prasetyo', 'location' => ['lat' => -6.1751, 'lng' => 106.865]],
-        ];
-
         return view('admin.worker.location-chart');
     })->name('worker.location-chart');
 
@@ -233,3 +192,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [SocialiteController::class, 'callback']);
+
+// ===================================================================
+//                             Midtrans
+// ===================================================================
+Route::post('/midtrans/callback', [MidtransCallbackController::class, 'notificationHandler']);

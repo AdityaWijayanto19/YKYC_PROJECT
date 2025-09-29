@@ -15,9 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'midtrans/callback', // <-- URL yang kita izinkan
+            'midtrans/*' // <-- Atau gunakan wildcard untuk semua rute di bawah /midtrans
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-
-    
