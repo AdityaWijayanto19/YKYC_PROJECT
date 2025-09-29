@@ -113,7 +113,7 @@
                                 </div>
                                 
                                 <!-- Ringkasan Pesanan -->
-                                <div class="border-t pt-6 mt-6 space-y-2">
+                                <div class="border-t pt-6 mt-6 space-y-2 bg-gray-50 rounded-lg p-4">
                                     <h3 class="text-lg font-semibold text-gray-800">Ringkasan Pesanan</h3>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Layanan:</span>
@@ -163,13 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const summaryService = document.getElementById('summary-service');
     const summaryDeliveryFee = document.getElementById('summary-delivery-fee');
     const summaryTotal = document.getElementById('summary-total');
-
-    const prices = {
-        'Quick Clean': 25000,
-        'Deep Clean': 45000,
-        'Unyellowing': 35000,
-        'delivery_fee': 15000
-    };
 
     function formatRupiah(number) {
         return new Intl.NumberFormat('id-ID', {

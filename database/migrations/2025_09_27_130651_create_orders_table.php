@@ -9,11 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // File: database/migrations/...._create_orders_table.php
+
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
             // --- Informasi Kunci (Penghubung ke tabel lain) ---
             $table->id(); // ID unik untuk setiap pesanan, contoh: #1, #2, dst.
+
+            // ========================================================================
+            // TAMBAHKAN BARIS INI! INI ADALAH KUNCI UTAMA SOLUSINYA
+            $table->string('order_id')->unique()->nullable(); // ID unik untuk Midtrans, contoh: YKYC-1-xyz
+            // ========================================================================
+
             $table->foreignId('user_id')->constrained('users'); // Menghubungkan ke tabel 'users'. Siapa yang pesan?
             $table->foreignId('service_id')->constrained('services'); // Menghubungkan ke tabel 'services'. Pesan layanan apa?
 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buat Akun - Ya Kotor Ya Cuci</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,6 +23,13 @@
             }
         }
     </script>
+        <!-- Custom style diletakkan setelah semua link agar override -->
+        <style>
+            .swiper-slide {
+                background-size: cover !important;
+                background-position: center !important;
+            }
+        </style>
     <style>
         .swiper-slide {
             background-size: cover;
@@ -37,9 +44,6 @@
 
         <div class="hidden md:block md:w-1/2 relative bg-cover bg-center h-screen"
             style="background-image: url('https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg');">
-            <div class="p-12 flex flex-col justify-between h-full">
-                <div class="absolute inset-0 bg-black opacity-20"></div>
-            </div>
             <div class="absolute inset-0 bg-black opacity-25"></div>
             <div class="absolute inset-0 p-12 flex flex-col justify-end">
                 <div class="relative z-10">
@@ -50,8 +54,6 @@
         </div>
 
         <!-- Right side with Registration Form -->
-        <!-- PERUBAHAN FINAL DI SINI: 'min-h-0' ditambahkan -->
-        
         <div class="w-full md:w-1/2 bg-white flex flex-col h-screen overflow-y-auto min-h-0">
             <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto my-auto">
                 <!-- Back Button -->
@@ -122,7 +124,7 @@
                     <div class="flex items-center pt-2">
                         <input id="terms" name="terms" type="checkbox" required
                             class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                        <label for="terms" class="ml-2 block text-sm text-gray-700">Saya setuju dengan <a href="#"
+                        <label for="terms" class="ml-2 block text-sm text-gray-700">Saya setuju dengan <a href="#" id="terms-link"
                                 class="font-medium text-primary hover:underline">Syarat & Ketentuan</a></label>
                     </div>
 
@@ -150,6 +152,59 @@
             </div>
         </div>
     </div>
+    
+    <!-- === MODAL SYARAT & KETENTUAN (TAMBAHAN BARU) === -->
+    <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full flex flex-col">
+            <!-- Modal Header -->
+            <div class="p-5 border-b">
+                <h3 class="text-2xl font-semibold text-gray-800">Syarat & Ketentuan Layanan</h3>
+            </div>
+            
+            <!-- Modal Body (dengan scroll) -->
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <p class="text-gray-600">Mohon baca Syarat dan Ketentuan ("Ketentuan") ini dengan saksama sebelum menggunakan layanan "Ya Kotor Ya Cuci". Dengan mendaftar dan menggunakan layanan kami, Anda setuju untuk terikat oleh Ketentuan ini.</p>
+                
+                <div>
+                    <h4 class="font-semibold text-gray-700">1. Pendaftaran Akun</h4>
+                    <p class="text-gray-600 mt-1">Anda bertanggung jawab untuk memberikan informasi yang akurat dan lengkap saat membuat akun. Anda juga bertanggung jawab penuh untuk menjaga kerahasiaan kata sandi dan semua aktivitas yang terjadi di bawah akun Anda.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-gray-700">2. Layanan & Tanggung Jawab</h4>
+                    <p class="text-gray-600 mt-1">Kami berkomitmen untuk memberikan layanan pencucian dengan kualitas terbaik. Namun, kami tidak bertanggung jawab atas kerusakan pada pakaian yang disebabkan oleh bahan yang tidak tahan cuci (luntur, susut) atau benda asing yang tertinggal di saku pakaian (pena, koin, dll.).</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-gray-700">3. Barang Hilang atau Rusak</h4>
+                    <p class="text-gray-600 mt-1">Keluhan mengenai barang yang hilang atau rusak harus dilaporkan dalam waktu 1x24 jam setelah pengiriman. Kompensasi, jika ada, tidak akan melebihi 5 kali biaya cuci dari barang yang bersangkutan dan akan melalui proses investigasi internal terlebih dahulu.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-gray-700">4. Pembayaran</h4>
+                    <p class="text-gray-600 mt-1">Semua pembayaran harus diselesaikan sesuai dengan tagihan sebelum atau pada saat pakaian Anda diantar kembali. Kami menerima berbagai metode pembayaran yang tertera di aplikasi.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-gray-700">5. Privasi</h4>
+                    <p class="text-gray-600 mt-1">Kami menghargai privasi Anda. Informasi pribadi yang Anda berikan hanya akan digunakan untuk keperluan penyediaan layanan dan tidak akan dibagikan kepada pihak ketiga tanpa persetujuan Anda.</p>
+                </div>
+
+                <p class="pt-2 text-sm text-gray-500">Dengan menekan tombol "Saya Setuju", Anda mengonfirmasi bahwa Anda telah membaca, memahami, dan menyetujui seluruh Syarat & Ketentuan yang berlaku.</p>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-end p-5 border-t space-x-4">
+                <button id="close-modal-btn" type="button" class="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none">
+                    Tutup
+                </button>
+                <button id="agree-btn" type="button" class="px-6 py-2 text-white bg-primary rounded-lg hover:bg-blue-600 focus:outline-none">
+                    Saya Setuju
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- === AKHIR MODAL === -->
 
     <script>
         const swiper = new Swiper('.swiper', {
@@ -163,5 +218,43 @@
         });
     </script>
 
+    <!-- === JAVASCRIPT MODAL (TAMBAHAN BARU) === -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const termsLink = document.getElementById('terms-link');
+            const termsModal = document.getElementById('terms-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const agreeBtn = document.getElementById('agree-btn');
+            const termsCheckbox = document.getElementById('terms');
+
+            // Fungsi untuk membuka modal
+            termsLink.addEventListener('click', function (event) {
+                event.preventDefault(); // Mencegah link berpindah halaman
+                termsModal.classList.remove('hidden');
+                termsModal.classList.add('flex', 'items-center', 'justify-center');
+            });
+
+            // Fungsi untuk menutup modal
+            const closeModal = () => {
+                termsModal.classList.remove('flex', 'items-center', 'justify-center');
+                termsModal.classList.add('hidden');
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+
+            // Fungsi saat tombol "Saya Setuju" diklik
+            agreeBtn.addEventListener('click', function () {
+                termsCheckbox.checked = true; // Otomatis mencentang checkbox
+                closeModal(); // Menutup modal
+            });
+
+            // Opsional: tutup modal jika klik di luar area konten modal
+            termsModal.addEventListener('click', function(event) {
+                if (event.target === termsModal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

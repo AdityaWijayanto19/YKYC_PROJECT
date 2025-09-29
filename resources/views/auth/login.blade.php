@@ -67,11 +67,11 @@
         <div class="w-full md:w-1/2 bg-white flex flex-col justify-center">
             <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto">
                 
-                <!-- Tombol Kembali yang Baru -->
-                <div class="mb-8">
-                    <a href="/" class="text-gray-500 hover:text-gray-800 transition-colors duration-200 flex items-center gap-2 font-medium">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                <!-- Back Button -->
+                <div class="mb-6">
+                    <a href="/" class="text-primary font-bold tracking-wider flex items-center gap-2 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
                         Kembali
                     </a>

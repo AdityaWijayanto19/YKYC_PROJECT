@@ -19,7 +19,7 @@ class OrderController extends Controller
     public function create()
     {
         $services = Service::all();
-        $locations = Location::all(); 
+        $locations = Location::all();
 
         return view('customer.order', [
             'services' => $services,
@@ -60,9 +60,14 @@ class OrderController extends Controller
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
 
+        $uniqueOrderId = 'YKYC-' . $order->id . '-' . Str::random(5);
+
+        $order->order_id = $uniqueOrderId;
+        $order->save();
+
         $params = array(
             'transaction_details' => array(
-                'order_id' => $order->id . '-' . time(), // ID Order Unik, contoh: 123-1612345678
+                'order_id' => $order->order_id,
                 'gross_amount' => $order->total_price,
             ),
             'customer_details' => array(
@@ -73,6 +78,7 @@ class OrderController extends Controller
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 
+        $order->order_id = $uniqueOrderId;
         $order->snap_token = $snapToken;
         $order->save();
 
@@ -85,8 +91,28 @@ class OrderController extends Controller
             abort(403, 'ANDA TIDAK DIIZINKAN MENGAKSES HALAMAN INI.');
         }
 
+        if ($order->payment_status === 'paid') {
+            // Jika sudah lunas, kembalikan ke halaman status dengan pesan.
+            return redirect()->route('customer.order.status')
+                ->with('info', 'Pesanan dengan ID ' . $order->order_id . ' sudah lunas.');
+        }
+
         return view('customer.order-payment', [
             'order' => $order
         ]);
+    }
+
+    public function status()
+    {
+        $userId = Auth::id();
+
+        // Ambil semua order aktif customer, beserta relasi service dan worker
+        $active_orders = Order::with(['service', 'worker'])
+            ->where('user_id', $userId)
+            ->whereIn('status', ['pending', 'diproses', 'In Progress', 'Ready for Pickup'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('customer.order_status', compact('active_orders'));
     }
 }
