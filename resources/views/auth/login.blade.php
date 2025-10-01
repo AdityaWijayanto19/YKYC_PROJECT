@@ -105,7 +105,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
-                            <a href="{{-- route('password.request') --}}"
+                            <a href="{{ route('forget') }}"
                                 class="text-sm font-medium text-primary hover:underline">
                                 Lupa password?
                             </a>

@@ -226,7 +226,7 @@
                                 <li class="flex items-center"><i class="fas fa-times-circle text-gray-400 w-6"></i> Cuci Tali & Insole</li>
                             </ul>
                         </div>
-                        <div class="mt-10"><a href="/login" class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg border-2 border-cyan-custom transition hover:bg-cyan-custom hover:text-white">Pesan Sekarang</a></div>
+                        <div class="mt-10"><a href="/login" class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg border-2 border-cyan-custom transition hover:bg-cyan-custom hover:text-blue">Pesan Sekarang</a></div>
                     </div>
                     <div class="service-card relative bg-cyan-custom rounded-lg shadow-2xl shadow-cyan-glow/50 p-8 text-white flex flex-col h-full lg:scale-105 fade-in">
                         <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-400 text-gray-900 font-semibold px-4 py-1 rounded-full text-sm">Paling Populer</div>
@@ -260,7 +260,7 @@
                                 <li class="flex items-center"><i class="fas fa-info-circle text-gray-400 w-6"></i> Optimal dengan Deep Clean</li>
                             </ul>
                         </div>
-                        <div class="mt-10"><a href="/login" class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg border-2 border-cyan-custom transition hover:bg-cyan-custom hover:text-white">Pesan Sekarang</a></div>
+                        <div class="mt-10"><a href="/login" class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg border-2 border-cyan-custom transition hover:bg-cyan-custom hover:text-blue">Pesan Sekarang</a></div>
                     </div>
                 </div>
             </div>
@@ -319,6 +319,9 @@
                 <div class="md:col-span-4 lg:col-span-3">
                     <h3 class="font-bold text-lg mb-4 text-white tracking-wider">Kantor Pusat</h3>
                     <div class="flex text-gray-400"><i class="fas fa-map-marker-alt w-5 mr-3 mt-1 text-cyan-custom"></i><span>Jalan Bunga Coklat No. 10, Jatimulyo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141</span></div>
+                </div>
+                <div class="md:col-span-4 lg:col-span-3">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.579601358641!2d112.6176543153926!3d-7.938959994279016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e788276b23448f5%3A0xcbab727c62c1615f!2sJl.%20Bunga%20Coklat%20No.10%2C%20Jatimulyo%2C%20Kec.%20Lowokwaru%2C%20Kota%20Malang%2C%20Jawa%20Timur%2065141!5e0!3m2!1sid!2sid!4v1678886400000!5m2!1sid!2sid" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
