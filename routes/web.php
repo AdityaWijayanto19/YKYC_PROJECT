@@ -1,13 +1,18 @@
 <?php
 
-use App\Http\Controllers\Auth\SocialiteController;
-use App\Http\Controllers\Customer\ProfileController;
-use App\Http\Controllers\Customer\OrderController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\MidtransCallbackController;
+use App\Http\Controllers\Auth\SocialiteController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Customer\FeedbackController;
+use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
+use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
+use App\Http\Controllers\Worker\DashboardController;
+use App\Http\Controllers\Worker\OrderController as WorkerOrderController;
+use App\Http\Controllers\Worker\OrderHistoryController;
+use App\Http\Controllers\Worker\ProfileController as WorkerProfileController;
 
 // ===================================================================
 // HALAMAN PUBLIK & OTENTIKASI
@@ -55,58 +60,57 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 Route::prefix('customer')->name('customer.')->group(function () {
 
-    Route::get('/dashboard', function () {
-        view()->share('user', (object)['name' => 'Aditya']);
-        return view('customer.dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
-
+    Route::get('/dashboard', [CustomerOrderController::class, 'dashboard'])
+        ->middleware(['auth', 'verified'])
+        ->name('dashboard');
 
     // page order
-    Route::get('/order', [OrderController::class, 'create'])
+    Route::get('/order', [CustomerOrderController::class, 'create'])
         ->middleware(['auth', 'verified', 'profile.complete']) // Penjaga: hanya user yang sudah login yang bisa lewat.
         ->name('order.create'); // Kita beri nama 'order.create' agar mudah dipanggil.
 
     // Rute ini untuk MEMPROSES data form saat tombol submit ditekan (metode POST).
-    Route::post('/order', [OrderController::class, 'store'])
+    Route::post('/order', [CustomerOrderController::class, 'store'])
         ->middleware(['auth', 'verified'])
         ->name('order.store');
 
-    Route::get('/order/payment/{order}', [OrderController::class, 'payment'])
+    Route::get('/order/payment/{order}', [CustomerOrderController::class, 'payment'])
         ->middleware(['auth', 'verified'])
         ->name('order.payment');
 
     Route::middleware(['auth', 'verified'])->group(function () {
-        Route::get('/order-status', [OrderController::class, 'status'])
+        Route::get('/order-status', [CustomerOrderController::class, 'status'])
             ->name('order.status');
     });
 
-    Route::get('/locations', function () {
-        return view('customer.locations');
-    })->middleware(['auth', 'verified'])->name('locations');
+    Route::get('/order/{order}/track', [CustomerOrderController::class, 'track'])
+        ->middleware(['auth', 'verified'])
+        ->name('order.track');
 
-    Route::get('/tracking/{order}', function ($orderId) {
-        return view('customer.tracking');
-    })->middleware(['auth', 'verified'])->name('tracking');
-
-    Route::get('/history', function () {
-        return view('customer.history');
-    })->middleware(['auth', 'verified'])->name('history');
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/history', [CustomerOrderController::class, 'history'])
+            ->name('history');
+    });
 
     Route::get('/notifications', function () {
         return view('customer.notifications');
     })->middleware(['auth', 'verified'])->name('notifications');
 
-    Route::get('/feedback', function () {
-        return view('customer.feedback');
-    })->middleware(['auth', 'verified'])->name('feedback.create');
+    Route::get('/feedback/create/{orderId}', [FeedbackController::class, 'create'])
+        ->middleware(['auth', 'verified'])
+        ->name('feedback.create');
+
+    Route::post('/feedback', [FeedbackController::class, 'store'])
+        ->middleware(['auth', 'verified'])
+        ->name('feedback.store');
 
     // page profile
 
-    Route::get('/profile', [ProfileController::class, 'edit'])
+    Route::get('/profile', [CustomerProfileController::class, 'edit'])
         ->middleware(['auth', 'verified'])
         ->name('profile.edit');
 
-    Route::patch('/profile', [ProfileController::class, 'update'])
+    Route::patch('/profile', [CustomerProfileController::class, 'update'])
         ->middleware(['auth', 'verified'])
         ->name('profile.update');
 });
@@ -114,37 +118,40 @@ Route::prefix('customer')->name('customer.')->group(function () {
 // ===================================================================
 //                           HALAMAN WORKER 
 // ===================================================================
-Route::prefix('worker')->name('worker.')->group(function () {
+Route::prefix('worker')->name('worker.')->middleware(['auth', 'is_worker'])->group(function () {
 
-    // Halaman Dashboard Utama
-    Route::get('/dashboard', function () {
-        return view('worker.dashboard');
-    })->name('dashboard');
+    // === RUTE HALAMAN (VIEWS) ===
 
-    // Halaman Pesanan Aktif
-    Route::get('/pesanan-actived', function () {
-        return view('worker.pesanan-actived');
-    })->name('pesanan.actived');
+    // Halaman Dashboard Utama -> Ditangani oleh DashboardController@index
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Halaman Riwayat Pesanan
-    Route::get('/history-pesanan', function () {
-        return view('worker.history-pesanan');
-    })->name('pesanan.history');
+    // Halaman Pesanan Aktif -> Ditangani oleh WorkerOrderController
+    Route::get('/pesanan-aktif', [WorkerOrderController::class, 'activeOrders'])->name('pesanan-actived.active');
 
-    // Halaman Grafik Lokasi
-    Route::get('/location-chart', function () {
-        return view('worker.location-chart');
-    })->name('location.chart');
-
-    // Halaman Notifikasi
-    Route::get('/notifications', function () {
-        return view('worker.notifications');
-    })->name('notifications');
+    // Halaman Riwayat Pesanan -> Ditangani oleh WorkerOrderController
+    Route::get('/riwayat-pesanan', [OrderHistoryController::class, 'index'])->name('history-pesanan');
 
     // Halaman Profil Worker
-    Route::get('/profil', function () {
-        return view('worker.profil');
-    })->name('profil');
+    Route::get('/profil', [WorkerProfileController::class, 'show'])->name('profil.show');
+
+    Route::put('/profil', [WorkerProfileController::class, 'update'])->name('profil.update');
+
+    // (Rute untuk 'location-chart' dan 'notifications' bisa ditambahkan controllernya nanti)
+    Route::get('/location-chart', fn() => view('worker.location-chart'))->name('location.chart');
+    Route::get('/notifications', fn() => view('worker.notifications'))->name('notifications');
+
+    Route::post('/logout', [DashboardController::class, 'destroy'])->name('logout');
+
+    // === RUTE AKSI (UNTUK AJAX & FORM) ===
+
+    // Aksi untuk mengubah status aktif/non-aktif
+    Route::post('/status/toggle', [DashboardController::class, 'toggleActiveStatus'])->name('status.toggle');
+
+    // Aksi untuk mengubah status pengerjaan pesanan
+    Route::post('/orders/{order}/update-status', [DashboardController::class, 'updateOrderStatus'])->name('order.updateStatus');
+
+    // Aksi untuk menerima update lokasi GPS dari worker
+    Route::post('/location/update', [DashboardController::class, 'updateLocation'])->name('location.update');
 });
 
 // ===================================================================

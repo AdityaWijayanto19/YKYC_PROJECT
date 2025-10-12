@@ -17,7 +17,31 @@ class Worker extends Model
         'current_longitude',
         'is_active',
         'location_name',
+        'total_orders',
+        'average_rating',
     ];
+
+
+    public function getTotalOrdersAttribute()
+    {
+        // Dapatkan ID dari status 'completed'
+        $completedStatusId = Status::where('name', 'completed')->value('id');
+
+        // Hitung jumlah order yang sudah selesai milik worker ini
+        return $this->orders()
+            ->where('status_id', $completedStatusId)
+            ->count();
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        // Ambil rata-rata rating dari feedback berdasarkan worker_id
+        return round(
+            \App\Models\Feedback::where('worker_id', $this->id)->avg('rating'),
+            1
+        ) ?? 0;
+    }
+
 
     public function user(): BelongsTo
     {

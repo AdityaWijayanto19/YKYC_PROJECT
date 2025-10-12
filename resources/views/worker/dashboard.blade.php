@@ -3,133 +3,302 @@
 @section('title', 'Dashboard Worker')
 
 @section('content')
-    @php
-        // Bisa diambil dari database / session user
-        $workerType = 'Mangkal'; // ganti 'Mangkal' atau 'Keliling'
-        $workerName = 'Budi Santoso';
-        $isOnline = true;
-    @endphp
-
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <header class="mb-8">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-                <h1 class="text-3xl font-bold text-gray-800">Selamat Datang, {{ $workerName }}!</h1>
-
-                <!-- Toggle Online/Offline -->
-                <div class="flex items-center mt-4 md:mt-0">
-                    <span class="mr-3 font-medium text-gray-700">{{ $isOnline ? 'Online' : 'Offline' }}</span>
-                    <label for="status-toggle" class="inline-flex relative items-center cursor-pointer">
-                        <input type="checkbox" id="status-toggle" class="sr-only peer" {{ $isOnline ? 'checked' : '' }}>
-                        <div
-                            class="w-14 h-8 bg-gray-300 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:bg-green-500 after:content-[''] after:absolute after:top-1 after:left-[4px] after:bg-white after:h-6 after:w-6 after:rounded-full after:transition-all">
-                        </div>
-                    </label>
-                </div>
+<div class="min-h-screen bg-gray-50 px-4 py-8">
+    {{-- Header Umum untuk Kedua Tipe Worker --}}
+    <header class="mb-8">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                     Selamat Datang, {{ $worker->user->name }}
+                </h1>
+                <p class="text-gray-600 text-sm mt-1">
+                    Anda login sebagai Worker 
+                    <span class="font-medium {{ $worker->worker_type === 'Keliling' ? 'text-blue-600' : 'text-green-600' }}">
+                        {{ $worker->worker_type }}
+                    </span>
+                </p>
             </div>
-        </header>
 
-        <!-- Grid Layout -->
+            {{-- Toggle Aktif/Non-Aktif (Berbeda Label) --}}
+            <div class="flex items-center mt-4 md:mt-0">
+                <span id="status-text" class="mr-3 font-semibold {{ $worker->is_active ? 'text-green-600' : 'text-gray-500' }}">
+                    {{ $worker->is_active ? ($worker->worker_type === 'Keliling' ? 'Online' : 'Kios Buka') : ($worker->worker_type === 'Keliling' ? 'Offline' : 'Kios Tutup') }}
+                </span>
+                <label for="active-toggle" class="inline-flex relative items-center cursor-pointer group">
+                    <input type="checkbox" id="active-toggle" class="sr-only peer" {{ $worker->is_active ? 'checked' : '' }}>
+                    <div
+                        class="w-14 h-8 bg-gray-300 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-green-500
+                        after:content-[''] after:absolute after:top-1 after:left-[4px] after:bg-white after:h-6 after:w-6 after:rounded-full
+                        after:transition-all peer-checked:after:translate-x-6 shadow-inner">
+                    </div>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    @if ($worker->worker_type === 'Keliling')
+
+        {{-- ============================================= --}}
+        {{-- TAMPILAN UNTUK WORKER KELILING (MAP-CENTRIC) --}}
+        {{-- ============================================= --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Kolom kiri (utama) -->
-            <div class="lg:col-span-2 space-y-6">
-
-                <!-- Card Aktivitas -->
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    @if ($workerType == 'Mangkal')
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Aktivitas Mangkal</h2>
-                        <button
-                            class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 flex items-center justify-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span>Aktifkan Lokasi Mangkal</span>
-                        </button>
-                    @else
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Aktivitas Keliling</h2>
-                        <button
-                            class="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 flex items-center justify-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
-                            <span>Aktifkan Mode Keliling (GPS Tracking)</span>
-                        </button>
-                    @endif
+            <!-- Kolom Peta (Utama) -->
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 h-full">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-blue-600"></i>
+                        Peta & Lokasi Anda
+                    </h2>
+                    <div id="map" class="h-[450px] bg-gray-200 rounded-xl flex items-center justify-center">
+                        <p class="text-gray-500 text-sm">Aktifkan status untuk memulai pelacakan di peta.</p>
+                    </div>
                 </div>
-
-                <!-- Konten Dinamis -->
-                @if ($workerType == 'Keliling')
-                    <!-- Pesanan Aktif di atas -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Pesanan Aktif</h2>
-                        <div class="space-y-3">
-                            <div class="p-4 bg-blue-100 rounded-lg flex items-center justify-between">
-                                <span class="font-medium text-gray-700">Pesanan #12345</span>
-                                <span class="font-semibold text-blue-600">Dalam Proses</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Peta Tracking -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Tracking Lokasi</h2>
-                        <div class="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <p class="text-gray-500 text-center">Peta dengan tracking GPS akan ditampilkan di sini.</p>
-                        </div>
-                    </div>
-                @else
-                    <!-- Peta dulu -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Lokasi Mangkal Anda</h2>
-                        <div class="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <p class="text-gray-500 text-center">Peta lokasi mangkal akan ditampilkan di sini.</p>
-                        </div>
-                    </div>
-                @endif
             </div>
 
-            <!-- Kolom kanan -->
-            <div class="lg:col-span-1 space-y-6">
-                @if ($workerType == 'Mangkal')
-                    <!-- Ringkasan Pesanan hanya untuk Mangkal -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">Ringkasan Pesanan</h2>
-                        <div class="grid grid-cols-3 gap-4 lg:grid-cols-1">
-                            <div class="flex flex-col items-center lg:flex-row lg:justify-between p-4 bg-yellow-100 rounded-lg">
-                                <span class="font-semibold text-yellow-800">Menunggu</span>
-                                <span class="font-bold text-2xl text-yellow-900">5</span>
-                            </div>
-                            <div class="flex flex-col items-center lg:flex-row lg:justify-between p-4 bg-blue-100 rounded-lg">
-                                <span class="font-semibold text-blue-800">Proses</span>
-                                <span class="font-bold text-2xl text-blue-900">3</span>
-                            </div>
-                            <div class="flex flex-col items-center lg:flex-row lg:justify-between p-4 bg-green-100 rounded-lg">
-                                <span class="font-semibold text-green-800">Selesai</span>
-                                <span class="font-bold text-2xl text-green-900">12</span>
-                            </div>
+            <!-- Kolom Info & Aksi (Samping) -->
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-5 h-5 text-orange-500"></i>
+                        Status & Aksi
+                    </h2>
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
+                        <p id="status-info-text" class="text-sm font-semibold text-blue-800">
+                            {{ $worker->is_active ? 'Anda sedang aktif dan terlihat oleh customer.' : 'Anda sedang offline. Aktifkan untuk menerima pesanan.' }}
+                        </p>
+                    </div>
+                     {{-- Kode di bawah ini sudah benar, tidak perlu diubah --}}
+                    <a href="{{ route('worker.pesanan-actived.active') }}" class="mt-4 flex items-center justify-center gap-2 w-full text-center bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        {{ $orders->count() > 0 ? 'Lihat Tugas Saat Ini' : 'Belum Ada Tugas' }}
+                    </a>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="history" class="w-5 h-5 text-indigo-500"></i>
+                        Riwayat
+                    </h2>
+                     <a href="{{ route('worker.history-pesanan') }}" class="flex items-center justify-center gap-2 w-full text-center bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition">
+                        <i data-lucide="clock" class="w-5 h-5"></i> Lihat Riwayat Pesanan
+                    </a>
+                </div>
+                  <div class="mt-auto pt-4 border-t border-gray-200">
+                    <form method="POST" action="{{ route('worker.logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            <i data-lucide="log-out" class="w-5 h-5"></i>
+                            <span>Keluar (Logout)</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    @else
+
+        {{-- =========================================== --}}
+        {{-- TAMPILAN UNTUK WORKER MANGKAL (MANAGEMENT) --}}
+        {{-- =========================================== --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Kolom utama (Kiri) -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Ringkasan Kios -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="store" class="w-5 h-5 text-green-600"></i>
+                        Ringkasan Kios Anda
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                        <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                            {{-- PERBAIKAN 1: Menggunakan 'status.name' untuk menghitung jumlah --}}
+                            <p class="text-4xl font-bold text-blue-600">{{ $orders->where('status.name', 'diproses')->count() }}</p>
+                            <p class="text-sm text-gray-600 mt-1">Pesanan Sedang Dikerjakan</p>
+                        </div>
+                        <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                            {{-- PERBAIKAN 2: Menggunakan 'status.name' untuk menghitung jumlah --}}
+                            <p class="text-4xl font-bold text-yellow-600">{{ $orders->where('status.name', 'ready for pickup')->count() }}</p>
+                            <p class="text-sm text-gray-600 mt-1">Pesanan Siap Diambil</p>
                         </div>
                     </div>
-                @endif
+                </div>
 
-                <!-- Aksi Cepat -->
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">Aksi Cepat</h2>
+                <!-- Daftar Tugas Aktif -->
+                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                            <i data-lucide="package" class="w-5 h-5 text-blue-600"></i>
+                            Antrian Tugas
+                        </h2>
+                        <a href="{{ route('worker.pesanan-actived.active') }}" class="text-sm text-blue-600 hover:underline">
+                            Lihat Semua
+                        </a>
+                    </div>
+                     <div class="space-y-4">
+                        @forelse ($orders->take(3) as $order) 
+                            <div class="border rounded-xl p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">{{ $order->service->name }}</p>
+                                        <p class="text-sm text-gray-500">ID: {{ $order->order_id }} oleh {{ $order->user->name }}</p>
+                                    </div>
+                                    {{-- PERBAIKAN 3: Menggunakan 'status->name' untuk kondisi dan menampilkan 'status->label' --}}
+                                    <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full {{ $order->status->name === 'ready for pickup' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700' }}">
+                                        {{ $order->status->label ?? $order->status->name }}
+                                    </span>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-gray-500 text-sm text-center py-4">Tidak ada tugas aktif saat ini. Waktunya bersantai!</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Aksi Cepat (Kanan) -->
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-5 h-5 text-orange-500"></i>
+                        Aksi Cepat
+                    </h2>
                     <div class="space-y-3">
-                        <button class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700">
-                            Mulai Aktivitas
-                        </button>
-                        <button class="w-full bg-gray-200 text-gray-800 font-bold py-3 px-4 rounded-lg hover:bg-gray-300">
-                            Lihat Pesanan Aktif
-                        </button>
+                        <a href="{{ route('worker.pesanan-actived.active') }}" class="flex items-center justify-center gap-2 w-full text-center bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">
+                            <i data-lucide="clipboard-list" class="w-5 h-5"></i> Kelola Semua Pesanan
+                        </a>
+                        <a href="{{ route('worker.history-pesanan') }}" class="flex items-center justify-center gap-2 w-full text-center bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition">
+                            <i data-lucide="clock" class="w-5 h-5"></i> Riwayat Pesanan
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    @endif
+
+</div>
 @endsection
+
+@push('scripts')
+{{-- Tidak ada perubahan di bagian SCRIPT, semuanya sudah benar --}}
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+lucide.createIcons();
+// ... (Sisa script Anda tetap sama)
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('active-toggle');
+    const statusText = document.getElementById('status-text');
+    const workerId = {{ Auth::user()->worker->id }};
+    const workerType = '{{ $worker->worker_type }}';
+
+    // Logika toggle status, berlaku untuk keduanya
+    toggle.addEventListener('change', function() {
+        const isActive = this.checked;
+        fetch('{{ route("worker.status.toggle") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            body: JSON.stringify({ is_active: isActive })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Update teks status
+                const activeText = workerType === 'Keliling' ? 'Online' : 'Kios Buka';
+                const inactiveText = workerType === 'Keliling' ? 'Offline' : 'Kios Tutup';
+                statusText.textContent = data.is_active ? activeText : inactiveText;
+                statusText.classList.toggle('text-green-600', data.is_active);
+                statusText.classList.toggle('text-gray-500', !data.is_active);
+
+                // Jika worker keliling, jalankan fungsi peta
+                if (workerType === 'Keliling') {
+                    const statusInfo = document.getElementById('status-info-text');
+                    statusInfo.textContent = data.is_active ? 'Anda sedang aktif dan terlihat oleh customer.' : 'Anda sedang offline. Aktifkan untuk menerima pesanan.';
+                    setupMap(data.is_active);
+                }
+            }
+        });
+    });
+
+    // ==============================================================
+    // SCRIPT PETA INI HANYA AKAN DIJALANKAN JIKA WORKER TIPE KELILING
+    // ==============================================================
+    if (workerType === 'Keliling') {
+        const mapContainer = document.getElementById('map');
+        let watchId = null;
+        let map = null;
+        let workerMarker = null;
+
+        const setupMap = (isActive) => {
+            if (isActive && !map) { // Hanya inisialisasi jika aktif dan peta belum ada
+                mapContainer.innerHTML = '';
+                map = L.map('map').setView([-7.9539, 112.6173], 15); // Ganti dengan lokasi default
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+
+                startTracking();
+            } else if (!isActive && map) { // Hancurkan peta jika non-aktif dan peta ada
+                stopTracking();
+                map.remove();
+                map = null;
+                workerMarker = null;
+                mapContainer.innerHTML = '<p class="text-gray-500 text-sm">🗺️ Aktifkan status untuk memulai pelacakan di peta.</p>';
+            }
+        };
+
+        const startTracking = () => {
+            if (!navigator.geolocation) return;
+            if (watchId) return;
+
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    fetch('{{ route("worker.location.update") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        body: JSON.stringify({ lat: latitude, lng: longitude })
+                    });
+
+                    const newLatLng = [latitude, longitude];
+                    if (!workerMarker) {
+                        workerMarker = L.marker(newLatLng).addTo(map).bindPopup('Posisi Anda');
+                        map.setView(newLatLng, 16); // Pusatkan peta saat lokasi pertama kali didapat
+                    } else {
+                        workerMarker.setLatLng(newLatLng);
+                    }
+                },
+                (err) => console.error(err),
+                { enableHighAccuracy: true }
+            );
+        };
+
+        const stopTracking = () => {
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+            }
+        };
+
+        // Inisialisasi peta jika status worker sudah aktif saat halaman dimuat
+        if (toggle.checked) {
+            setupMap(true);
+        }
+    }
+
+    if (workerType === 'Keliling' && window.Echo) {
+        window.Echo.private(`worker.${workerId}`)
+            .listen('.new-order-assigned', (e) => {
+                
+                const notification = document.createElement('div');
+                notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background-color: #2563EB; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 16px; z-index: 9999;';
+                notification.innerHTML = `<strong>Tugas Baru Masuk!</strong><p>Anda mendapatkan pesanan penjemputan baru. Mengarahkan...</p>`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    window.location.href = "{{ route('worker.pesanan-actived.active') }}";
+                }, 2500);
+            });
+    }
+});
+</script>
+@endpush

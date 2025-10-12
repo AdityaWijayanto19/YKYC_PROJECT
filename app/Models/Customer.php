@@ -13,6 +13,8 @@ class Customer extends Model
     protected $fillable = [
         'user_id',
         'address',
+        'latitude',  
+        'longitude',
     ];
 
       public function user(): BelongsTo

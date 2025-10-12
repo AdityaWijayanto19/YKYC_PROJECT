@@ -61,7 +61,7 @@
             window.snap.pay('{{ $order->snap_token }}', {
                 onSuccess: function (result) {
                     console.log("Success:", result);
-                    window.location.href = '/customer/order_status';
+                    window.location.href = '/customer/order-status';
                 },
                 onPending: function (result) {
                     console.log("Pending:", result);

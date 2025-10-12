@@ -22,11 +22,9 @@ class SocialiteController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
 
-            // Cek apakah email sudah ada di sistem
             $user = User::where('email', $googleUser->email)->first();
 
             if ($user) {
-                // Kalau user sudah ada tapi belum punya google_id → update
                 if (is_null($user->google_id)) {
                     $user->update([
                         'name' => $googleUser->name,
@@ -37,7 +35,6 @@ class SocialiteController extends Controller
                     ]);
                 }
             } else {
-                // Kalau user belum ada → buat user baru
                 $user = DB::transaction(function () use ($googleUser) {
                     $newUser = User::create([
                         'name' => $googleUser->name,

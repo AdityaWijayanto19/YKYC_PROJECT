@@ -11,13 +11,11 @@ class MidtransCallbackController extends Controller
 {
     public function notificationHandler(Request $request)
     {
-        // Setup Midtrans
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
 
-        // Ambil data notification dari Midtrans
         $notification = new Notification();
 
         $status = $notification->transaction_status;
@@ -25,7 +23,6 @@ class MidtransCallbackController extends Controller
         $orderId = $notification->order_id;
         $fraud = $notification->fraud_status;
 
-        // Cari order berdasarkan order_id (bukan id numeric)
         $order = Order::where('order_id', $orderId)->first();
 
         if (!$order) {
@@ -47,37 +44,33 @@ class MidtransCallbackController extends Controller
 
         \Log::info('Midtrans Notification:', json_decode(json_encode($notification), true));
 
-
-        // Tentukan status payment
         switch ($status) {
             case 'capture':
-                if ($type === 'credit_card') {
-                    $order->payment_status = ($fraud === 'challenge') ? 'challenge' : 'paid';
+                if ($type === 'credit_card' && $fraud === 'accept') {
+                    $order->payment_status = 'paid';
+                    $order->status = 'diproses'; 
                 }
                 break;
-
             case 'settlement':
                 $order->payment_status = 'paid';
+                $order->status = 'diproses'; 
                 break;
-
             case 'pending':
                 $order->payment_status = 'pending';
                 break;
-
             case 'deny':
             case 'cancel':
-                $order->payment_status = 'failed';
-                break;
-
+            case 'dibatalkan':
             case 'expire':
-                $order->payment_status = 'expired';
+                $order->payment_status = 'failed'; 
+                $order->status = 'dibatalkan';    
                 break;
         }
 
         $order->save();
 
         if ($order->payment_status === 'paid') {
-            OrderPaid::dispatch($order); 
+            OrderPaid::dispatch($order);
         }
 
         \Log::info("Midtrans callback processed for order $orderId: status={$order->payment_status}");
@@ -85,4 +78,3 @@ class MidtransCallbackController extends Controller
         return response()->json(['message' => 'Notification processed successfully']);
     }
 }
-

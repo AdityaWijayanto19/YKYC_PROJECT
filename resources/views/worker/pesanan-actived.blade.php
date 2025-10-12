@@ -1,195 +1,205 @@
 @extends('layouts.worker')
 
-@section('title', 'Lokasi Gerobak Worker')
+@section('title', 'Tugas Aktif')
 
 @php
-    // Ganti value ini untuk simulasi
-    $workerType = 'Keliling'; // Atau 'Mangkal'
-
-    $orders = [
-        (object) [
-            'id' => 'SC-081123-001',
-            'customer' => 'Andi Wijaya',
-            'phone' => '081234567890',
-            'service' => 'Deep Clean (2 pasang)',
-            'notes' => 'Tolong bagian sol bawah dibersihkan maksimal ya.',
-            'location' => 'Jl. Merdeka No. 45, Jakarta Pusat',
-            'status' => 'Waiting'
-        ],
-        (object) [
-            'id' => 'SC-081123-002',
-            'customer' => 'Daffa Ahmad',
-            'phone' => '081234567890',
-            'service' => 'Unyellowing (2 pasang)',
-            'notes' => 'Upper nya sudah menguning.',
-            'location' => 'Jl. Veteran No. 26, Jakarta Selatan',
-            'status' => 'Payment'
-        ],
-        (object) [
-            'id' => 'SC-081123-003',
-            'customer' => 'Citra Lestari',
-            'phone' => '081222333444',
-            'service' => 'Quick Clean (1 pasang)',
-            'notes' => 'Tidak ada catatan.',
-            'location' => 'Stasiun Gondangdia, Pintu Selatan',
-            'status' => 'In Progress'
-        ],
-        (object) [
-            'id' => 'SC-081123-004',
-            'customer' => 'Bambang Susilo',
-            'phone' => '085678901234',
-            'service' => 'Unyellowing (1 pasang)',
-            'notes' => 'Sepatu Adidas Superstar, bagian mid-sole menguning.',
-            'location' => 'Kantin FISIP, Universitas Indonesia',
-            'status' => 'Selesai'
-        ]
-    ];
-
-    // Ambil hanya 1 order untuk worker keliling (misal order pertama yang statusnya belum selesai)
-    $activeKelilingOrder = collect($orders)->first(function ($o) {
-        return in_array($o->status, ['Waiting', 'In Progress']);
-    });
-
-    // Fungsi warna label status
-    function getStatusClass($status)
+    // Fungsi helper ini sudah benar, tidak perlu diubah.
+    function getStatusClass($statusName) 
     {
-        switch ($status) {
-            case 'Waiting':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'In Progress':
-                return 'bg-blue-100 text-blue-800';
-            case 'Selesai':
-                return 'bg-green-100 text-green-800';
-            case 'Payment':
-                return 'bg-red-100 text-red-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
+        return match ($statusName) { 
+            'waiting', 'pending' => 'bg-yellow-100 text-yellow-800',
+            'on-the-way' => 'bg-indigo-100 text-indigo-800', 
+            'diproses' => 'bg-blue-100 text-blue-800',
+            'ready for pickup' => 'bg-purple-100 text-purple-800',
+            'completed' => 'bg-green-100 text-green-800',
+            'cancelled' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800'
+        };
     }
 @endphp
 
 @section('content')
-    <div class="container mx-auto max-w-4xl px-4 py-8">
-
-        <!-- Header -->
+    <div class="container mx-auto max-w-5xl px-4 py-8">
         <header class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Pesanan Aktif</h1>
-            <p class="text-gray-600">Daftar semua pesanan yang perlu diproses.</p>
+            <div class="flex justify-between items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Tugas Aktif Saya</h1>
+                    <p class="text-gray-600">
+                        Menampilkan tugas untuk Worker
+                        <span
+                            class="font-medium {{ $worker->worker_type === 'Keliling' ? 'text-blue-600' : 'text-green-600' }}">
+                            {{ $worker->worker_type }}
+                        </span>
+                    </p>
+                </div>
+            </div>
         </header>
 
-        @if ($workerType == 'Keliling')
-            <!-- Khusus Worker Keliling: 1 Card Pesanan + Peta -->
-            <div class="space-y-6">
-                @if($activeKelilingOrder)
-                    <!-- Card Pesanan -->
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden transition hover:shadow-lg">
-                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <h3 class="font-bold text-gray-800">Pesanan #{{ $activeKelilingOrder->id }}</h3>
-                            <span
-                                class="text-xs font-semibold px-2.5 py-1 rounded-full {{ getStatusClass($activeKelilingOrder->status) }}">
-                                {{ $activeKelilingOrder->status }}
-                            </span>
+        @if ($worker->worker_type === 'Keliling')
+
+            {{-- ======================================================= --}}
+            {{-- BAGIAN INI SUDAH BENAR, TIDAK ADA PERUBAHAN DIPERLUKAN --}}
+            {{-- ======================================================= --}}
+
+            @if ($active_orders->isNotEmpty())
+                @php $order = $active_orders->first(); @endphp
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="bg-white rounded-2xl shadow-md p-5 sticky top-4">
+                            <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <i data-lucide="map" class="w-5 h-5 text-green-600"></i>
+                                Rute Penjemputan
+                            </h2>
+                            <div id="map" class="h-80 rounded-lg bg-gray-200 flex items-center justify-center">
+                                <p class="text-gray-500">Memuat peta rute...</p>
+                            </div>
                         </div>
-                        <div class="p-4 space-y-4">
-                            <div>
-                                <p class="text-sm text-gray-500">Customer</p>
-                                <p class="font-semibold text-gray-900">{{ $activeKelilingOrder->customer }}</p>
-                                <p class="text-sm text-gray-700">{{ $activeKelilingOrder->phone }}</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                        <div class="p-5 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-xl text-gray-800">Misi: #{{ $order->order_id }}</h3>
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full {{ getStatusClass($order->status->name) }}">
+                                    {{ $order->status->label }}
+                                </span>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Layanan</p>
-                                <p class="font-semibold text-gray-900">{{ $activeKelilingOrder->service }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500">Lokasi</p>
-                                <p class="text-gray-700">{{ $activeKelilingOrder->location }}</p>
-                            </div>
-                            @if($activeKelilingOrder->notes != 'Tidak ada catatan.')
-                                <div class="bg-gray-50 p-3 rounded-md">
-                                    <p class="text-sm text-gray-500">Catatan</p>
-                                    <p class="text-gray-700 italic">"{{ $activeKelilingOrder->notes }}"</p>
-                                </div>
-                            @endif
+                            <p class="text-sm text-gray-500 mt-1">Status saat ini: <span class="font-medium text-gray-700">{{ $order->status->label }}</span></p>
                         </div>
-                        <div class="p-4 bg-gray-50 flex flex-col sm:flex-row gap-3">
-                            <button
-                                class="w-full sm:w-auto flex-grow bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
-                                Lihat Rute Customer
-                            </button>
-                            @if($activeKelilingOrder->status == 'Waiting')
-                                <button
-                                    class="w-full sm:w-auto flex-grow bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Mulai
-                                    Jemput</button>
-                            @elseif($activeKelilingOrder->status == 'In Progress')
-                                <button
-                                    class="w-full sm:w-auto bg-gray-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700">Selesaikan</button>
+                        <div class="p-5 space-y-4">
+                            <div><p class="text-sm text-gray-500">Pelanggan:</p><p class="font-semibold text-lg text-gray-800">{{ $order->user->name }}</p></div>
+                            <div><p class="text-sm text-gray-500">Layanan:</p><p class="font-medium text-gray-900">{{ $order->service->name }}</p></div>
+                            <div><p class="text-sm text-gray-500">Alamat Penjemputan:</p><p class="text-gray-700">{{ $order->customer_address ?? 'Tidak ada alamat' }}</p></div>
+                        </div>
+                        <div class="p-4 bg-gray-50 border-t grid grid-cols-2 gap-3">
+                            <a href="https://www.google.com/maps/dir/?api=1&destination={{ $order->customer_lat }},{{ $order->customer_lng }}" target="_blank" class="flex items-center justify-center gap-2 w-full text-center bg-gray-800 text-white font-semibold py-3 rounded-lg hover:bg-gray-900 transition"><i data-lucide="navigation" class="w-5 h-5"></i> Buka Gmaps</a>
+                            <a href="tel:{{ $order->user->number_phone }}" class="flex items-center justify-center gap-2 w-full text-center bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition"><i data-lucide="phone" class="w-5 h-5"></i> Telepon</a>
+                        </div>
+                        <div class="p-4 bg-gray-50">
+                            @if($order->status->name === 'waiting')
+                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">@csrf<input type="hidden" name="status" value="on-the-way"><button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition text-lg">Berangkat Menuju Lokasi</button></form>
+                            @elseif($order->status->name === 'on-the-way')
+                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">@csrf<input type="hidden" name="status" value="diproses"><button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition text-lg">Konfirmasi Pengambilan Sepatu</button></form>
+                            @elseif($order->status->name === 'diproses')
+                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">@csrf<input type="hidden" name="status" value="completed"><button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition text-lg">Tandai Pesanan Selesai</button></form>
                             @endif
                         </div>
                     </div>
-                @else
-                    <div class="text-center py-12">
-                        <p class="text-gray-500">Tidak ada pesanan aktif saat ini.</p>
-                    </div>
-                @endif
-            </div>
+                </div>
+            @else
+                <div class="text-center bg-white p-10 rounded-2xl shadow-md border"><i data-lucide="coffee" class="w-16 h-16 mx-auto text-green-500"></i><h3 class="mt-4 text-xl font-bold text-gray-800">Anda Siap Menerima Tugas!</h3><p class="mt-1 text-gray-500">Pastikan status Anda <a href="{{ route('worker.dashboard') }}" class="font-semibold text-green-600 hover:underline">'Online'</a> di halaman Dashboard untuk mulai menerima pesanan.</p></div>
+            @endif
+
         @else
-            <!-- Worker Mangkal (pakai loop semua orders, kode lama tidak diubah) -->
-            <div class="space-y-4">
-                @forelse ($orders as $order)
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden transition hover:shadow-lg">
-                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <h3 class="font-bold text-gray-800">Pesanan #{{ $order->id }}</h3>
-                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ getStatusClass($order->status) }}">
-                                {{ $order->status }}
+
+            {{-- ================================================= --}}
+            {{-- TAMPILAN UNTUK WORKER MANGKAL (BAGIAN PERBAIKAN) --}}
+            {{-- ================================================= --}}
+            <div class="space-y-5">
+                @forelse ($active_orders as $order)
+                    <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center flex-wrap gap-2">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">Pesanan #{{ $order->order_id }}</h3>
+                                <p class="text-sm text-gray-500">Oleh: {{ $order->user->name }}</p>
+                            </div>
+                            {{-- PERBAIKAN 1: Menggunakan 'status->name' untuk fungsi dan 'status->label' untuk tampilan --}}
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full capitalize {{ getStatusClass($order->status->name) }}">
+                                {{ $order->status->label ?? $order->status->name }}
                             </span>
                         </div>
-                        <div class="p-4 space-y-4">
+
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <p class="text-sm text-gray-500">Customer</p>
-                                <p class="font-semibold text-gray-900">{{ $order->customer }}</p>
-                                <p class="text-sm text-gray-700">{{ $order->phone }}</p>
+                                <p class="text-sm text-gray-500 mb-1">Layanan</p>
+                                <p class="font-semibold text-gray-900">{{ $order->service->name }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Layanan</p>
-                                <p class="font-semibold text-gray-900">{{ $order->service }}</p>
+                                <p class="text-sm text-gray-500 mb-1">Metode</p>
+                                <p class="font-medium text-gray-800">
+                                    {{ $order->delivery_method === 'pickup' ? 'Dijemput Worker' : 'Antar Sendiri' }}
+                                </p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500">Lokasi</p>
-                                <p class="text-gray-700">{{ $order->location }}</p>
+                                <p class="text-sm text-gray-500 mb-1">Tanggal Pesan</p>
+                                <p class="text-gray-700">{{ $order->created_at->format('d M Y, H:i') }}</p>
                             </div>
-                            @if($order->notes != 'Tidak ada catatan.')
-                                <div class="bg-gray-50 p-3 rounded-md">
-                                    <p class="text-sm text-gray-500">Catatan</p>
-                                    <p class="text-gray-700 italic">"{{ $order->notes }}"</p>
-                                </div>
-                            @endif
                         </div>
-                        <div class="p-4 bg-gray-50 flex flex-col sm:flex-row gap-3 items-center">
-                            <div
-                                class="w-full sm:w-auto flex-grow text-center sm:text-left bg-green-100 text-green-800 text-sm font-semibold p-3 rounded-lg">
-                                Customer akan datang ke lokasi Anda.
-                            </div>
-                            @if($order->status == 'Waiting')
-                                <button
-                                    class="w-full sm:w-auto bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600">Mulai
-                                    Kerjakan</button>
-                            @elseif($order->status == 'In Progress')
-                                <button
-                                    class="w-full sm:w-auto bg-gray-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700">Selesaikan</button>
-                            @elseif($order->status == 'Payment')
-                                <button
-                                    class="w-full sm:w-auto bg-red-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700">Confirm
-                                    Payment</button>
-                            @endif
+
+                        <div class="p-4 bg-gray-50 border-t flex items-center justify-end">
+                            <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
+                                @csrf
+                                {{-- PERBAIKAN 2: Menggunakan 'status->name' untuk semua kondisi --}}
+                                @if($order->status->name === 'waiting')
+                                    <input type="hidden" name="status" value="diproses">
+                                    <button type="submit"
+                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                        Mulai Kerjakan
+                                    </button>
+                                @elseif($order->status->name === 'diproses')
+                                    <input type="hidden" name="status" value="ready for pickup">
+                                    <button type="submit"
+                                        class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                        Tandai Siap Diambil
+                                    </button>
+                                @elseif($order->status->name === 'ready for pickup')
+                                    <input type="hidden" name="status" value="completed">
+                                    <button type="submit"
+                                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                        Konfirmasi Selesai
+                                    </button>
+                                @endif
+                            </form>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-12">
-                        <p class="text-gray-500">Tidak ada pesanan aktif saat ini.</p>
+                    <div class="text-center bg-white p-10 rounded-2xl shadow-md border">
+                        <i data-lucide="package-check" class="w-16 h-16 mx-auto text-gray-400"></i>
+                        <h3 class="mt-4 text-xl font-bold text-gray-800">Semua Tugas Selesai!</h3>
+                        <p class="mt-1 text-gray-500">Tidak ada pesanan aktif di antrian Anda saat ini. Kerja bagus!</p>
                     </div>
                 @endforelse
             </div>
         @endif
-
     </div>
 @endsection
+
+@push('scripts')
+    {{-- Tidak ada perubahan di bagian SCRIPT, semuanya sudah benar --}}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script>
+        lucide.createIcons();
+        const workerType = '{{ $worker->worker_type }}';
+        if (workerType === 'Keliling' && document.getElementById('map')) {
+            @if ($active_orders->isNotEmpty())
+                const order = @json($active_orders->first());
+                const customerLat = parseFloat(order.customer_lat);
+                const customerLng = parseFloat(order.customer_lng);
+                const customerName = order.user.name;
+                const mapElement = document.getElementById('map');
+                mapElement.innerHTML = '';
+                const map = L.map('map');
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const workerLat = position.coords.latitude;
+                    const workerLng = position.coords.longitude;
+                    L.Routing.control({
+                        waypoints: [L.latLng(workerLat, workerLng), L.latLng(customerLat, customerLng)],
+                        routeWhileDragging: false, show: false, fitSelectedRoutes: true,
+                        lineOptions: { styles: [{ color: '#1D4ED8', opacity: 0.9, weight: 7 }] },
+                        createMarker: function (i, waypoint, n) {
+                            let popupText = ""; let iconUrl = "";
+                            if (i === 0) { popupText = "<b>Posisi Anda Saat Ini</b>"; iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png'; }
+                            else if (i === n - 1) { popupText = `<b>Jemput di Sini</b><br>${customerName}`; iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png'; }
+                            return L.marker(waypoint.latLng, { icon: L.icon({ iconUrl: iconUrl, iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', shadowSize: [41, 41] }) }).bindPopup(popupText);
+                        }
+                    }).addTo(map);
+                }, function (error) {
+                    console.error("Gagal mendapatkan lokasi worker:", error);
+                    mapElement.innerHTML = '<p class="text-center text-red-600 font-medium">Gagal mendapatkan lokasi Anda. Pastikan izin lokasi/GPS sudah aktif.</p>';
+                });
+            @endif
+        }
+    </script>
+@endpush

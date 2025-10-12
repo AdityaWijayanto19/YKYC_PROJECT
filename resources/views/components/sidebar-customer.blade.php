@@ -1,11 +1,13 @@
-<!-- Bottom Navigation with Circle CTA -->
-<div class="fixed bottom-0 left-0 right-0 flex justify-center z-50 mb-4">
-    <div class="bg-white border border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] 
-              rounded-xl w-full max-w-md mx-auto relative">
+<div class="fixed bottom-0 left-0 right-0 flex justify-center z-50 sm:mb-4">
+
+    <div class="relative bg-white w-full border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] 
+                rounded-t-xl
+                sm:border sm:rounded-xl sm:w-full sm:max-w-md sm:mx-auto">
+
         <div class="flex justify-around items-center h-16 px-2">
 
-            <!-- 1. Home (Dashboard) - Active -->
-            <x-sidebar-link-customer :href="route('customer.dashboard')" :active="request()->routeIs('customer.dashboard')">
+            <x-sidebar-link-customer :href="route('customer.dashboard')"
+                :active="request()->routeIs('customer.dashboard')">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path
                         d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
@@ -15,8 +17,8 @@
                 <span class="text-xs font-semibold">Dashboard</span>
             </x-sidebar-link-customer>
 
-            <!-- 2. Status -->
-            <x-sidebar-link-customer :href="route('customer.order.status')" :active="request()->routeIs('customer.order.status')">
+            <x-sidebar-link-customer :href="route('customer.order.status')"
+                :active="request()->routeIs('customer.order.status')">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path fill-rule="evenodd"
                         d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z"
@@ -28,10 +30,9 @@
                 <span class="text-xs">Status</span>
             </x-sidebar-link-customer>
 
-            <!-- CTA Pesanan Baru -->
             <div class="relative -mt-10">
-                 <a href="{{ route('customer.order.create') }}"
-                    class="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-blue-500 to-blue-900 text-white shadow-lg hover:scale-110 transition-transform">
+                <a href="{{ route('customer.order.create') }}"
+                    class="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-primary to-dark text-white shadow-lg hover:scale-110 transition-transform">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" stroke="currentColor"
                         stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -39,17 +40,16 @@
                 </a>
             </div>
 
-            <!-- 3. Lokasi -->
-            <x-sidebar-link-customer :href="route('customer.locations')" :active="request()->routeIs('customer.locations')">
+            <x-sidebar-link-customer :href="route('customer.notifications')"
+                :active="request()->routeIs('customer.locations')">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path fill-rule="evenodd"
-                        d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                        d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
                         clip-rule="evenodd" />
                 </svg>
-                <span class="text-xs">Lokasi</span>
+                <span class="text-xs">Notifikasi</span>
             </x-sidebar-link-customer>
 
-            <!-- Riwayat -->
             <x-sidebar-link-customer :href="route('customer.history')" :active="request()->routeIs('customer.history')">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path fill-rule="evenodd"
