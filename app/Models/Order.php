@@ -9,23 +9,20 @@ class Order extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     * Ini adalah daftar kolom yang boleh diisi melalui Order::create().
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'user_id',
+        'order_id',
         'worker_id',
         'service_id',
         'delivery_method',
         'location_id',
         'customer_address',
+        'customer_lat',
+        'customer_lng',
         'service_price',
         'delivery_fee',
         'total_price',
-        'status',
+        'status_id',
         'payment_status',
         'snap_token',
     ];
@@ -53,12 +50,23 @@ class Order extends Model
     {
         return $this->belongsTo(Location::class);
     }
-    
+
     /**
      * Mendefinisikan relasi: Satu Order dikerjakan oleh satu Worker (bisa juga tidak).
      */
     public function worker()
     {
         return $this->belongsTo(Worker::class);
+    }
+
+    public function feedback()
+    {
+        // Sebuah Order memiliki satu Feedback
+        return $this->hasOne(Feedback::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
     }
 }

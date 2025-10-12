@@ -1,3 +1,5 @@
 import './bootstrap';
-import Toastify from 'toastify-js';
+import './echo';
 import 'toastify-js/src/toastify.css';
+
+

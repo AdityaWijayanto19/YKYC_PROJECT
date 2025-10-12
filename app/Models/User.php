@@ -59,24 +59,25 @@ class  User extends Authenticatable implements MustVerifyEmail
     public function getProfileCompletionPercentageAttribute(): int
     {
         $score = 0;
-        // Tentukan ada berapa field yang kita hitung
-        $totalFields = 4;
+        $totalFields = 5;
 
-        // Beri 1 poin untuk setiap field yang tidak kosong
         if (!empty($this->name)) {
             $score++;
         }
         if (!empty($this->number_phone)) {
             $score++;
         }
-        if ($this->customer && !empty($this->customer->address)) {
-            $score++;
+        if ($this->customer) {
+            if (!empty($this->customer->address)) $score++;
+           
+            if (!empty($this->customer->latitude) && !empty($this->customer->longitude)) {
+                $score++;
+            }
         }
         if (!empty($this->avatar)) {
             $score++;
         }
 
-        // Hitung persentase dan bulatkan ke bawah
         if ($totalFields === 0) {
             return 100;
         }
@@ -99,7 +100,7 @@ class  User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Admin::class);
     }
 
-     public function orders()
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }

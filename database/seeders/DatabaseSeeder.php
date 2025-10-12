@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ServiceSeeder::class,
             LocationSeeder::class,
+            StatusSeeder::class,
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',

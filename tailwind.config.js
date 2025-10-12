@@ -1,6 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
-/** @type {import('tailwindcss').Config} */
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -11,8 +10,18 @@ export default {
     ],
     theme: {
         extend: {
+            colors: {
+                primary: '#5483B3',   
+                secondary: '#7DA0CA', 
+                success: '#10B981',
+                warning: '#F59E0B',   
+                danger: '#EF4444',    
+                light: '#C1E8FF',
+                dark: '#052659',      
+                background: '#f3f4f6',      
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
         },
     },

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran Pesanan #{{ $order->id }}</title>
 
-    <!-- PENTING: Script dari Midtrans untuk menampilkan Pop-up (mode Sandbox) -->
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 
@@ -56,29 +55,23 @@
     </div>
 
     <script type="text/javascript">
-        // Ambil tombol pembayaran dari HTML
         var payButton = document.getElementById('pay-button');
 
-        // Tambahkan event listener untuk 'click' pada tombol tersebut
         payButton.addEventListener('click', function () {
-            // Panggil fungsi snap.pay() dari Midtrans dengan Snap Token dari order
             window.snap.pay('{{ $order->snap_token }}', {
                 onSuccess: function (result) {
-                    /* Notifikasi pembayaran berhasil! */
-                    alert("Pembayaran berhasil!");
-                    // Arahkan ke halaman dashboard atau daftar pesanan
-                    window.location.href = '/dashboard';
+                    console.log("Success:", result);
+                    window.location.href = '/customer/order-status';
                 },
                 onPending: function (result) {
-                    /* Pembayaran belum selesai */
+                    console.log("Pending:", result);
                     alert("Menunggu pembayaran Anda.");
                 },
                 onError: function (result) {
-                    /* Terjadi kesalahan */
+                    console.error("Error:", result);
                     alert("Pembayaran gagal!");
                 },
                 onClose: function () {
-                    /* Pengguna menutup pop-up tanpa membayar */
                     alert('Anda menutup pop-up tanpa menyelesaikan pembayaran.');
                 }
             });

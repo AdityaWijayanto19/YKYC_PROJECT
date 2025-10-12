@@ -1,258 +1,273 @@
 @extends('layouts.customer')
 
-{{-- Push CSS khusus halaman ini --}}
-
-{{-- Set judul halaman ini --}}
-@section('title', 'Dashboard Worker')
+@section('title', 'Dashboard Customer')
 
 @push('styles')
     <style>
-        /* Styling khusus untuk halaman dashboard customer */
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .map-viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #map {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        #panel-content {
+            transition: all 0.3s ease-in-out;
+        }
+
+        #panel-content.is-hidden {
+            width: 0 !important;
+            max-width: 0 !important;
+            opacity: 0;
+            overflow: hidden;
+            margin-left: -0.5rem;
+        }
+
+        .collapse-icon {
+            transition: transform 0.2s ease;
+        }
+
+        .is-collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
         .promo-carousel .swiper-slide img {
-            border-radius: 1rem;
-            /* Membuat sudut gambar carousel lebih melengkung */
+            border-radius: 0.75rem;
         }
     </style>
 @endpush
 
-{{-- Mulai bagian konten --}}
 @section('content')
-    <!-- Content Area -->
-    <x-toastify></x-toastify>
-    <main class="flex-1 overflow-y-auto bg-gray-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
+    <main class="relative w-screen h-screen overflow-hidden map-viewport">
 
-            <!-- Header Section -->
-            <section class="mb-8">
-                <h2 class="text-3xl font-bold text-gray-800">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</h2>
-                <p class="text-gray-500 mt-1">Siap membuat sepatumu bersih kembali?</p>
-            </section>
+        <div id="map" class="absolute inset-0 z-0 w-full h-full"></div>
+        <div id="map-hint"
+            class="absolute inset-0 z-[9999] flex items-center justify-center bg-black/60 text-white text-2xl font-bold opacity-0 pointer-events-none transition-opacity duration-300">
+            <p class="text-center">Gunakan CTRL + scroll untuk<br>memperbesar atau memperkecil peta</p>
+        </div>
 
-            <!-- Carousel Promo Section -->
-            <section class="mb-8">
-                <div class="swiper promo-carousel rounded-2xl shadow-sm overflow-hidden">
-                    <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2670&auto=format&fit=crop"
-                                alt="Promo 2: Gratis Antar Jemput" class="w-full h-56 md:h-72 object-cover">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?q=80&w=2670&auto=format&fit=crop"
-                                alt="Promo 3: Paket Bundling" class="w-full h-56 md:h-72 object-cover">
-                        </div>
-                    </div>
-                    <!-- If we need pagination -->
-                    <div class="swiper-pagination"></div>
+        <div id="panel-container" class="absolute top-3 right-3 bottom-3 z-10 flex flex-row-reverse items-start gap-2">
 
-                    <!-- If we need navigation buttons -->
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
-            </section>
-
-
-            <!-- Lacak Pesanan Saya -->
-            <section class="mb-8">
-                <h3 class="text-xl font-bold text-gray-700 mb-4">Lacak Pesanan Saya</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                    <a href="#"
-                        class="bg-white p-5 rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                        <div class="flex items-start gap-4">
-                            <div class="bg-yellow-100 p-3 rounded-xl">
-                                <svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 font-medium">Menunggu</p>
-                                <p class="text-2xl font-bold text-gray-800">2</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#"
-                        class="bg-white p-5 rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                        <div class="flex items-start gap-4">
-                            <div class="bg-blue-100 p-3 rounded-xl">
-                                <svg class="w-6 h-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 font-medium">Diproses</p>
-                                <p class="text-2xl font-bold text-gray-800">1</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#"
-                        class="bg-white p-5 rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                        <div class="flex items-start gap-4">
-                            <div class="bg-green-100 p-3 rounded-xl">
-                                <svg class="w-6 h-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 font-medium">Siap Ambil</p>
-                                <p class="text-2xl font-bold text-gray-800">3</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Peta & Riwayat -->
-            <!-- Peta & Riwayat -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                <!-- Kolom Peta (Tidak diubah, sebagai referensi tinggi) -->
-                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-semibold text-gray-700">Temukan Gerobak Terdekat</h3>
-                        <a href="{{ route('customer.locations') }}"
-                            class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
-                    </div>
-                    <!-- Tinggi peta ini (`h-96`) menjadi patokan untuk card di sebelahnya -->
-                    <div id="map" class="h-96 w-full rounded-lg z-10"></div>
-                </div>
-
-                <!-- ========================================================== -->
-                <!-- CARD RIWAYAT (YANG SUDAH DIPERBAIKI DENGAN BENAR) -->
-                <!-- ========================================================== -->
-
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4 flex-shrink-0">Riwayat Terbaru</h3>
-                    <div class="flex-grow overflow-y-auto min-h-0">
-                        <!-- Wrapper untuk memberikan sedikit padding bawah pada scrollbar -->
-                        <div class="space-y-4 pr-2">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">Deep Clean - #ORD123</p>
-                                    <p class="text-sm text-gray-500">15 Sep 2025</p>
+            <div id="panel-content" class="w-64 md:w-80 h-full flex flex-col">
+                <div class="flex-1 overflow-y-auto space-y-3 pr-1">
+                    <div class="bg-white rounded-xl shadow-lg">
+                        <div class="p-3">
+                            <div class="swiper promo-carousel rounded-lg shadow-inner overflow-hidden">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide"><img
+                                            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop"
+                                            alt="Promo 1" class="w-full h-36 object-cover"></div>
+                                    <div class="swiper-slide"><img
+                                            src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=600&auto=format=crop"
+                                            alt="Promo 2" class="w-full h-36 object-cover"></div>
                                 </div>
-                                <span
-                                    class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">Quick Clean - #ORD121</p>
-                                    <p class="text-sm text-gray-500">14 Sep 2025</p>
-                                </div>
-                                <span
-                                    class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">Unyellowing - #ORD119</p>
-                                    <p class="text-sm text-gray-500">12 Sep 2025</p>
-                                </div>
-                                <span
-                                    class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
-                            </div>
-                            <!-- Data Tambahan untuk Menunjukkan Scroll Bekerja -->
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">Repaint - #ORD115</p>
-                                    <p class="text-sm text-gray-500">10 Sep 2025</p>
-                                </div>
-                                <span
-                                    class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">Deep Clean - #ORD112</p>
-                                    <p class="text-sm text-gray-500">8 Sep 2025</p>
-                                </div>
-                                <span
-                                    class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-800">Unyellowing - #ORD109</p>
-                                    <p class="text-sm text-gray-500">5 Sep 2025</p>
-                                </div>
-                                <span
-                                    class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Selesai</span>
+                                <div class="swiper-pagination"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- DIV 2: Area Link "Lihat Semua" yang Tetap di Bawah (tidak ikut scroll) -->
-                    <div class="pt-4 mt-4 border-t border-gray-200 text-center flex-shrink-0">
-                        <a href="{{ route('customer.history') }}"
-                            class="text-primary hover:underline font-semibold text-sm">
-                            Lihat Semua Riwayat
-                        </a>
+                    <div class="bg-white rounded-xl shadow-lg">
+                        <div data-toggle="collapse" data-target="#card-tracking-content"
+                            class="p-3 cursor-pointer flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-gray-700">Lacak Pesanan Saya</h3>
+                            <svg class="w-5 h-5 text-gray-500 collapse-icon" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div id="card-tracking-content" class="px-3 pb-3">
+                            <div class="grid grid-cols-3 gap-2">
+                                <a href="{{ route('customer.order.status') }}"
+                                    class="p-2 text-center bg-gray-50 border rounded-lg hover:shadow-sm transition">
+                                    <p class="text-xl font-bold text-yellow-600">{{ $countPending }}</p>
+                                    <p class="text-xs text-gray-500">Menunggu</p>
+                                </a>
+                                <a href="{{ route('customer.order.status') }}"
+                                    class="p-2 text-center bg-gray-50 border rounded-lg hover:shadow-sm transition">
+                                    <p class="text-xl font-bold text-blue-600">{{ $countInProgress }}</p>
+                                    <p class="text-xs text-gray-500">Diproses</p>
+                                </a>
+                                <a href="{{ route('customer.order.status') }}"
+                                    class="p-2 text-center bg-gray-50 border rounded-lg hover:shadow-sm transition">
+                                    <p class="text-xl font-bold text-green-600">{{ $countReady }}</p>
+                                    <p class="text-xs text-gray-500">Siap Ambil</p>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg">
+                        <div data-toggle="collapse" data-target="#card-history-content"
+                            class="p-3 cursor-pointer flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-gray-700">Riwayat Terbaru</h3>
+                            <svg class="w-5 h-5 text-gray-500 collapse-icon" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div id="card-history-content" class="px-3 pb-3">
+                            <div class="space-y-2">
+                                @forelse ($recentOrders as $order)
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-semibold text-gray-800 text-sm">
+                                            {{ $order->service->name ?? 'Layanan Tidak Diketahui' }} - #{{ $order->order_id }}
+                                        </p>
+                                       <span class="px-2 py-0.5 text-xs font-semibold 
+                                            @php $statusName = strtolower($order->status->name ?? 'unknown'); @endphp
+                                            @if($statusName == 'completed' || $statusName == 'selesai') 
+                                                text-green-800 bg-green-100 
+                                            @elseif($statusName == 'pending') 
+                                                text-yellow-800 bg-yellow-100 
+                                            @elseif($statusName == 'ready for pickup') 
+                                                text-purple-800 bg-purple-100
+                                            @elseif($statusName == 'diproses' || $statusName == 'in progress') 
+                                                text-blue-800 bg-blue-100 
+                                            @else 
+                                                text-gray-800 bg-gray-100 
+                                            @endif
+                                            rounded-full">  
+                                            {{ ucfirst($order->status->name ?? 'Tidak diketahui') }}
+                                        </span>
+                                    </div>
+                                @empty
+                                    <p class="text-sm text-gray-500 italic">Belum ada riwayat pesanan.</p>
+                                @endforelse
+                            </div>
+
+                            <div class="pt-2 mt-2 text-center border-t border-gray-100"><a
+                                    href="{{ route('customer.history') }}"
+                                    class="text-xs font-semibold text-primary hover:underline">Lihat Semua Riwayat</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <div class="flex-shrink-0 pt-2">
+                <button id="hide-panel-btn"
+                    class="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center focus:outline-none">
+                    <svg id="hide-panel-icon" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
         </div>
     </main>
 @endsection
-{{-- Akhir bagian konten --}}
 
 @push('scripts')
-    <!-- Swiper.js Script -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-            // ========== Swiper.js Carousel Initialization ==========
-            const swiper = new Swiper('.promo-carousel', {
-                // Optional parameters
-                loop: true, // Membuat carousel berputar tanpa henti
-                autoplay: {
-                    delay: 4000, // Pindah slide setiap 4 detik
-                    disableOnInteraction: false, // Autoplay tidak berhenti setelah interaksi user
-                },
+            const hideBtn = document.getElementById('hide-panel-btn');
+            const panelContent = document.getElementById('panel-content');
+            const hideIcon = document.getElementById('hide-panel-icon');
+            if (hideBtn) {
+                hideBtn.addEventListener('click', () => {
+                    panelContent.classList.toggle('is-hidden');
+                    hideIcon.style.transform = panelContent.classList.contains('is-hidden')
+                        ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
+            }
 
-                // If we need pagination
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-
-                // Navigation arrows
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
+            document.querySelectorAll('[data-toggle="collapse"]').forEach(header => {
+                header.addEventListener('click', () => {
+                    const targetContent = document.querySelector(header.dataset.target);
+                    targetContent.classList.toggle('hidden');
+                    header.classList.toggle('is-collapsed');
+                });
             });
 
+            new Swiper('.promo-carousel', {
+                loop: true,
+                autoplay: { delay: 4000, disableOnInteraction: false },
+                pagination: { el: '.swiper-pagination', clickable: true },
+            });
 
-            // ========== Leaflet.js Map Initialization ==========
             const mapElement = document.getElementById('map');
             if (mapElement) {
-                const map = L.map('map').setView([-7.966737054356289, 112.63246382330945], 12);
+                const map = L.map('map', { zoomControl: false, scrollWheelZoom: false, attributionControl: false }).setView([-7.9667, 112.6324], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '©YKYC' }).addTo(map);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '© YKYc'
-                }).addTo(map);
-
-                const locations = [
-                    { lat: -8.170114494091404, lng: 112.68353990616373, name: 'Universitas Brawijaya' },
-                    { lat: -6.1751, lng: 106.8650, name: 'Gerobak Stasiun Gambir' },
-                    { lat: -6.2415, lng: 106.8242, name: 'Gerobak Blok M Square' }
-                ];
+                const serviceAreaPolygon = @json($serviceAreaPolygon ?? []);
+                if (serviceAreaPolygon.length > 0) {
+                    L.polygon(serviceAreaPolygon, {
+                        color: '#5483B3', weight: 2, dashArray: '5, 5', fillOpacity: 0.1, fillColor: '#5483B3'
+                    }).addTo(map);
+                }
 
                 const cartIcon = L.icon({
                     iconUrl: 'https://cdn-icons-png.flaticon.com/512/3721/3721838.png',
-                    iconSize: [40, 40],
-                    iconAnchor: [20, 40],
-                    popupAnchor: [0, -40]
+                    iconSize: [40, 40], iconAnchor: [20, 40], popupAnchor: [0, -40]
+                });
+                const activeWorkers = @json($activeWorkers);
+                activeWorkers.forEach(worker => {
+                    if (worker.current_latitude && worker.current_longitude) {
+                        const lat = parseFloat(worker.current_latitude);
+                        const lng = parseFloat(worker.current_longitude);
+                        if (worker.user && worker.user.name) {
+                            L.marker([lat, lng], { icon: cartIcon }).addTo(map).bindPopup(`<b>${worker.user.name}</b>`);
+                        }
+                    }
                 });
 
-                locations.forEach(loc => {
-                    L.marker([loc.lat, loc.lng], { icon: cartIcon }).addTo(map)
-                        .bindPopup(`<b>${loc.name}</b><br>Aktif sekarang!`);
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const customerIcon = L.icon({
+                        iconUrl: 'https://cdn-icons-png.flaticon.com/128/727/727636.png',
+                        iconSize: [35, 35], iconAnchor: [17, 35], popupAnchor: [0, -35]
+                    });
+                    L.marker([lat, lng], { icon: customerIcon }).addTo(map).bindPopup('<b>Posisi Anda</b>');
+                    map.setView([lat, lng], 14);
                 });
+
+                const hint = document.getElementById('map-hint');
+                let hideHintTimeout;
+
+                map.getContainer().addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (e.ctrlKey) {
+                        hint.classList.remove('opacity-100');
+                        hint.classList.add('opacity-0');
+                        clearTimeout(hideHintTimeout);
+                        if (e.deltaY < 0) {
+                            map.zoomIn();
+                        } else {
+                            map.zoomOut();
+                        }
+                    } else {
+                        hint.classList.remove('opacity-0');
+                        hint.classList.add('opacity-100');
+                        clearTimeout(hideHintTimeout);
+                        hideHintTimeout = setTimeout(() => {
+                            hint.classList.remove('opacity-100');
+                            hint.classList.add('opacity-0');
+                        }, 1500);
+                    }
+                }, { passive: false });
             }
         });
     </script>
