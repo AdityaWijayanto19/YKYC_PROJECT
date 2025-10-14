@@ -55,24 +55,23 @@ class OrderController extends Controller
             'worker_id' => ['nullable', 'exists:workers,id'],
         ]);
 
-        // Dapatkan objek status dari database
+        // Ambil status
         $pendingStatus = Status::where('name', 'pending')->firstOrFail();
         $waitingStatus = Status::where('name', 'waiting')->firstOrFail();
 
         $assignedWorkerId = $validated['worker_id'] ?? null;
-        $statusId = $pendingStatus->id; // Default status adalah 'pending'
+        $statusId = $pendingStatus->id; // Default: pending
         $nearestWorker = null;
 
         if ($validated['delivery_method'] === 'pickup') {
-
             $nearestWorker = $this->findNearestAvailableWorker($request->customer_lat, $request->customer_lng);
-
             if (!$nearestWorker) {
                 return back()->withErrors(['error' => 'Maaf, tidak ada driver yang tersedia...'])->withInput();
             }
-
             $assignedWorkerId = $nearestWorker->id;
-            $statusId = $waitingStatus->id;
+            $statusId = Status::where('name', 'waiting_keliling')->value('id');
+        } else { // drop-off/mangkal
+            $statusId = Status::where('name', 'waiting_mangkal')->value('id');
         }
 
         $service = Service::find($validated['service_id']);
@@ -92,6 +91,7 @@ class OrderController extends Controller
             'payment_status' => 'pending',
         ]);
 
+        // Midtrans
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
         \Midtrans\Config::$isSanitized = true;
@@ -116,7 +116,7 @@ class OrderController extends Controller
         $order->snap_token = $snapToken;
         $order->save();
 
-        if (isset($nearestWorker)) {
+        if ($nearestWorker) {
             NewOrderAssigned::dispatch($order, $nearestWorker);
         }
 

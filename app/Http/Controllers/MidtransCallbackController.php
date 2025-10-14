@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Events\OrderPaid;
+use App\Models\Status;
 use Midtrans\Notification;
 
 class MidtransCallbackController extends Controller
@@ -48,22 +49,28 @@ class MidtransCallbackController extends Controller
             case 'capture':
                 if ($type === 'credit_card' && $fraud === 'accept') {
                     $order->payment_status = 'paid';
-                    $order->status = 'diproses'; 
+                    $statusModel = Status::where('name', 'diproses')->first();
+                    if ($statusModel) $order->status_id = $statusModel->id;
                 }
                 break;
+
             case 'settlement':
                 $order->payment_status = 'paid';
-                $order->status = 'diproses'; 
+                $statusModel = Status::where('name', 'diproses')->first();
+                if ($statusModel) $order->status_id = $statusModel->id;
                 break;
+
             case 'pending':
                 $order->payment_status = 'pending';
                 break;
+
             case 'deny':
             case 'cancel':
             case 'dibatalkan':
             case 'expire':
-                $order->payment_status = 'failed'; 
-                $order->status = 'dibatalkan';    
+                $order->payment_status = 'failed';
+                $statusModel = Status::where('name', 'dibatalkan')->first();
+                if ($statusModel) $order->status_id = $statusModel->id;
                 break;
         }
 
