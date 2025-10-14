@@ -1,159 +1,92 @@
-{{-- Memasukkan konten ke dalam slot 'content' di layout --}}
 @extends('layouts.admin')
-
 @section('title', 'Dashboard')
 
 @section('content')
-
     {{-- Kontainer utama untuk konten halaman dengan padding --}}
     <div class="p-8">
 
         <!-- Header Konten -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-navy-dark">Selamat Datang Admin!</h1>
+                <h1 class="text-3xl font-bold text-navy-dark">Selamat Datang, {{ Auth::user()->name }}!</h1>
                 <p class="text-blue-medium mt-1">Semoga hari Anda produktif dalam mengelola sistem hari ini.</p>
             </div>
-            <div class="flex items-center gap-6 mt-4 sm:mt-0">
-                <div class="flex items-center gap-3">
-                    <img src="https://i.ibb.co.com/BHs9DfNK/2025-02-16-17-23-IMG-0201.jpg" class="w-10 h-10 rounded-full" alt="User Avatar">
-                    <div>
-                        <span class="font-semibold text-navy-dark">Adit Kocok</span>
-                    </div>
+            <div class="flex items-center gap-3 mt-4 sm:mt-0">
+                <img src="{{ Auth::user()->avatar ?? 'https://i.pravatar.cc/40?u=' . Auth::user()->email }}" class="w-10 h-10 rounded-full object-cover" alt="User Avatar">
+                <div>
+                    <span class="font-semibold text-navy-dark">{{ Auth::user()->name }}</span>
                 </div>
             </div>
         </header>
 
-        {{-- Grid Layout Utama: Konten Kiri (main) dan Kanan (aside) --}}
+        {{-- Grid Layout Utama --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {{-- =============================================== --}}
             {{-- KOLOM KONTEN KIRI (2/3) --}}
-            {{-- =============================================== --}}
             <div class="lg:col-span-2 space-y-8">
 
                 <!-- Banner Statistik -->
                 <section class="bg-navy-primary p-6 rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-6 text-white shadow-lg">
                     <div>
-                        <div class="flex items-start gap-2 mt-1">
-                            <p class="text-sm text-blue-pale">Hari ini</p>
-                            <span class="text-xs font-light bg-white/20 px-2 py-1 rounded-full">+2.4%</span>
-                        </div>
-                        <div class="flex items-center">
-                            <p class="text-2xl font-bold">Rp125.000</p>
-                        </div>
-                        <p class="text-xs text-blue-pale mt-1">Bulan sebelumnya Rp67.000</p>
+                        <p class="text-sm text-blue-pale">Hari ini</p>
+                        <p class="text-2xl font-bold mt-1">Rp{{ number_format($incomeToday, 0, ',', '.') }}</p>
                     </div>
-
                     <div>
-                        <div class="flex items-start gap-2 mt-1">
-                            <p class="text-sm text-blue-pale">Bulan ini</p>
-                            <span class="text-xs font-light bg-white/20 px-2 py-1 rounded-full">+1.4%</span>
-                        </div>
-                        <div class="flex items-center">
-                            <p class="text-2xl font-bold">Rp1.500.000</p>
-                        </div>
-                        <p class="text-xs text-blue-pale mt-1">Bulan sebelumnya Rp790.000</p>
+                        <p class="text-sm text-blue-pale">Bulan ini</p>
+                        <p class="text-2xl font-bold mt-1">Rp{{ number_format($incomeThisMonth, 0, ',', '.') }}</p>
                     </div>
-
                     <div>
-                        <div class="flex items-start gap-2 mt-1">
-                            <p class="text-sm text-blue-pale">Tahun ini</p>
-                            <span class="text-xs font-light bg-white/20 px-2 py-1 rounded-full">+4.3%</span>
-                        </div>
-                        <div class="flex items-center">
-                            <p class="text-2xl font-bold">Rp47.000.000</p>
-                        </div>
-                        <p class="text-xs text-blue-pale mt-1">Tahun sebelumnya Rp39.000.000</p>
+                        <p class="text-sm text-blue-pale">Tahun ini</p>
+                        <p class="text-2xl font-bold mt-1">Rp{{ number_format($incomeThisYear, 0, ',', '.') }}</p>
                     </div>
                 </section>
 
-                <!-- Total Sales & Cost -->
+                <!-- Grafik Pendapatan -->
                 <section class="bg-white p-6 rounded-2xl shadow-md">
-                    <div class="flex flex-col md:flex-row justify-between items-start">
-                        <div>
-                            <h2 class="text-xl font-bold text-navy-dark">Total Pendapatan</h2>
-                            <p class="text-sm text-blue-light">Last 60 days <span
-                                    class="text-sm text-status-success bg-green-100 px-2 py-1 rounded-full align-middle font-semibold">+5.4%</span>
-                            </p>
-                            <p class="text-4xl font-bold text-navy-primary my-4">Rp150.000.000</p>
-                            <p class="text-sm text-blue-medium">+8.20k vs prev. 60 days</p>
-                        </div>
-                        <!-- Chart Placeholder -->
-                        <div class="h-24 w-full md:w-1/2 flex items-end gap-3 justify-center mt-6">
-                            <div class="w-full h-1/3 bg-blue-pale rounded-t-lg transition-transform hover:scale-105"></div>
-                            <div class="w-full h-2/3 bg-navy-primary rounded-t-lg transition-transform hover:scale-105">
-                            </div>
-                            <div class="w-full h-1/2 bg-blue-pale rounded-t-lg transition-transform hover:scale-105"></div>
-                            <div
-                                class="w-full h-full bg-navy-primary rounded-t-lg relative transition-transform hover:scale-105">
-                                <span
-                                    class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-navy-dark text-white px-2 py-1 rounded-md whitespace-nowrap">60%</span>
-                            </div>
-                            <div class="w-full h-1/3 bg-blue-pale rounded-t-lg transition-transform hover:scale-105"></div>
-                        </div>
+                    <h2 class="text-xl font-bold text-navy-dark mb-4">Grafik Pendapatan (6 Bulan Terakhir)</h2>
+                    <div>
+                        <canvas id="revenueChart"></canvas>
                     </div>
                 </section>
 
                 <!-- Transaction History -->
                 <section>
-                    <h2 class="text-xl font-bold text-navy-dark mb-4">Transaction History</h2>
-                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                    <h2 class="text-xl font-bold text-navy-dark mb-4">Transaksi Terakhir Hari Ini</h2>
+                    <div class="bg-white p-6 rounded-2xl shadow-md overflow-x-auto">
                         <table class="w-full text-left min-w-[600px]">
                             <thead>
                                 <tr class="border-b">
                                     <th class="py-3 px-2 font-semibold text-blue-medium">Customer</th>
-                                    <th class="py-3 px-2 font-semibold text-blue-medium">Status</th>
-                                    <th class="py-3 px-2 font-semibold text-blue-medium">Date</th>
-                                    <th class="py-3 px-2 font-semibold text-blue-medium">Invoice</th>
-                                    <th class="py-3 px-2 font-semibold text-blue-medium">People</th>
+                                    <th class="py-3 px-2 font-semibold text-blue-medium">Status Bayar</th>
+                                    <th class="py-3 px-2 font-semibold text-blue-medium">Tanggal</th>
+                                    <th class="py-3 px-2 font-semibold text-blue-medium">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b hover:bg-slate-50">
-                                    <td class="py-4 px-2 flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/40?u=flyod" class="w-10 h-10 rounded-full"
-                                            alt="Flyod">
-                                        <div>
-                                            <p class="font-semibold text-navy-dark">Flyod Johntosan</p>
-                                            <p class="text-sm text-blue-light">johntosan@gmail.com</p>
-                                        </div>
-                                    </td>
-                                    <td class="px-2"><span
-                                            class="text-sm text-status-success bg-green-100 px-3 py-1 rounded-full font-semibold">&#9679;
-                                            Success</span></td>
-                                    <td class="px-2 text-blue-medium">Nov 02, 2021</td>
-                                    <td class="px-2 font-semibold text-navy-dark">$100,00</td>
-                                    <td class="px-2 flex items-center -space-x-2">
-                                        <img src="https://i.pravatar.cc/24?u=person1"
-                                            class="w-6 h-6 rounded-full border-2 border-white" alt="person1">
-                                        <img src="https://i.pravatar.cc/24?u=person2"
-                                            class="w-6 h-6 rounded-full border-2 border-white" alt="person2">
-                                        <span
-                                            class="w-6 h-6 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-xs font-bold text-blue-medium">+6</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-slate-50">
-                                    <td class="py-4 px-2 flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/40?u=flyod2" class="w-10 h-10 rounded-full"
-                                            alt="Flyod 2">
-                                        <div>
-                                            <p class="font-semibold text-navy-dark">Flyod Johntosan</p>
-                                            <p class="text-sm text-blue-light">johntosan@gmail.com</p>
-                                        </div>
-                                    </td>
-                                    <td class="px-2"><span
-                                            class="text-sm text-status-pending bg-amber-100 px-3 py-1 rounded-full font-semibold">&#9679;
-                                            Pending</span></td>
-                                    <td class="px-2 text-blue-medium">Nov 02, 2021</td>
-                                    <td class="px-2 font-semibold text-navy-dark">$100,00</td>
-                                    <td class="px-2 flex items-center -space-x-2">
-                                        <img src="https://i.pravatar.cc/24?u=person3"
-                                            class="w-6 h-6 rounded-full border-2 border-white" alt="person3">
-                                        <img src="https://i.pravatar.cc/24?u=person4"
-                                            class="w-6 h-6 rounded-full border-2 border-white" alt="person4">
-                                    </td>
-                                </tr>
+                                @forelse ($todayTransactions as $transaction)
+                                    <tr class="border-b hover:bg-slate-50">
+                                        <td class="py-4 px-2 flex items-center gap-3">
+                                            <img src="{{ $transaction->user->avatar ?? 'https://i.pravatar.cc/40?u=' . $transaction->user->email }}" class="w-10 h-10 rounded-full object-cover" alt="{{ $transaction->user->name }}">
+                                            <div>
+                                                <p class="font-semibold text-navy-dark">{{ $transaction->user->name }}</p>
+                                                <p class="text-sm text-blue-light">{{ $transaction->user->email }}</p>
+                                            </div>
+                                        </td>
+                                        <td class="px-2">
+                                            @if($transaction->payment_status == 'paid')
+                                                <span class="text-sm text-status-success bg-green-100 px-3 py-1 rounded-full font-semibold">&#9679; Success</span>
+                                            @else
+                                                <span class="text-sm text-status-pending bg-amber-100 px-3 py-1 rounded-full font-semibold capitalize">&#9679; {{ $transaction->payment_status }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-2 text-blue-medium">{{ $transaction->created_at->format('d M Y, H:i') }}</td>
+                                        <td class="px-2 font-semibold text-navy-dark">Rp{{ number_format($transaction->total_price, 0, ',', '.') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center py-10 text-blue-medium">Belum ada transaksi hari ini.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -169,10 +102,8 @@
                     <div class="flex justify-between items-center mb-4">
                         <h3 id="month-year" class="text-lg font-bold text-navy-dark">October 2023</h3>
                         <div class="flex gap-2">
-                            <button id="prev-month"
-                                class="w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium">&lt;</button>
-                            <button id="next-month"
-                                class="w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium">&gt;</button>
+                            <button id="prev-month" class="w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium">&lt;</button>
+                            <button id="next-month" class="w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium">&gt;</button>
                         </div>
                     </div>
                     <div id="calendar-grid" class="grid grid-cols-7 text-center text-sm text-blue-medium">
@@ -183,64 +114,52 @@
                     </div>
                 </div>
 
-                <!-- Meetings -->
+                <!-- Meetings / Schedule -->
                 <div class="bg-white p-6 rounded-2xl shadow-md space-y-4">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold text-navy-dark">Schedule</h3>
-                        <a href="#"
-                            class="flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium font-bold text-xl leading-none">+</a>
+                        {{-- TODO: Buat route untuk halaman tambah jadwal --}}
+                        <a href="#" class="flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium font-bold text-xl leading-none">+</a>
                     </div>
 
-                    <!-- Konten Saat Jadwal Kosong -->
-                    <div class="text-center py-10 px-4 border-2 border-dashed rounded-xl">
-                        <div class="text-4xl text-slate-300 mb-2">
-                            <!-- Anda bisa menggunakan ikon dari Font Awesome atau library ikon lainnya -->
-                            <i class="fas fa-calendar-alt"></i>
+                    {{-- Logika untuk menampilkan jadwal atau pesan kosong --}}
+                    @if(empty($schedules))
+                        <!-- Konten Saat Jadwal Kosong -->
+                        <div class="text-center py-10 px-4 border-2 border-dashed rounded-xl">
+                            <div class="text-4xl text-slate-300 mb-2">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <p class="font-semibold text-navy-dark">Belum ada jadwal</p>
+                            <p class="text-sm text-blue-medium">Klik tombol '+' untuk menambahkan jadwal baru.</p>
                         </div>
-                        <p class="font-semibold text-navy-dark">Belum ada jadwal</p>
-                        <p class="text-sm text-blue-medium">Klik tombol '+' untuk menambahkan jadwal baru.</p>
-                    </div>
-
-                    {{-- <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50">
-                        <div class="bg-white p-3 rounded-full text-lg"><i class="fas fa-desktop text-navy-primary"></i>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-navy-dark">Meeting with Client</p>
-                            <p class="text-sm text-blue-medium">Google Meet</p>
-                        </div>
-                        <span class="ml-auto text-sm text-blue-medium">12 PM</span>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50">
-                        <div class="bg-white p-3 rounded-full text-lg"><i class="fas fa-file-invoice text-navy-primary"></i>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-navy-dark">Weekly Report</p>
-                            <p class="text-sm text-blue-medium">Google Meet</p>
-                        </div>
-                        <span class="ml-auto text-sm text-blue-medium">03 PM</span>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50">
-                        <div class="bg-white p-3 rounded-full text-lg"><i class="fas fa-book-open text-navy-primary"></i>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-navy-dark">Daily Scrum Meeting</p>
-                            <p class="text-sm text-blue-medium">Google Meet</p>
-                        </div>
-                        <span class="ml-auto text-sm text-blue-medium">05 PM</span>
-                    </div> --}}
+                    @else
+                        {{-- Lakukan looping jika variabel $schedules ada isinya --}}
+                        @foreach($schedules as $schedule)
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50">
+                                <div class="bg-white p-3 rounded-full text-lg"><i class="fas fa-file-invoice text-navy-primary"></i></div>
+                                <div>
+                                    <p class="font-semibold text-navy-dark">{{ $schedule->title }}</p>
+                                    <p class="text-sm text-blue-medium">{{ $schedule->description }}</p>
+                                </div>
+                                <span class="ml-auto text-sm text-blue-medium">{{ $schedule->schedule_date->format('H:i') }}</span>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </aside>
 
         </div>
     </div>
-
 @endsection
 
-{{-- Contoh jika Anda perlu menambahkan script khusus untuk halaman ini --}}
 @push('scripts')
+    {{-- Library untuk Grafik --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+        // Script untuk Kalender
         document.addEventListener('DOMContentLoaded', function () {
-            const monthYearElement = document.getElementById('month-year');
+              const monthYearElement = document.getElementById('month-year');
             const prevMonthButton = document.getElementById('prev-month');
             const nextMonthButton = document.getElementById('next-month');
             const calendarGrid = document.getElementById('calendar-grid');
@@ -314,6 +233,41 @@
 
             // Render kalender saat pertama kali halaman dimuat
             renderCalendar();
+        });
+
+        // Script untuk Grafik Pendapatan
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: @json($chartLabels),
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: @json($chartData),
+                    backgroundColor: 'rgba(5, 38, 89, 0.8)', // Warna navy-primary dengan opacity
+                    borderColor: 'rgba(5, 38, 89, 1)',
+                    borderWidth: 1,
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return 'Rp' + new Intl.NumberFormat('id-ID').format(value);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
         });
     </script>
 @endpush

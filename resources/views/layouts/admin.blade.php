@@ -42,6 +42,7 @@
 </head>
 
 <body class="bg-slate-100 font-sans">
+    <x-toastify></x-toastify>
     <div class="flex h-screen overflow-hidden">
 
         <aside class="w-64 bg-white p-6 flex flex-col flex-shrink-0">
@@ -71,7 +72,7 @@
                     {{-- Submenu untuk Worker --}}
                     <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
                         <a href="{{ route('admin.worker.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/worker/index') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/worker') ? 'font-bold text-navy-primary' : '' }}">Kelola
                             Worker</a>
                         <a href="{{ route('admin.worker.location-chart') }}"
                             class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/worker/location-chart') ? 'font-bold text-navy-primary' : '' }}">Lokasi
@@ -90,16 +91,15 @@
                     </button>
                     {{-- Submenu untuk Customer --}}
                     <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
-                        <a href="{{ route('admin.customer.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/customer/index') ? 'font-bold text-navy-primary' : '' }}">Kelola
-                            Customer</a>
-                        <a href="#" class="block text-sm py-2 text-blue-medium hover:text-navy-dark">Dashboard
-                            Customer</a>
+                        <a href="{{ route('admin.customer.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/customer') ? 'font-bold text-navy-primary' : '' }}">Kelola Customer</a>
+                        <a href="{{ route('admin.service.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/service') ? 'font-bold text-navy-primary' : '' }}">Kelola Service</a>
+                        <a href="{{ route('admin.promo.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/promo') ? 'font-bold text-navy-primary' : '' }}">Kelola Promo</a>
+                        <a href="{{ route('admin.announcement.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/announcement') ? 'font-bold text-navy-primary' : '' }}">Kelola Pengumuman</a>
                     </div>
                 </div>
 
                 {{-- === DROPDOWN UNTUK PESANAN === --}}
-                <a href="{{ route('admin.pesanan') }}"
+                <a href="{{ route('admin.pesanan.index') }}"
                     class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/pesanan*') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
                     <i class="fas fa-shopping-bag w-5 text-center"></i> Pesanan
                 </a>
@@ -122,13 +122,9 @@
 
                 <div class="pt-6">
                     <h3 class="px-4 text-xs font-bold uppercase text-blue-light">System</h3>
-                    <a href="#"
-                        class="flex items-center gap-3 px-4 py-2 mt-2 rounded-lg text-blue-medium hover:bg-slate-100">
-                        <i class="fas fa-file-invoice-dollar w-5 text-center"></i> Laporan
-                    </a>
-                    <a href="#"
-                        class="flex items-center gap-3 px-4 py-2 rounded-lg text-blue-medium hover:bg-slate-100">
-                        <i class="fas fa-cog w-5 text-center"></i> Pengaturan
+                    <a href="{{ route('admin.peraturan.index') }}"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/peraturan') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
+                        <i class="fas fa-shield-alt w-5 text-center"></i> Peraturan
                     </a>
                 </div>
             </nav>

@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Customer;
 
-// Models
-
 use App\Events\NewOrderAssigned;
 use App\Models\Service;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\Worker;
 use App\Models\ServiceArea;
+use App\Models\Promo;
 
-// Helpers
 use App\Helpers\LocationHelper;
 
-// Laravel Components
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -170,6 +168,9 @@ class OrderController extends Controller
     {
         $userId = Auth::id();
 
+        $activePromos = Promo::where('is_active', true)->latest()->get();
+        $activeAnnouncements = Announcement::where('is_active', true)->orderBy('order', 'asc')->get();
+
         // Dapatkan ID untuk setiap grup status
         $pendingStatusId = Status::where('name', 'pending')->value('id');
         $inProgressStatusIds = Status::whereIn('name', ['waiting', 'on-the-way', 'diproses'])->pluck('id');
@@ -200,6 +201,8 @@ class OrderController extends Controller
         }
 
         return view('customer.dashboard', [
+            'activePromos' => $activePromos,
+            'activeAnnouncements' => $activeAnnouncements,
             'countPending' => $countPending,
             'countInProgress' => $countInProgress,
             'countReady' => $countReady,

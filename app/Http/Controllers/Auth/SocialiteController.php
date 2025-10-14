@@ -56,10 +56,20 @@ class SocialiteController extends Controller
                 });
             }
 
+            if ($user->status === 'diblokir') {
+                return redirect('/login')->with('error', 'Akun Anda telah diblokir. Silakan hubungi customer service untuk informasi lebih lanjut.');
+            }
+
             Auth::login($user);
 
-            return redirect()->intended('/customer/dashboard')
+            $redirectResponse = redirect()->intended('/customer/dashboard')
                 ->with('success', 'Login dengan Google berhasil. Selamat datang, ' . $user->name . '!');
+
+            if ($user->role === 'customer') {
+                $redirectResponse->with('show_announcement_modal', true);
+            }
+
+            return $redirectResponse;
         } catch (Exception $e) {
             return redirect('/login')->with('error', 'Terjadi kesalahan saat login dengan Google.');
         }

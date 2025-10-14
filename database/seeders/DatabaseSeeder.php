@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             LocationSeeder::class,
             StatusSeeder::class,
+            AdminSeeder::class,
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',

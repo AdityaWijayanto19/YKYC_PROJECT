@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
             'is_worker' => \App\Http\Middleware\IsWorker::class,
+            'is_admin' => \App\Http\Middleware\IsAdmin::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

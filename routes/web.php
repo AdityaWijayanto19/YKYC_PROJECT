@@ -2,17 +2,29 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+
 use App\Http\Controllers\MidtransCallbackController;
+
 use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\AuthController;
+
 use App\Http\Controllers\Customer\FeedbackController;
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
+
 use App\Http\Controllers\Worker\DashboardController;
 use App\Http\Controllers\Worker\OrderController as WorkerOrderController;
 use App\Http\Controllers\Worker\OrderHistoryController;
 use App\Http\Controllers\Worker\ProfileController as WorkerProfileController;
+
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\CustomerManagementController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PromoController;
+use App\Http\Controllers\Admin\WorkerManagementController;
+use App\Http\Controllers\Admin\ServiceController;
 
 // ===================================================================
 // HALAMAN PUBLIK & OTENTIKASI
@@ -157,40 +169,53 @@ Route::prefix('worker')->name('worker.')->middleware(['auth', 'is_worker'])->gro
 // ===================================================================
 //                           HALAMAN ADMIN
 // ===================================================================
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(function () {
 
-    // Halaman Dashboard Utama
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/worker/index', function () {
-        return view('admin.worker.index');
-    })->name('worker.index');
+    Route::prefix('worker')->name('worker.')->group(function () {
+        Route::get('/', [WorkerManagementController::class, 'index'])->name('index');
+        Route::get('/tambah', [WorkerManagementController::class, 'create'])->name('tambah');
+        Route::post('/', [WorkerManagementController::class, 'store'])->name('store');
+        Route::get('/{user}/edit', [WorkerManagementController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [WorkerManagementController::class, 'update'])->name('update');
+        Route::delete('/{user}', [WorkerManagementController::class, 'destroy'])->name('destroy');
+        Route::get('/location-chart', [WorkerManagementController::class, 'showLocations'])->name('location-chart');
+    });
 
-    Route::get('/worker/location-chart', function () {
-        return view('admin.worker.location-chart');
-    })->name('worker.location-chart');
+    Route::prefix('customer')->name('customer.')->group(function () {
+        Route::get('/', [CustomerManagementController::class, 'index'])->name('index');
+        Route::delete('/{user}', [CustomerManagementController::class, 'destroy'])->name('destroy');
+        Route::post('/{user}/toggle-block', [CustomerManagementController::class, 'toggleBlock'])->name('toggleBlock');
+    });
 
-    Route::get('/worker/tambah', function () {
-        return view('admin.worker.tambah');
-    })->name('worker.tambah');
+    Route::prefix('service')->name('service.')->controller(ServiceController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // Halaman daftar (GET /admin/service)
+        Route::get('/tambah', 'create')->name('tambah'); // Halaman form tambah (GET /admin/service/tambah)
+        Route::post('/', 'store')->name('store'); // Aksi menyimpan (POST /admin/service)
+        Route::get('/{service}/edit', 'edit')->name('edit'); // Halaman form edit (GET /admin/service/{id}/edit)
+        Route::put('/{service}', 'update')->name('update'); // Aksi update (PUT /admin/service/{id})
+        Route::delete('/{service}', 'destroy')->name('destroy'); // Aksi hapus (DELETE /admin/service/{id})
+    });
 
-    Route::get('/worker/edit', function () {
-        return view('admin.worker.edit');
-    })->name('worker.edit');
+    Route::resource('promo', PromoController::class)->except(['show']);
 
-    Route::get('/customer/index', function () {
-        return view('admin.customer.index');
-    })->name('customer.index');
+    Route::prefix('announcement')->name('announcement.')->controller(AnnouncementController::class)->group(function () {
+        Route::get('/', 'index')->name('index');                           // Halaman daftar
+        Route::get('/tambah', 'create')->name('tambah');                      // Halaman form tambah
+        Route::post('/', 'store')->name('store');                          // Aksi menyimpan
+        Route::get('/{announcement}/edit', 'edit')->name('edit');           // Halaman form edit
+        Route::put('/{announcement}', 'update')->name('update');            // Aksi update
+        Route::delete('/{announcement}', 'destroy')->name('destroy');       // Aksi hapus
+    });
 
-    Route::get('/customer/edit', function () {
-        return view('admin.customer.edit');
-    })->name('customer.edit');
+    Route::prefix('pesanan')->name('pesanan.')->controller(OrderController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{order}', 'show')->name('show');
+        Route::post('/{order}/update-status', 'updateStatus')->name('updateStatus');
+    });
 
-    Route::get('/pesanan', function () {
-        return view('admin.pesanan');
-    })->name('pesanan');
+     Route::get('/peraturan', [AdminDashboardController::class, 'peraturan'])->name('peraturan.index');
 });
 
 // ===================================================================

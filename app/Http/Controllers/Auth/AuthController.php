@@ -52,16 +52,13 @@ class AuthController extends Controller
         Auth::login($user);
 
         return redirect()->route('verification.notice');
-
-        // return redirect()->route('customer.dashboard')
-        //     ->with('success', 'Registrasi berhasil, Anda sudah login.');
     }
 
     public function showLoginForm()
     {
         return view('auth.login');
     }
-
+    
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -70,15 +67,32 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user(); 
+
+            if ($user->status === 'diblokir') {
+                Auth::logout(); 
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->with('error', 'Akun Anda telah diblokir. Silakan hubungi customer service untuk informasi lebih lanjut.');
+            }
+
             $request->session()->regenerate();
 
-            if (Auth::user()->role === 'customer') {
-                return redirect()->route('customer.dashboard');
-            } elseif (Auth::user()->role === 'worker') {
-                return redirect()->route('worker.dashboard');
-            } elseif (Auth::user()->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+            $redirectRoute = 'customer.dashboard'; 
+            if ($user->role === 'worker') {
+                $redirectRoute = 'worker.dashboard';
+            } elseif ($user->role === 'admin') {
+                $redirectRoute = 'admin.dashboard';
             }
+
+            $redirectResponse = redirect()->route($redirectRoute);
+
+            if ($user->role === 'customer') {
+                $redirectResponse->with('show_announcement_modal', true);
+            }
+
+            return $redirectResponse;
         }
 
         return back()->withErrors([
