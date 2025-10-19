@@ -5,13 +5,11 @@
 @section('content')
     <div class="container mx-auto max-w-7xl px-4 py-8">
 
-        <!-- Header -->
         <header class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Riwayat Pesanan Saya</h1>
             <p class="text-gray-600 mt-1">Lihat semua pesanan yang telah Anda selesaikan.</p>
         </header>
 
-        <!-- Statistik Mini -->
         <section class="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
                 <p class="text-sm font-medium text-gray-500">Pesanan Minggu Ini</p>
@@ -25,7 +23,6 @@
             </div>
         </section>
 
-        <!-- Panel Filter -->
         <section class="mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
             <form id="filterForm" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
                 <div>
@@ -57,9 +54,7 @@
             </form>
         </section>
 
-        <!-- Tabel Riwayat -->
         <div id="historyContainer" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            {{-- File partial akan dirender di sini saat halaman dimuat --}}
             @include('components.history-table-worker', ['history' => $history])
         </div>
     </div>
@@ -67,16 +62,14 @@
 
 @push('scripts')
     <script>
-        // Menggunakan submit event pada form untuk penanganan yang lebih baik
         document.getElementById('filterForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Mencegah form submit secara tradisional
+            event.preventDefault(); 
 
             const startDate = document.getElementById('start_date').value;
             const endDate = document.getElementById('end_date').value;
             const serviceId = document.getElementById('service_id').value;
             const container = document.getElementById('historyContainer');
             
-            // Tampilkan loading state
             container.innerHTML = '<div class="text-center py-10 text-gray-500">Memuat data...</div>';
 
             const url = `{{ route('worker.history-pesanan') }}?start_date=${startDate}&end_date=${endDate}&service_id=${serviceId}`;
@@ -89,7 +82,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Gunakan fungsi terpisah untuk membangun HTML tabel agar lebih rapi
                 container.innerHTML = buildTableHtml(data.history);
             })
             .catch(error => {
@@ -104,12 +96,10 @@
             }
 
             let tableRows = historyData.map(order => {
-                // Tentukan warna badge berdasarkan nama status dari data JSON
                 const statusClass = order.status.name === 'completed'
                     ? 'bg-green-100 text-green-800'
                     : 'bg-red-100 text-red-800';
                 
-                // Format tanggal agar lebih mudah dibaca
                 const formattedDate = new Date(order.updated_at).toLocaleDateString('id-ID', {
                     day: '2-digit', month: 'short', year: 'numeric'
                 });

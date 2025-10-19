@@ -3,15 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Service; // Jangan lupa tambahkan ini!
+use App\Models\Service;
 
 class ServiceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         Service::create(['name' => 'Quick Clean', 'price' => 25000, 'description' => 'Pembersihan cepat bagian luar dan sol.']);

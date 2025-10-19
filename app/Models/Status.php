@@ -19,12 +19,11 @@ class Status extends Model
         return $this->hasMany(Order::class);
     }
 
-    // app/Models/Status.php
 
     public function getBadgeHtml()
     {
         $statusName = strtolower($this->name);
-        $class = 'text-gray-800 bg-gray-100'; // Default
+        $class = 'text-gray-800 bg-gray-100'; 
 
         if (in_array($statusName, ['completed', 'selesai'])) $class = 'text-green-800 bg-green-100';
         elseif (in_array($statusName, ['diproses', 'on-the-way', 'in progress'])) $class = 'text-amber-800 bg-amber-100';

@@ -1,11 +1,8 @@
 @extends('layouts.worker')
 
-{{-- Set judul halaman ini --}}
 @section('title', 'Dashboard Worker')
 
 {{--
-Jika ada CSS khusus untuk halaman ini, tambahkan di sini.
-Contoh:
 @push('styles')
 <style>
     .custom-dashboard-style {
@@ -15,17 +12,11 @@ Contoh:
 @endpush
 --}}
 
-{{-- Mulai bagian konten --}}
 @section('content')
 
-{{--
-SIMULASI DATA DARI CONTROLLER LARAVEL
-Data ini mensimulasikan notifikasi yang akan diterima worker.
---}}
 @php
 
     $notifications = [
-        // Notifikasi Hari Ini
         (object) [
             'type' => 'order',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>',
@@ -53,7 +44,6 @@ Data ini mensimulasikan notifikasi yang akan diterima worker.
             'timestamp' => '1 jam yang lalu',
             'is_read' => false
         ],
-        // Notifikasi Kemarin
         (object) [
             'type' => 'order',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>',
@@ -67,13 +57,11 @@ Data ini mensimulasikan notifikasi yang akan diterima worker.
 @endphp
 
 <div class="container mx-auto max-w-2xl px-4 py-8">
-    <!-- Header Halaman -->
     <header class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Notifikasi</h1>
         <button class="text-sm font-medium text-blue-600 hover:text-blue-800">Tandai semua sudah dibaca</button>
     </header>
 
-    <!-- Filter Kategori -->
     <div class="mb-6 flex space-x-2 border-b">
         <button class="px-4 py-2 text-sm font-semibold text-blue-600 border-b-2 border-blue-600">Semua</button>
         <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">Pesanan</button>
@@ -81,9 +69,7 @@ Data ini mensimulasikan notifikasi yang akan diterima worker.
         <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">Admin</button>
     </div>
 
-    <!-- Daftar Notifikasi -->
     <div class="space-y-6">
-        <!-- Grup Waktu: Hari Ini -->
         <div>
             <h2 class="text-xs font-semibold uppercase text-gray-500 mb-2">Hari Ini</h2>
             <div class="space-y-3">
@@ -91,18 +77,15 @@ Data ini mensimulasikan notifikasi yang akan diterima worker.
                     @if ($notification->timestamp != 'Kemarin, 16:30')
                         <div
                             class="flex items-start p-4 rounded-lg {{ !$notification->is_read ? 'bg-white shadow' : 'bg-gray-50' }}">
-                            <!-- Ikon -->
                             <div
                                 class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-{{$notification->color}}-100 text-{{$notification->color}}-600">
                                 {!! $notification->icon !!}
                             </div>
-                            <!-- Konten Teks -->
                             <div class="ml-4 flex-grow">
                                 <p class="text-sm font-semibold text-gray-900">{{ $notification->title }}</p>
                                 <p class="text-sm text-gray-600">{{ $notification->message }}</p>
                                 <p class="text-xs text-gray-400 mt-1">{{ $notification->timestamp }}</p>
                             </div>
-                            <!-- Indikator Belum Dibaca -->
                             @if (!$notification->is_read)
                                 <div class="flex-shrink-0 ml-4 mt-1">
                                     <div class="h-2.5 w-2.5 rounded-full bg-blue-500"></div>
@@ -113,8 +96,6 @@ Data ini mensimulasikan notifikasi yang akan diterima worker.
                 @endforeach
             </div>
         </div>
-
-        <!-- Grup Waktu: Kemarin -->
         <div>
             <h2 class="text-xs font-semibold uppercase text-gray-500 mb-2">Kemarin</h2>
             <div class="space-y-3">
@@ -122,12 +103,10 @@ Data ini mensimulasikan notifikasi yang akan diterima worker.
                     @if ($notification->timestamp == 'Kemarin, 16:30')
                         <div
                             class="flex items-start p-4 rounded-lg {{ !$notification->is_read ? 'bg-white shadow' : 'bg-gray-50' }}">
-                            <!-- Ikon -->
                             <div
                                 class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-{{$notification->color}}-100 text-{{$notification->color}}-600">
                                 {!! $notification->icon !!}
                             </div>
-                            <!-- Konten Teks -->
                             <div class="ml-4 flex-grow">
                                 <p class="text-sm font-semibold text-gray-900">{{ $notification->title }}</p>
                                 <p class="text-sm text-gray-600">{{ $notification->message }}</p>

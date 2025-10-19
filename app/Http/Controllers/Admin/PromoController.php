@@ -24,11 +24,10 @@ class PromoController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Validasi gambar
+            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'is_active' => 'required|boolean',
         ]);
 
-        // Simpan gambar dan dapatkan path-nya
         $validated['image_path'] = $request->file('image_path')->store('promos', 'public');
 
         Promo::create($validated);
@@ -49,11 +48,8 @@ class PromoController extends Controller
             'is_active' => 'required|boolean',
         ]);
 
-        // Cek jika ada gambar baru yang di-upload
         if ($request->hasFile('image_path')) {
-            // Hapus gambar lama
             Storage::disk('public')->delete($promo->image_path);
-            // Simpan gambar baru
             $validated['image_path'] = $request->file('image_path')->store('promos', 'public');
         }
 
@@ -64,11 +60,8 @@ class PromoController extends Controller
 
     public function destroy(Promo $promo)
     {
-        // Hapus gambar dari storage
         Storage::disk('public')->delete($promo->image_path);
-        // Hapus data dari database
         $promo->delete();
-
         return redirect()->route('admin.promo.index')->with('success', 'Promo berhasil dihapus.');
     }
 }

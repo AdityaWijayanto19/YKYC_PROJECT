@@ -3,7 +3,6 @@
 @section('title', 'Tugas Aktif')
 
 @php
-    // Fungsi helper ini sudah benar, tidak perlu diubah.
     function getStatusClass($statusName) 
     {
         return match ($statusName) { 
@@ -36,10 +35,6 @@
         </header>
 
         @if ($worker->worker_type === 'Keliling')
-
-            {{-- ======================================================= --}}
-            {{-- BAGIAN INI SUDAH BENAR, TIDAK ADA PERUBAHAN DIPERLUKAN --}}
-            {{-- ======================================================= --}}
 
             @if ($active_orders->isNotEmpty())
                 @php $order = $active_orders->first(); @endphp
@@ -91,9 +86,6 @@
 
         @else
 
-            {{-- ================================================= --}}
-            {{-- TAMPILAN UNTUK WORKER MANGKAL (BAGIAN PERBAIKAN) --}}
-            {{-- ================================================= --}}
             <div class="space-y-5">
                 @forelse ($active_orders as $order)
                     <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -102,7 +94,6 @@
                                 <h3 class="font-bold text-lg text-gray-800">Pesanan #{{ $order->order_id }}</h3>
                                 <p class="text-sm text-gray-500">Oleh: {{ $order->user->name }}</p>
                             </div>
-                            {{-- PERBAIKAN 1: Menggunakan 'status->name' untuk fungsi dan 'status->label' untuk tampilan --}}
                             <span class="px-2.5 py-1 text-xs font-semibold rounded-full capitalize {{ getStatusClass($order->status->name) }}">
                                 {{ $order->status->label ?? $order->status->name }}
                             </span>
@@ -128,7 +119,6 @@
                         <div class="p-4 bg-gray-50 border-t flex items-center justify-end">
                             <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
                                 @csrf
-                                {{-- PERBAIKAN 2: Menggunakan 'status->name' untuk semua kondisi --}}
                                 @if($order->status->name === 'waiting')
                                     <input type="hidden" name="status" value="diproses">
                                     <button type="submit"
@@ -164,7 +154,6 @@
 @endsection
 
 @push('scripts')
-    {{-- Tidak ada perubahan di bagian SCRIPT, semuanya sudah benar --}}
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>

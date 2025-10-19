@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
-use App\Models\Status; // <-- PENTING: Tambahkan ini
+use App\Models\Status; 
 
 class OrderController extends Controller
 {
@@ -14,13 +14,11 @@ class OrderController extends Controller
     {
         $worker = Auth::user()->worker;
 
-        // Dapatkan ID status yang ingin dikecualikan
         $excludedStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
 
-        // Eager load relasi status
         $query = Order::with('user', 'service', 'status')
             ->where('worker_id', $worker->id)
-            ->whereNotIn('status_id', $excludedStatusIds) // Gunakan status_id
+            ->whereNotIn('status_id', $excludedStatusIds) 
             ->orderBy('created_at', 'desc');
 
         if ($worker->worker_type === 'Keliling') {
@@ -36,13 +34,11 @@ class OrderController extends Controller
     {
         $worker = Auth::user()->worker;
 
-        // Dapatkan ID status yang dianggap sebagai riwayat
         $historyStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
 
-        // Eager load relasi
         $history_orders = Order::with('user', 'service', 'status')
             ->where('worker_id', $worker->id)
-            ->whereIn('status_id', $historyStatusIds) // Gunakan status_id
+            ->whereIn('status_id', $historyStatusIds) 
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

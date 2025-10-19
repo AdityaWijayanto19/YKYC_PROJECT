@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Worker;
 
-// Impor kelas-kelas yang dibutuhkan
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Status;

@@ -24,10 +24,8 @@ class Worker extends Model
 
     public function getTotalOrdersAttribute()
     {
-        // Dapatkan ID dari status 'completed'
         $completedStatusId = Status::where('name', 'completed')->value('id');
 
-        // Hitung jumlah order yang sudah selesai milik worker ini
         return $this->orders()
             ->where('status_id', $completedStatusId)
             ->count();
@@ -35,7 +33,6 @@ class Worker extends Model
 
     public function getAverageRatingAttribute()
     {
-        // Ambil rata-rata rating dari feedback berdasarkan worker_id
         return round(
             \App\Models\Feedback::where('worker_id', $this->id)->avg('rating'),
             1

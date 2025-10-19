@@ -3,7 +3,6 @@
 
 <script>
     (function () {
-        // Ambil data dari server
         const toastData = {
             errors: @json($errors->all()),
             success: "{{ session('success') ?? '' }}",
@@ -11,7 +10,6 @@
             warning: "{{ session('warning') ?? '' }}"
         };
 
-        // Tampilkan error
         toastData.errors.forEach(msg => {
             Toastify({
                 text: msg,
@@ -50,7 +48,6 @@
             }).showToast();
         }
 
-        // Tampilkan flash success
         if (toastData.success) {
             Toastify({
                 text: toastData.success,
@@ -70,7 +67,6 @@
             }).showToast();
         }
 
-        // Tampilkan flash error
         if (toastData.error) {
             Toastify({
                 text: toastData.error,

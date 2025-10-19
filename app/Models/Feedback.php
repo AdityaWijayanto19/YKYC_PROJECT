@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Feedback.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +19,6 @@ class Feedback extends Model
         'comment',
     ];
 
-    // Definisikan relasi
     public function order()
     {
         return $this->belongsTo(Order::class);

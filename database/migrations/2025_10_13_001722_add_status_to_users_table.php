@@ -11,9 +11,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Tambahkan kolom status setelah kolom 'role'
-            // 'aktif' -> Pengguna normal
-            // 'diblokir' -> Pengguna tidak bisa login/menggunakan fitur
             $table->enum('status', ['aktif', 'diblokir'])->default('aktif')->after('role');
         });
     }

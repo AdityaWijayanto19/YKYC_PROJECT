@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'user_id',
         'order_id',
@@ -27,33 +26,21 @@ class Order extends Model
         'snap_token',
     ];
 
-    /**
-     * Mendefinisikan relasi: Satu Order dimiliki oleh satu User.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Mendefinisikan relasi: Satu Order dimiliki oleh satu Service.
-     */
     public function service()
     {
         return $this->belongsTo(Service::class);
     }
 
-    /**
-     * Mendefinisikan relasi: Satu Order dimiliki oleh satu Location (bisa juga tidak).
-     */
     public function location()
     {
         return $this->belongsTo(Location::class);
     }
 
-    /**
-     * Mendefinisikan relasi: Satu Order dikerjakan oleh satu Worker (bisa juga tidak).
-     */
     public function worker()
     {
         return $this->belongsTo(Worker::class);
@@ -61,7 +48,6 @@ class Order extends Model
 
     public function feedback()
     {
-        // Sebuah Order memiliki satu Feedback
         return $this->hasOne(Feedback::class);
     }
 

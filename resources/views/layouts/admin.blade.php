@@ -32,7 +32,6 @@
     </script>
 
     <style>
-        /* Menambahkan style untuk transisi yang lebih halus */
         .submenu {
             transition: max-height 0.3s ease-in-out;
         }
@@ -54,13 +53,11 @@
             </div>
 
             <nav class="flex-1 space-y-2 overflow-y-auto">
-                {{-- Dashboard (Tanpa Dropdown) --}}
                 <a href="{{ route('admin.dashboard') }}"
                     class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/dashboard*') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
                     <i class="fas fa-home w-5 text-center"></i> Dashboard
                 </a>
 
-                {{-- === DROPDOWN UNTUK WORKER === --}}
                 <div>
                     <button type="button"
                         class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-blue-medium hover:bg-slate-100 focus:outline-none">
@@ -69,7 +66,6 @@
                         </span>
                         <i class="dropdown-arrow fas fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
-                    {{-- Submenu untuk Worker --}}
                     <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
                         <a href="{{ route('admin.worker.index') }}"
                             class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/worker') ? 'font-bold text-navy-primary' : '' }}">Kelola
@@ -80,7 +76,6 @@
                     </div>
                 </div>
 
-                {{-- === DROPDOWN UNTUK CUSTOMER === --}}
                 <div>
                     <button type="button"
                         class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-blue-medium hover:bg-slate-100 focus:outline-none">
@@ -89,16 +84,22 @@
                         </span>
                         <i class="dropdown-arrow fas fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
-                    {{-- Submenu untuk Customer --}}
                     <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
-                        <a href="{{ route('admin.customer.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/customer') ? 'font-bold text-navy-primary' : '' }}">Kelola Customer</a>
-                        <a href="{{ route('admin.service.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/service') ? 'font-bold text-navy-primary' : '' }}">Kelola Service</a>
-                        <a href="{{ route('admin.promo.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/promo') ? 'font-bold text-navy-primary' : '' }}">Kelola Promo</a>
-                        <a href="{{ route('admin.announcement.index') }}" class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/announcement') ? 'font-bold text-navy-primary' : '' }}">Kelola Pengumuman</a>
+                        <a href="{{ route('admin.customer.index') }}"
+                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/customer') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            Customer</a>
+                        <a href="{{ route('admin.service.index') }}"
+                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/service') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            Service</a>
+                        <a href="{{ route('admin.promo.index') }}"
+                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/promo') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            Promo</a>
+                        <a href="{{ route('admin.announcement.index') }}"
+                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/announcement') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            Pengumuman</a>
                     </div>
                 </div>
 
-                {{-- === DROPDOWN UNTUK PESANAN === --}}
                 <a href="{{ route('admin.pesanan.index') }}"
                     class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/pesanan*') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
                     <i class="fas fa-shopping-bag w-5 text-center"></i> Pesanan
@@ -143,9 +144,8 @@
                 dropdownToggles.forEach(toggle => {
                     const submenu = toggle.nextElementSibling;
                     const arrow = toggle.querySelector('.dropdown-arrow');
-
-                    // Cek saat halaman dimuat jika ada submenu yang aktif
                     const hasActiveLink = submenu.querySelector('.font-bold.text-navy-primary');
+                    
                     if (hasActiveLink) {
                         submenu.style.maxHeight = submenu.scrollHeight + "px";
                         arrow.classList.add('rotate-180');

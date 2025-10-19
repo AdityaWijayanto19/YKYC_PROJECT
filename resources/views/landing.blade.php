@@ -613,7 +613,7 @@
     <div id="modal-container"
         class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
         <div id="modal-box" class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden transform scale-95">
-            <!-- === PERUBAHAN UTAMA DI SINI === -->
+           
             <div class="grid md:grid-cols-2">
                 <div class="p-8 order-2 md:order-1 flex flex-col">
                     <div class="flex-grow">
@@ -624,7 +624,6 @@
                         class="mt-8 w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90 flex-shrink-0">Tutup</button>
                 </div>
                 <div class="order-1 md:order-2">
-                    <!-- Tinggi gambar diatur di sini untuk konsistensi -->
                     <img id="modal-image" src="" alt="Detail Gambar" class="w-full h-64 md:h-[450px] object-cover">
                 </div>
             </div>
@@ -633,22 +632,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // SCRIPT NAVBAR, FAQ, FADE-IN, HERO (TIDAK BERUBAH)
             const header = document.getElementById('main-header'); const headerLogo = document.getElementById('header-logo'); const mobileMenuButton = document.getElementById('mobile-menu-button'); const mobileMenu = document.getElementById('mobile-menu'); window.addEventListener('scroll', () => { if (window.scrollY > 50) { header.classList.add('bg-white', 'text-gray-800', 'shadow-md'); header.classList.remove('text-white', 'nav-glassmorphism'); headerLogo.classList.remove('brightness-0', 'invert'); } else { header.classList.remove('bg-white', 'text-gray-800', 'shadow-md'); header.classList.add('text-white', 'nav-glassmorphism'); headerLogo.classList.add('brightness-0', 'invert'); } }); mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); }); const faqToggles = document.querySelectorAll('.faq-toggle'); faqToggles.forEach(toggle => { toggle.addEventListener('click', () => { const content = toggle.nextElementSibling; toggle.classList.toggle('open'); content.classList.toggle('open'); }); }); const fadeInElements = document.querySelectorAll('.fade-in'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); fadeInElements.forEach(el => { observer.observe(el); }); const slideshowImages = document.querySelectorAll('.hero-slideshow-image'); let currentImageIndex = 0; if (slideshowImages.length > 0) slideshowImages[0].classList.add('active'); function changeBackgroundImage() { if (slideshowImages.length === 0) return; slideshowImages[currentImageIndex].classList.remove('active'); currentImageIndex = (currentImageIndex + 1) % slideshowImages.length; slideshowImages[currentImageIndex].classList.add('active'); } setInterval(changeBackgroundImage, 7000);
 
-            // --- SCRIPT CAROUSEL (DENGAN KONTROL PLAY/PAUSE) ---
             const galleryWrapper = document.getElementById('about-gallery-wrapper');
             const gallery = document.getElementById('about-gallery');
 
             if (gallery && galleryWrapper) {
                 const originalCards = Array.from(gallery.children);
                 originalCards.forEach(card => {
-                    gallery.appendChild(card.cloneNode(true)); // duplikasi untuk efek infinite
+                    gallery.appendChild(card.cloneNode(true)); 
                 });
 
                 let isPaused = false;
 
-                // auto scroll
                 const autoScroll = () => {
                     if (!isPaused) {
                         galleryWrapper.scrollLeft += 0.8;
@@ -656,7 +652,6 @@
                     requestAnimationFrame(autoScroll);
                 };
 
-                // infinite scroll
                 const handleInfiniteScroll = () => {
                     const itemSetWidth = gallery.scrollWidth / 2;
                     if (galleryWrapper.scrollLeft >= itemSetWidth) {
@@ -668,7 +663,6 @@
                 };
                 galleryWrapper.addEventListener('scroll', handleInfiniteScroll);
 
-                // drag manual
                 let isDown = false;
                 let startX;
                 let scrollLeft;
@@ -678,7 +672,7 @@
                     galleryWrapper.classList.add('cursor-grabbing');
                     startX = e.pageX - galleryWrapper.offsetLeft;
                     scrollLeft = galleryWrapper.scrollLeft;
-                    isPaused = true; // stop auto-scroll saat drag
+                    isPaused = true; 
                 });
 
                 galleryWrapper.addEventListener('mouseleave', () => {
@@ -707,7 +701,6 @@
                 requestAnimationFrame(autoScroll);
             }
 
-            // --- SCRIPT MODAL ---
             const modalContainer = document.getElementById('modal-container');
             const modalBox = document.getElementById('modal-box');
             const modalCloseButton = document.getElementById('modal-close-button');

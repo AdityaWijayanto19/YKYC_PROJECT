@@ -36,7 +36,6 @@
                             <td class="py-4 px-4 font-semibold text-navy-primary">Rp {{ number_format($service->price, 0, ',', '.') }}</td>
                             <td class="py-4 px-4 text-center">
                                 <div class="flex justify-center items-center gap-2">
-                                    {{-- Route diubah ke admin.service.edit --}}
                                     <a href="{{ route('admin.service.edit', $service->id) }}" class="flex items-center justify-center gap-1.5 bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold px-3 py-1 rounded-md text-sm transition-colors" title="Edit Layanan">
                                         <i class="fas fa-edit"></i> <span>Edit</span>
                                     </a>

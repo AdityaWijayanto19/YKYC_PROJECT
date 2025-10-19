@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('promos', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('image_path'); // Path untuk menyimpan gambar
-            $table->boolean('is_active')->default(true); // Status aktif/nonaktif
+            $table->string('image_path'); 
+            $table->boolean('is_active')->default(true); 
             $table->timestamps();
         });
     }

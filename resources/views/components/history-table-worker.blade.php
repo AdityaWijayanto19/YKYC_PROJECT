@@ -29,7 +29,6 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             @php
-                                // PERBAIKAN 1: Logika untuk menentukan warna badge secara dinamis
                                 $statusName = $order->status->name ?? '';
                                 $statusClass = match ($statusName) {
                                     'completed' => 'bg-green-100 text-green-800',
@@ -39,7 +38,6 @@
                             @endphp
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusClass }}">
                                 
-                                {{-- PERBAIKAN 2: Ikon dinamis berdasarkan status --}}
                                 @if ($statusName === 'completed')
                                     <svg class="-ml-0.5 mr-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -50,7 +48,6 @@
                                     </svg>
                                 @endif
 
-                                {{-- PERBAIKAN 3 (UTAMA): Tampilkan properti 'label' dari objek status --}}
                                 {{ $order->status->label ?? 'Tidak Diketahui' }}
                             </span>
                         </td>

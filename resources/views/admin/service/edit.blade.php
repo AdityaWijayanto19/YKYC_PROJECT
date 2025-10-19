@@ -17,7 +17,6 @@
             @method('PUT')
 
             <div class="space-y-6">
-                <!-- Nama Layanan -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-blue-medium mb-1">Nama Layanan</label>
                     <input type="text" id="name" name="name" 
@@ -28,7 +27,6 @@
                     @enderror
                 </div>
 
-                <!-- Deskripsi -->
                 <div>
                     <label for="description" class="block text-sm font-medium text-blue-medium mb-1">Deskripsi</label>
                     <textarea id="description" name="description" rows="4" class="w-full px-4 py-2 border border-blue-pale rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-medium @error('description') border-red-500 @enderror">{{ old('description', $service->description) }}</textarea>
@@ -37,7 +35,6 @@
                     @enderror
                 </div>
 
-                <!-- Harga -->
                 <div>
                     <label for="price" class="block text-sm font-medium text-blue-medium mb-1">Harga (Rp)</label>
                     <input type="number" id="price" name="price" 
@@ -49,7 +46,6 @@
                 </div>
             </div>
 
-            {{-- Tombol Aksi --}}
             <div class="mt-8 flex justify-end gap-4">
                 <a href="{{ route('admin.service.index') }}" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors">
                     Batal

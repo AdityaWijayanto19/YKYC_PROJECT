@@ -9,11 +9,6 @@ class Location extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'address',
@@ -21,9 +16,6 @@ class Location extends Model
         'longitude'
     ];
 
-    /**
-     * Get the orders for the location.
-     */
     public function orders()
     {
         return $this->hasMany(Order::class);

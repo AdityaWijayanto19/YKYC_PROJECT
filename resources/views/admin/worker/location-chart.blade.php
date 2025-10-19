@@ -39,7 +39,6 @@
                 const locations = @json($active_locations ?? []);
                 const serviceAreaPolygon = @json($serviceAreaPolygon ?? []);
 
-                // Cek jika tidak ada data sama sekali (worker dan zona)
                 if (locations.length === 0 && serviceAreaPolygon.length === 0) {
                      mapElement.innerHTML = `<div class="flex items-center justify-center h-full text-center p-4 rounded-lg bg-slate-50"><div><i class="fas fa-map-marked-alt text-4xl text-blue-light mb-4"></i><h2 class="text-xl font-semibold text-navy-dark">Peta Siap</h2><p class="text-blue-medium mt-2">Tidak ada worker aktif atau zona layanan yang bisa ditampilkan saat ini.</p></div></div>`;
                     return;

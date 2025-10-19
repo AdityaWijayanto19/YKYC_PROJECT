@@ -54,7 +54,7 @@ class WorkerManagementController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make('password'), // Password default, worker bisa ganti nanti
+                'password' => Hash::make('password'), 
                 'role' => 'worker',
                 'email_verified_at' => now(),
             ]);
@@ -62,7 +62,7 @@ class WorkerManagementController extends Controller
             $user->worker()->create([
                 'worker_type' => $request->type,
                 'is_active' => ($request->status === 'aktif'),
-                'location_name' => 'Belum diatur', // Nilai default
+                'location_name' => 'Belum diatur', 
             ]);
         });
 
@@ -98,14 +98,12 @@ class WorkerManagementController extends Controller
 
     public function destroy(User $user)
     {
-        // Migrasi Anda sudah memiliki onDelete('cascade'), jadi data worker akan ikut terhapus
         $user->delete();
         return redirect()->route('admin.worker.index')->with('success', 'Worker berhasil dihapus.');
     }
 
     public function showLocations()
     {
-        // Mengambil lokasi worker (kode ini sudah benar)
         $activeWorkers = User::where('role', 'worker')
             ->whereHas('worker', function ($query) {
                 $query->where('is_active', true)->whereNotNull(['current_latitude', 'current_longitude']);
@@ -130,11 +128,9 @@ class WorkerManagementController extends Controller
 
             if (json_last_error() === JSON_ERROR_NONE && isset($decodedCoords[0]) && is_array($decodedCoords[0])) {
 
-                // 2. Lakukan perulangan dan tukar urutan [lng, lat] menjadi [lat, lng] untuk Leaflet
                 foreach ($decodedCoords[0] as $coord) {
-                    // Pastikan $coord adalah array dengan 2 elemen sebelum menukar
                     if (is_array($coord) && count($coord) === 2) {
-                        $serviceAreaPolygon[] = [$coord[1], $coord[0]]; // Tukar posisi
+                        $serviceAreaPolygon[] = [$coord[1], $coord[0]]; 
                     }
                 }
             }

@@ -4,22 +4,17 @@
 
 @section('content')
 <div class="container mx-auto max-w-lg px-4 py-10">
-    <!-- Header Halaman -->
     <header class="mb-6 text-center">
         <h1 class="text-3xl font-bold text-gray-900">Profil Saya</h1>
         <p class="text-gray-600 mt-1">Kelola informasi akun dan lihat performa Anda.</p>
     </header>
 
-    <!-- Card Profil Utama -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-        <!-- Header Card: Foto dan Nama -->
         <div class="p-8 bg-gray-50 border-b border-gray-200">
             <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                <!-- Foto Profil -->
                 <div class="flex-shrink-0">
                     @php
-                        // Jika pakai laravel-ui-avatar, tampilkan avatar
                         $avatarUrl = Avatar::create($user->name)->toBase64();
                     @endphp
                     <img class="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-md"
@@ -27,7 +22,6 @@
                          alt="Foto profil {{ $user->name }}">
                 </div>
 
-                <!-- Nama dan Tipe Worker -->
                 <div class="text-center sm:text-left">
                     <h2 class="text-2xl font-bold text-gray-800">{{ $user->name }}</h2>
                     <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full mt-1
@@ -38,7 +32,6 @@
             </div>
         </div>
 
-        <!-- Statistik Performa -->
         <div class="p-6">
             <h3 class="text-sm font-semibold uppercase text-gray-500 mb-4 text-center">Performa Anda</h3>
             <div class="grid grid-cols-2 gap-4 text-center">
@@ -60,7 +53,6 @@
             </div>
         </div>
 
-        <!-- Biodata Rinci -->
         <div class="p-6 border-t border-gray-200">
             <ul class="space-y-4 text-gray-700">
                 <li class="flex items-center space-x-3">
@@ -90,7 +82,6 @@
             </ul>
         </div>
 
-        <!-- Tombol Aksi -->
         <div class="p-6 bg-gray-50 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <a href="#"
                class="w-full text-center bg-gray-800 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-gray-700 transition duration-300">

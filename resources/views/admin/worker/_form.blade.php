@@ -1,4 +1,3 @@
-{{-- Cek apakah kita sedang dalam mode edit (ada variabel $user) atau mode tambah --}}
 @php
     $isEdit = isset($user);
 @endphp
@@ -10,7 +9,6 @@
     @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {{-- Kolom Kiri: Info Profil --}}
         <div class="lg:col-span-1">
             <div class="bg-white p-6 rounded-2xl shadow-md">
                 <h3 class="text-lg font-semibold text-navy-dark mb-4">Foto Profil</h3>
@@ -27,21 +25,18 @@
             </div>
         </div>
 
-        {{-- Kolom Kanan: Detail Data --}}
         <div class="lg:col-span-2">
             <div class="bg-white p-6 rounded-2xl shadow-md">
                 <h3 class="text-lg font-semibold text-navy-dark mb-6">Informasi Worker</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Nama Lengkap -->
                     <div class="md:col-span-2">
                         <label for="name" class="block text-sm font-medium text-blue-medium mb-1">Nama Lengkap</label>
                         <input type="text" id="name" name="name"
                                value="{{ old('name', $user->name ?? '') }}"
                                class="w-full px-4 py-2 border border-blue-pale rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-medium" required>
                     </div>
-                    
-                    <!-- Email -->
+
                     <div class="md:col-span-2">
                         <label for="email" class="block text-sm font-medium text-blue-medium mb-1">Alamat Email</label>
                         <input type="email" id="email" name="email"
@@ -49,7 +44,6 @@
                                class="w-full px-4 py-2 border border-blue-pale rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-medium" required>
                     </div>
 
-                    <!-- Jenis Worker -->
                     <div>
                         <label for="type" class="block text-sm font-medium text-blue-medium mb-1">Jenis Worker</label>
                         <select id="type" name="type" class="w-full px-4 py-2 border border-blue-pale rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-medium">
@@ -58,7 +52,6 @@
                         </select>
                     </div>
 
-                    <!-- Status -->
                     <div>
                         <label for="status" class="block text-sm font-medium text-blue-medium mb-1">Status</label>
                         <select id="status" name="status" class="w-full px-4 py-2 border border-blue-pale rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-medium">
@@ -71,7 +64,6 @@
         </div>
     </div>
 
-    {{-- Tombol Aksi --}}
     <div class="mt-8 flex justify-end gap-4">
         <a href="{{ route('admin.worker.index') }}" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors">
             Batal

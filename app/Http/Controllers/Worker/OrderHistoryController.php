@@ -15,14 +15,11 @@ class OrderHistoryController extends Controller
     {
         $worker = Auth::user()->worker;
 
-        // Dapatkan ID dari status yang dianggap sebagai riwayat
         $historyStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
 
-        // Query utama menggunakan status_id
         $query = Order::where('worker_id', $worker->id)
             ->whereIn('status_id', $historyStatusIds);
 
-        // Bagian filter Anda (sudah benar, tidak perlu diubah)
         if ($request->filled('start_date')) {
             $query->whereDate('updated_at', '>=', $request->start_date);
         }
@@ -33,7 +30,6 @@ class OrderHistoryController extends Controller
             $query->where('service_id', $request->service_type);
         }
 
-        // Eager load relasi termasuk 'status'
         $history = $query->with(['user', 'service', 'status'])->orderBy('updated_at', 'desc')->get();
         $services = Service::pluck('name', 'id');
 

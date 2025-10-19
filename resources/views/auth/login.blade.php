@@ -6,29 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Ya Kotor Ya Cuci</title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Toastify JS for notifications -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <!-- Swiper JS for Carousel -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <script>
-        // Tailwind CSS Configuration
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#3490dc', // Warna biru
+                        'primary': '#3490dc', 
                     },
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif'],
@@ -38,7 +33,6 @@
         }
     </script>
     <style>
-        /* Custom styles for Swiper slides to have cover effect */
         .swiper-slide {
             background-size: cover;
             background-position: center;
@@ -52,7 +46,6 @@
 
     <div class="min-h-screen md:flex">
         
-        <!-- Panel Gambar (Kiri) -->
         <div id="image-container" class="hidden md:block md:w-1/2 relative bg-cover bg-center">
             <div class="absolute inset-0 bg-black opacity-20"></div>
             <div class="p-12 flex flex-col justify-end h-full relative z-10">
@@ -63,11 +56,9 @@
             </div>
         </div>
 
-        <!-- Panel Form (Kanan) -->
         <div class="w-full md:w-1/2 bg-white flex flex-col justify-center">
             <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto">
                 
-                <!-- Back Button -->
                 <div class="mb-6">
                     <a href="/" class="text-primary font-bold tracking-wider flex items-center gap-2 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentColor">
@@ -84,12 +75,6 @@
                         Buat akun di sini
                     </a>
                 </p>
-
-                {{-- @if ($errors->has('login'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
-                    {{ $errors->first('login') }}
-                </div>
-                @endif --}}
 
                 <form method="POST" action="{{ route('login.post') }}" class="mt-8 space-y-6">
                     @csrf
@@ -157,7 +142,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Daftar URL gambar Anda. Ganti dengan gambar-gambar yang Anda inginkan.
             const imageUrls = [
                 'https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg',
                 'https://images.unsplash.com/photo-1582735689369-389ae1b3c938?q=80&w=2574&auto=format&fit=crop',
@@ -165,14 +149,11 @@
                 'https://images.unsplash.com/photo-1545174822-7a13c990b024?q=80&w=2574&auto=format&fit=crop'
             ];
 
-            // Pilih elemen kontainer gambar
             const imageContainer = document.getElementById('image-container');
 
-            // Pilih gambar acak dari daftar
             const randomIndex = Math.floor(Math.random() * imageUrls.length);
             const randomImage = imageUrls[randomIndex];
 
-            // Atur sebagai gambar latar belakang
             if (imageContainer) {
                 imageContainer.style.backgroundImage = `url('${randomImage}')`;
             }

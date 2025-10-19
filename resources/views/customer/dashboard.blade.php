@@ -3,7 +3,6 @@
 @section('title', 'Dashboard Customer')
 
 @push('styles')
-    {{-- Swiper.js CSS untuk carousel promo --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <style>
@@ -57,11 +56,9 @@
 
           #announcement-modal.is-visible {
             opacity: 1;
-            /* Nama animasi, durasi, fungsi waktu, dan status akhir */
             animation: scaleBounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
         }
         #announcement-modal.is-hiding {
-            /* Animasi keluar bisa ditambahkan di sini jika diinginkan, tapi opacity cukup */
             transition: opacity 0.3s ease;
         }
         @keyframes scaleBounce {
@@ -85,9 +82,6 @@
 
             <div id="panel-content" class="w-64 md:w-80 h-full flex flex-col">
                 <div class="flex-1 overflow-y-auto space-y-3 pr-1">
-                    {{-- ======================================================= --}}
-                    {{--       PROMO CAROUSEL (DINAMIS DARI DATABASE)            --}}
-                    {{-- ======================================================= --}}
                     <div class="bg-white rounded-xl shadow-lg">
                         <div class="p-3">
                             @if($activePromos->isNotEmpty())
@@ -112,7 +106,6 @@
                         </div>
                     </div>
 
-                    {{-- Card Lacak Pesanan (Tidak Berubah) --}}
                     <div class="bg-white rounded-xl shadow-lg">
                         <div data-toggle="collapse" data-target="#card-tracking-content"
                             class="p-3 cursor-pointer flex justify-between items-center">
@@ -131,7 +124,6 @@
                         </div>
                     </div>
 
-                    {{-- Card Riwayat Terbaru (Tidak Berubah) --}}
                     <div class="bg-white rounded-xl shadow-lg">
                         <div data-toggle="collapse" data-target="#card-history-content" class="p-3 cursor-pointer flex justify-between items-center">
                             <h3 class="text-lg font-bold text-gray-700">Riwayat Terbaru</h3>
@@ -151,7 +143,6 @@
                 </div>
             </div>
 
-            {{-- Tombol Sembunyikan Panel (Tidak Berubah) --}}
             <div class="flex-shrink-0 pt-2">
                 <button id="hide-panel-btn" class="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center focus:outline-none"><svg id="hide-panel-icon" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></button>
             </div>
@@ -161,7 +152,6 @@
 
      @if(session('show_announcement_modal') && $activeAnnouncements->isNotEmpty())
         <div id="announcement-modal-backdrop" class="fixed inset-0 bg-black bg-opacity-70 z-[9998] flex items-center justify-center p-4 transition-opacity duration-300">
-            {{-- Radius dikurangi dari rounded-2xl menjadi rounded-lg --}}
             <div id="announcement-modal" class="bg-white rounded-lg shadow-xl w-full max-w-sm transform opacity-0">
                 <button id="close-announcement-modal" class="absolute -top-3 -right-3 w-9 h-9 bg-white rounded-full text-gray-800 hover:bg-gray-200 flex items-center justify-center z-10 text-2xl font-light">&times;</button>
                 <div class="overflow-hidden rounded-lg">
@@ -199,22 +189,19 @@
                     modalDescription.textContent = announcement.description;
                     
                     backdrop.style.display = 'flex';
-                    // Memicu animasi bounce dengan menambahkan class
                     setTimeout(() => {
                         modal.classList.add('is-visible');
                     }, 50);
                 }
 
                 function closeAndShowNext() {
-                    // Sembunyikan modal dengan menghapus class animasi
                     modal.classList.remove('is-visible');
-                    // Tambahkan kembali class opacity-0 untuk transisi keluar
                     modal.classList.add('opacity-0');
                     
                     setTimeout(() => {
                         currentAnnouncementIndex++;
                         showAnnouncement(currentAnnouncementIndex);
-                    }, 300); // Tunggu transisi opacity selesai
+                    }, 300);
                 }
 
                 closeBtn.addEventListener('click', closeAndShowNext);
@@ -231,10 +218,8 @@
 @endsection
 
 @push('scripts')
-    {{-- Swiper.js untuk Carousel Promo --}}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    {{-- Kode JavaScript Asli Anda (Tidak Berubah) --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const hideBtn = document.getElementById('hide-panel-btn');
@@ -254,8 +239,6 @@
                     header.classList.toggle('is-collapsed');
                 });
             });
-
-            // Inisialisasi Swiper HANYA untuk promo carousel
             if (document.querySelector('.promo-carousel')) {
                 new Swiper('.promo-carousel', {
                     loop: true,
@@ -264,7 +247,6 @@
                 });
             }
 
-            // Kode Leaflet Map (Tidak Berubah)
             const mapElement = document.getElementById('map');
             if (mapElement) {
                 const map = L.map('map', { zoomControl: false, scrollWheelZoom: false, attributionControl: false }).setView([-7.9667, 112.6324], 13);

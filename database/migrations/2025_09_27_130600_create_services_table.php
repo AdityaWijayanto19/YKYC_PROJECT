@@ -12,11 +12,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('services', function (Blueprint $table) {
-            $table->id(); // Membuat kolom ID unik untuk setiap layanan
-            $table->string('name'); // Kolom untuk menyimpan nama layanan (contoh: "Deep Clean")
-            $table->text('description')->nullable(); // Kolom untuk deskripsi (opsional, jadi kita beri ->nullable())
-            $table->unsignedInteger('price'); // Kolom untuk harga. Kita gunakan integer untuk menghindari masalah koma. Simpan 25000, bukan 25.000.
-            $table->timestamps(); // Otomatis membuat kolom created_at dan updated_at
+            $table->id(); 
+            $table->string('name'); 
+            $table->text('description')->nullable(); 
+            $table->unsignedInteger('price'); 
+            $table->timestamps(); 
         });
     }
 

@@ -5,10 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Worker App')</title>
-    <!-- Di dalam <head> -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-    <!-- Sebelum </body> -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @stack('styles')
 
@@ -24,15 +21,12 @@
 
     @php
         $user = Auth::user();
-        $worker = $user->worker ?? null; // Pastikan relasi sudah benar
+        $worker = $user->worker ?? null;
     @endphp
 
-    <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
-
-                <!-- Kiri: Logo -->
                 <div>
                     <a href="{{ route('worker.dashboard') }}" class="text-xl font-bold text-gray-800">
                         Ya Kotor Ya Cuci
@@ -46,7 +40,6 @@
                     @endif
                 </div>
 
-                <!-- Tengah: Menu -->
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('worker.dashboard') }}"
                         class="{{ request()->is('worker/dashboard') ? 'text-blue-600 border-b-2 border-blue-500' : 'text-gray-600 hover:text-blue-600' }}">
@@ -69,9 +62,7 @@
                     </a>
                 </div>
 
-                <!-- Kanan: Notifikasi & Profil -->
                 <div class="hidden md:flex items-center space-x-5">
-                    <!-- Notifikasi (statis dulu) -->
                     <div class="relative group">
                         <button class="relative text-gray-600 hover:text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
@@ -83,7 +74,6 @@
                                 class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">3</span>
                         </button>
 
-                        <!-- Dropdown notifikasi -->
                         <div
                             class="absolute right-0 mt-3 w-80 bg-white shadow-lg rounded-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
                             <div class="p-3 border-b font-semibold text-gray-700">Notifikasi Baru</div>
@@ -104,7 +94,6 @@
                         </div>
                     </div>
 
-                    <!-- Profil -->
                     <a href="{{ route('worker.profil.show') }}">
                         <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-300 hover:border-blue-500"
                             src="{{ $worker && $worker->profile_image
@@ -113,7 +102,6 @@
                     </a>
                 </div>
 
-                <!-- Tombol mobile -->
                 <div class="flex md:hidden items-center space-x-4">
                     <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +113,6 @@
             </div>
         </div>
 
-        <!-- Menu mobile -->
         <div id="mobile-menu"
             class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out md:hidden bg-white px-4 space-y-2 border-t">
             <a href="{{ route('worker.dashboard') }}"
@@ -139,7 +126,6 @@
         </div>
     </nav>
 
-    <!-- Konten halaman -->
     <main class="py-4">
         @yield('content')
     </main>

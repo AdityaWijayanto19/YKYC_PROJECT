@@ -8,30 +8,22 @@ use Illuminate\Http\Request;
 
 class CustomerManagementController extends Controller
 {
-    /**
-     * Menampilkan daftar semua customer.
-     */
     public function index()
     {
         $customers = User::where('role', 'customer')
                            ->withCount('orders')
                            ->latest()
-                           ->paginate(10); // Kita naikkan jadi 10 per halaman
+                           ->paginate(10); 
 
         return view('admin.customer.index', compact('customers'));
     }
 
-    /**
-     * Memblokir atau mengaktifkan kembali akun customer.
-     */
     public function toggleBlock(User $user)
     {
-        // Pastikan kita tidak memblokir user yang bukan customer
         if ($user->role !== 'customer') {
             return back()->with('error', 'Aksi tidak diizinkan untuk pengguna ini.');
         }
 
-        // Ubah status
         $user->status = ($user->status == 'aktif') ? 'diblokir' : 'aktif';
         $user->save();
 
@@ -40,12 +32,8 @@ class CustomerManagementController extends Controller
         return back()->with('success', $message);
     }
 
-    /**
-     * Menghapus data customer secara permanen.
-     */
     public function destroy(User $user)
     {
-        // Pastikan kita tidak menghapus user yang bukan customer
         if ($user->role !== 'customer') {
             return back()->with('error', 'Aksi tidak diizinkan untuk pengguna ini.');
         }

@@ -26,7 +26,6 @@ class NewOrderAssigned implements ShouldBroadcast
 
     public function broadcastOn(): PrivateChannel
     {
-        // Mengirim ke channel privat yang hanya bisa diakses oleh worker spesifik
         return new PrivateChannel('worker.' . $this->worker->id);
     }
 

@@ -1,20 +1,18 @@
-{{-- Styling khusus untuk toggle switch dan area upload file --}}
 <style>
     .toggle-checkbox:checked {
         right: 0;
-        border-color: #1a3a64; /* navy-primary */
+        border-color: #1a3a64; 
     }
     .toggle-checkbox:checked + .toggle-label {
-        background-color: #1a3a64; /* navy-primary */
+        background-color: #1a3a64; 
     }
     .file-drop-area.is-dragging {
-        border-color: #1a3a64; /* navy-primary */
+        border-color: #1a3a64; 
         background-color: #f0f4f8;
     }
 </style>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    {{-- Kolom Kiri: Input Utama --}}
     <div class="lg:col-span-2 space-y-6">
         <div>
             <label for="title" class="block text-sm font-medium text-blue-medium mb-1">Judul Promo</label>
@@ -40,12 +38,11 @@
         </div>
     </div>
     
-    {{-- Kolom Kanan: Status --}}
     <div class="lg:col-span-1">
         <label for="is_active" class="block text-sm font-medium text-blue-medium mb-1">Status</label>
         <div class="flex items-center gap-4">
              <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                <input type="hidden" name="is_active" value="0"> {{-- Nilai default jika checkbox tidak dicentang --}}
+                <input type="hidden" name="is_active" value="0"> 
                 <input type="checkbox" name="is_active" id="toggle" value="1" 
                        class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" 
                        @checked(old('is_active', $promo->is_active ?? true))>
@@ -63,24 +60,20 @@
     <button type="submit" class="bg-navy-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">Simpan Promo</button>
 </div>
 
-{{-- JavaScript untuk interaktivitas form --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- Logic untuk Toggle Switch ---
         const toggle = document.getElementById('toggle');
         const statusText = document.getElementById('status-text');
         toggle.addEventListener('change', function() {
             statusText.textContent = this.checked ? 'Aktif' : 'Nonaktif';
         });
 
-        // --- Logic untuk Area Upload Gambar ---
         const dropArea = document.getElementById('file-drop-area');
         const fileInput = document.getElementById('image_path');
         const previewContainer = document.getElementById('preview-container');
         const imagePreview = document.getElementById('image-preview');
         const uploadPrompt = document.getElementById('upload-prompt');
 
-        // Fungsi untuk menampilkan pratinjau
         function showPreview(file) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -91,14 +84,12 @@
             reader.readAsDataURL(file);
         }
 
-        // Event listener untuk input file standar
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
                 showPreview(fileInput.files[0]);
             }
         });
 
-        // Event listener untuk drag and drop
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropArea.addEventListener(eventName, (e) => {
                 e.preventDefault();

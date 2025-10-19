@@ -36,7 +36,6 @@
                                 </div>
                             </td>
                             <td class="px-4">
-                                {{-- Badge Status yang lebih rapi --}}
                                 @if ($customer->status == 'aktif')
                                     <span class="text-sm text-green-800 bg-green-100 px-3 py-1 rounded-full font-semibold">&#9679; Aktif</span>
                                 @else
@@ -47,7 +46,6 @@
                             <td class="px-4 text-blue-medium text-center font-semibold">{{ $customer->orders_count }}</td>
                             <td class="px-4 text-center">
                                 <div class="flex justify-center items-center gap-2">
-                                    {{-- Tombol Blokir / Aktifkan yang disempurnakan --}}
                                     <form action="{{ route('admin.customer.toggleBlock', $customer->id) }}" method="POST" class="inline">
                                         @csrf
                                         @if ($customer->status == 'aktif')
@@ -62,8 +60,7 @@
                                             </button>
                                         @endif
                                     </form>
-
-                                    {{-- Tombol Hapus yang disempurnakan --}}
+                                    
                                     <form action="{{ route('admin.customer.destroy', $customer->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin MENGHAPUS customer ini secara permanen?');">
                                         @csrf
                                         @method('DELETE')

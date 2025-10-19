@@ -34,7 +34,6 @@ class OrderCreated implements ShouldBroadcast
         $order->status = 'paid';
         $order->save();
 
-        // broadcast event
         OrderPaid::dispatch($order);
 
         return response()->json(['message' => 'Order marked as paid']);

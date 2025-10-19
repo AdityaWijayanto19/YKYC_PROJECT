@@ -3,7 +3,6 @@
 @section('title', 'Lacak Pesanan #' . $order->order_id)
 
 @push('styles')
-    {{-- Pastikan Anda sudah punya aset Leaflet di layout utama, jika belum, tambahkan ini --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 @endpush
 
@@ -12,7 +11,6 @@
         <div class="container mx-auto max-w-4xl">
             <div class="bg-white p-6 rounded-2xl shadow-xl">
 
-                <!-- Header Informasi Pesanan -->
                 <div class="border-b border-gray-200 pb-4 mb-5">
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Driver sedang dalam perjalanan!</h1>
                     <p class="text-gray-500 mt-1">Lacak posisi driver untuk pesanan <span
@@ -28,12 +26,10 @@
                     </div>
                 </div>
 
-                <!-- Peta Pelacakan -->
                 <div id="tracking-map" class="h-96 w-full bg-gray-200 rounded-lg z-0">
                     <p class="text-center pt-10 text-gray-500">Memuat peta pelacakan...</p>
                 </div>
 
-                <!-- Informasi Driver -->
                 <div class="mt-5 p-4 bg-gray-50 rounded-lg border">
                     <h2 class="font-bold text-lg text-gray-800">Informasi Driver</h2>
                     @if($order->worker && $order->worker->user)
@@ -56,7 +52,6 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Data penting dari PHP
         const customerLat = {{ $order->customer_lat }};
         const customerLng = {{ $order->customer_lng }};
         const orderUserId = {{ $order->user_id }};
@@ -78,18 +73,15 @@
 
         let routingControl = null;
 
-        // ▼▼▼ KEMBALIKAN ISI FUNGSI INI ▼▼▼
         function updateRoute(workerLatLng) {
             const customerLatLng = L.latLng(customerLat, customerLng);
 
             if (routingControl) {
-                // Jika rute sudah ada, cukup update titik awalnya
                 routingControl.setWaypoints([
                     workerLatLng,
                     customerLatLng
                 ]);
             } else {
-                // Jika rute belum ada, buat yang baru
                 routingControl = L.Routing.control({
                     waypoints: [
                         workerLatLng,
@@ -118,7 +110,6 @@
                 }).addTo(map);
             }
         }
-        // ▲▲▲ AKHIR DARI ISI FUNGSI ▲▲▲
 
         if (initialWorkerLat && initialWorkerLng) {
             console.log("Menggambar rute awal berdasarkan data dari server.");
@@ -130,9 +121,17 @@
             map.setView([customerLat, customerLng], 15);
         }
 
-        // Mulai mendengarkan event real-time (kode ini sudah benar)
         if (window.Echo) {
-            // ... (sisa kode Echo Anda sudah benar)
+            Echo.channel('worker-location.' + orderUserId)
+                .listen('WorkerLocationUpdated', (e) => {
+                    console.log("Menerima pembaruan lokasi worker:", e);
+                    if (e.latitude && e.longitude) {
+                        const workerLatLng = L.latLng(e.latitude, e.longitude);
+                        updateRoute(workerLatLng);
+                    } else {
+                        console.warn("Data lokasi worker tidak lengkap:", e);
+                    }
+                });
         } else {
             console.error("Laravel Echo tidak terkonfigurasi.");
         }

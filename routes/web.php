@@ -27,8 +27,9 @@ use App\Http\Controllers\Admin\WorkerManagementController;
 use App\Http\Controllers\Admin\ServiceController;
 
 // ===================================================================
-// HALAMAN PUBLIK & OTENTIKASI
+//                              LANDING PAGE
 // ===================================================================
+
 Route::get('/', function () {
     return view('landing');
 })->name('landing');
@@ -37,15 +38,19 @@ Route::get('/about_us', function () {
     return view('about_us');
 })->name('about_us');
 
-// Form Login & Register (GET)
+// ===================================================================
+//                              AUTH
+// ===================================================================
+
+Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [SocialiteController::class, 'callback']);
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 
-// Proses Login & Register (POST)
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
-// Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout.post');
 
 // ===================================================================
@@ -76,12 +81,10 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('dashboard');
 
-    // page order
     Route::get('/order', [CustomerOrderController::class, 'create'])
-        ->middleware(['auth', 'verified', 'profile.complete']) // Penjaga: hanya user yang sudah login yang bisa lewat.
-        ->name('order.create'); // Kita beri nama 'order.create' agar mudah dipanggil.
+        ->middleware(['auth', 'verified', 'profile.complete']) 
+        ->name('order.create'); 
 
-    // Rute ini untuk MEMPROSES data form saat tombol submit ditekan (metode POST).
     Route::post('/order', [CustomerOrderController::class, 'store'])
         ->middleware(['auth', 'verified'])
         ->name('order.store');
@@ -116,8 +119,6 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('feedback.store');
 
-    // page profile
-
     Route::get('/profile', [CustomerProfileController::class, 'edit'])
         ->middleware(['auth', 'verified'])
         ->name('profile.edit');
@@ -132,37 +133,25 @@ Route::prefix('customer')->name('customer.')->group(function () {
 // ===================================================================
 Route::prefix('worker')->name('worker.')->middleware(['auth', 'is_worker'])->group(function () {
 
-    // === RUTE HALAMAN (VIEWS) ===
-
-    // Halaman Dashboard Utama -> Ditangani oleh DashboardController@index
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Halaman Pesanan Aktif -> Ditangani oleh WorkerOrderController
     Route::get('/pesanan-aktif', [WorkerOrderController::class, 'activeOrders'])->name('pesanan-actived.active');
 
-    // Halaman Riwayat Pesanan -> Ditangani oleh WorkerOrderController
     Route::get('/riwayat-pesanan', [OrderHistoryController::class, 'index'])->name('history-pesanan');
 
-    // Halaman Profil Worker
     Route::get('/profil', [WorkerProfileController::class, 'show'])->name('profil.show');
 
     Route::put('/profil', [WorkerProfileController::class, 'update'])->name('profil.update');
 
-    // (Rute untuk 'location-chart' dan 'notifications' bisa ditambahkan controllernya nanti)
     Route::get('/location-chart', fn() => view('worker.location-chart'))->name('location.chart');
     Route::get('/notifications', fn() => view('worker.notifications'))->name('notifications');
 
     Route::post('/logout', [DashboardController::class, 'destroy'])->name('logout');
 
-    // === RUTE AKSI (UNTUK AJAX & FORM) ===
-
-    // Aksi untuk mengubah status aktif/non-aktif
     Route::post('/status/toggle', [DashboardController::class, 'toggleActiveStatus'])->name('status.toggle');
 
-    // Aksi untuk mengubah status pengerjaan pesanan
     Route::post('/orders/{order}/update-status', [DashboardController::class, 'updateOrderStatus'])->name('order.updateStatus');
 
-    // Aksi untuk menerima update lokasi GPS dari worker
     Route::post('/location/update', [DashboardController::class, 'updateLocation'])->name('location.update');
 });
 
@@ -190,23 +179,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     });
 
     Route::prefix('service')->name('service.')->controller(ServiceController::class)->group(function () {
-        Route::get('/', 'index')->name('index'); // Halaman daftar (GET /admin/service)
-        Route::get('/tambah', 'create')->name('tambah'); // Halaman form tambah (GET /admin/service/tambah)
-        Route::post('/', 'store')->name('store'); // Aksi menyimpan (POST /admin/service)
-        Route::get('/{service}/edit', 'edit')->name('edit'); // Halaman form edit (GET /admin/service/{id}/edit)
-        Route::put('/{service}', 'update')->name('update'); // Aksi update (PUT /admin/service/{id})
-        Route::delete('/{service}', 'destroy')->name('destroy'); // Aksi hapus (DELETE /admin/service/{id})
+        Route::get('/', 'index')->name('index'); 
+        Route::get('/tambah', 'create')->name('tambah'); 
+        Route::post('/', 'store')->name('store'); 
+        Route::get('/{service}/edit', 'edit')->name('edit'); 
+        Route::put('/{service}', 'update')->name('update');
+        Route::delete('/{service}', 'destroy')->name('destroy'); 
     });
 
     Route::resource('promo', PromoController::class)->except(['show']);
 
     Route::prefix('announcement')->name('announcement.')->controller(AnnouncementController::class)->group(function () {
-        Route::get('/', 'index')->name('index');                           // Halaman daftar
-        Route::get('/tambah', 'create')->name('tambah');                      // Halaman form tambah
-        Route::post('/', 'store')->name('store');                          // Aksi menyimpan
-        Route::get('/{announcement}/edit', 'edit')->name('edit');           // Halaman form edit
-        Route::put('/{announcement}', 'update')->name('update');            // Aksi update
-        Route::delete('/{announcement}', 'destroy')->name('destroy');       // Aksi hapus
+        Route::get('/', 'index')->name('index');                           
+        Route::get('/tambah', 'create')->name('tambah');                      
+        Route::post('/', 'store')->name('store');                          
+        Route::get('/{announcement}/edit', 'edit')->name('edit');           
+        Route::put('/{announcement}', 'update')->name('update');            
+        Route::delete('/{announcement}', 'destroy')->name('destroy');       
     });
 
     Route::prefix('pesanan')->name('pesanan.')->controller(OrderController::class)->group(function () {
@@ -219,13 +208,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 });
 
 // ===================================================================
-//                          Authentication
-// ===================================================================
-
-Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('google.redirect');
-Route::get('/auth/google/callback', [SocialiteController::class, 'callback']);
-
-// ===================================================================
 //                             Midtrans
 // ===================================================================
+
 Route::post('/midtrans/callback', [MidtransCallbackController::class, 'notificationHandler']);

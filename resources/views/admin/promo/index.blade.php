@@ -35,7 +35,6 @@
                                         class="text-sm text-red-800 bg-red-100 px-3 py-1 rounded-full font-semibold">Nonaktif</span>@endif
                                 </td>
                                 <td class="p-4">
-                                    {{-- Aksi tidak berubah --}}
                                     <div class="flex justify-center items-center gap-2">
                                         <a href="{{ route('admin.promo.edit', $promo->id) }}"
                                             class="flex items-center gap-1.5 bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold px-3 py-1 rounded-md text-sm">Edit</a>

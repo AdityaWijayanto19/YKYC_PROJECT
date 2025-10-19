@@ -1,4 +1,3 @@
-{{-- Styling khusus untuk toggle switch dan area upload file --}}
 <style>
     .toggle-checkbox:checked {
         right: 0;
@@ -16,7 +15,6 @@
 </style>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    {{-- Kolom Kiri: Input Utama --}}
     <div class="lg:col-span-2 space-y-6">
         <div>
             <label for="title" class="block text-sm font-medium text-blue-medium mb-1">Judul Pengumuman</label>
@@ -61,7 +59,6 @@
         </div>
     </div>
 
-    {{-- Kolom Kanan: Status --}}
     <div class="lg:col-span-1">
         <label for="is_active" class="block text-sm font-medium text-blue-medium mb-1">Status</label>
         <div class="flex items-center gap-4">
@@ -97,7 +94,6 @@
 </div>
 
 <script>
-    // Kode JavaScript ini identik dengan yang ada di form promo
     document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('toggle');
         const statusText = document.getElementById('status-text');

@@ -23,7 +23,6 @@
             }
         }
     </script>
-        <!-- Custom style diletakkan setelah semua link agar override -->
         <style>
             .swiper-slide {
                 background-size: cover !important;
@@ -53,10 +52,8 @@
             </div>
         </div>
 
-        <!-- Right side with Registration Form -->
         <div class="w-full md:w-1/2 bg-white flex flex-col h-screen overflow-y-auto min-h-0">
             <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto my-auto">
-                <!-- Back Button -->
                 <div class="mb-6">
                     <a href="/" class="text-primary font-bold tracking-wider flex items-center gap-2 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentColor">
@@ -153,15 +150,12 @@
         </div>
     </div>
     
-    <!-- === MODAL SYARAT & KETENTUAN (TAMBAHAN BARU) === -->
     <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full flex flex-col">
-            <!-- Modal Header -->
             <div class="p-5 border-b">
                 <h3 class="text-2xl font-semibold text-gray-800">Syarat & Ketentuan Layanan</h3>
             </div>
             
-            <!-- Modal Body (dengan scroll) -->
             <div class="p-6 space-y-4 overflow-y-auto">
                 <p class="text-gray-600">Mohon baca Syarat dan Ketentuan ("Ketentuan") ini dengan saksama sebelum menggunakan layanan "Ya Kotor Ya Cuci". Dengan mendaftar dan menggunakan layanan kami, Anda setuju untuk terikat oleh Ketentuan ini.</p>
                 
@@ -193,7 +187,6 @@
                 <p class="pt-2 text-sm text-gray-500">Dengan menekan tombol "Saya Setuju", Anda mengonfirmasi bahwa Anda telah membaca, memahami, dan menyetujui seluruh Syarat & Ketentuan yang berlaku.</p>
             </div>
             
-            <!-- Modal Footer -->
             <div class="flex items-center justify-end p-5 border-t space-x-4">
                 <button id="close-modal-btn" type="button" class="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none">
                     Tutup
@@ -204,7 +197,6 @@
             </div>
         </div>
     </div>
-    <!-- === AKHIR MODAL === -->
 
     <script>
         const swiper = new Swiper('.swiper', {
@@ -218,7 +210,6 @@
         });
     </script>
 
-    <!-- === JAVASCRIPT MODAL (TAMBAHAN BARU) === -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const termsLink = document.getElementById('terms-link');
@@ -227,14 +218,12 @@
             const agreeBtn = document.getElementById('agree-btn');
             const termsCheckbox = document.getElementById('terms');
 
-            // Fungsi untuk membuka modal
             termsLink.addEventListener('click', function (event) {
-                event.preventDefault(); // Mencegah link berpindah halaman
+                event.preventDefault(); 
                 termsModal.classList.remove('hidden');
                 termsModal.classList.add('flex', 'items-center', 'justify-center');
             });
 
-            // Fungsi untuk menutup modal
             const closeModal = () => {
                 termsModal.classList.remove('flex', 'items-center', 'justify-center');
                 termsModal.classList.add('hidden');
@@ -242,13 +231,11 @@
 
             closeModalBtn.addEventListener('click', closeModal);
 
-            // Fungsi saat tombol "Saya Setuju" diklik
             agreeBtn.addEventListener('click', function () {
-                termsCheckbox.checked = true; // Otomatis mencentang checkbox
-                closeModal(); // Menutup modal
+                termsCheckbox.checked = true; 
+                closeModal(); 
             });
 
-            // Opsional: tutup modal jika klik di luar area konten modal
             termsModal.addEventListener('click', function(event) {
                 if (event.target === termsModal) {
                     closeModal();

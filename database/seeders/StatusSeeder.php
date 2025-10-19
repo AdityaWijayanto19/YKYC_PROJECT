@@ -7,9 +7,6 @@ use Illuminate\Database\Seeder;
 
 class StatusSeeder extends Seeder
 {
-    /**
-     * Jalankan proses seeding database.
-     */
     public function run(): void
     {
         $statuses = [

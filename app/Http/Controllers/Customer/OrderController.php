@@ -28,9 +28,15 @@ class OrderController extends Controller
         $serviceArea = ServiceArea::where('is_active', true)->first();
         $polygonForLeaflet = [];
         if ($serviceArea) {
-            $coordsFromDb = json_decode($serviceArea->polygon_coordinates, true)[0];
-            foreach ($coordsFromDb as $coord) {
-                $polygonForLeaflet[] = [$coord[1], $coord[0]];
+            $geojson = json_decode($serviceArea->polygon_coordinates, true);
+
+            if (!empty($geojson['features'][0]['geometry']['coordinates'][0])) {
+                $coordinates = $geojson['features'][0]['geometry']['coordinates'][0];
+                foreach ($coordinates as $coord) {
+                    if (isset($coord[0], $coord[1])) {
+                        $polygonForLeaflet[] = [$coord[1], $coord[0]]; 
+                    }
+                }
             }
         }
 
@@ -55,12 +61,11 @@ class OrderController extends Controller
             'worker_id' => ['nullable', 'exists:workers,id'],
         ]);
 
-        // Ambil status
         $pendingStatus = Status::where('name', 'pending')->firstOrFail();
         $waitingStatus = Status::where('name', 'waiting')->firstOrFail();
 
         $assignedWorkerId = $validated['worker_id'] ?? null;
-        $statusId = $pendingStatus->id; // Default: pending
+        $statusId = $pendingStatus->id; 
         $nearestWorker = null;
 
         if ($validated['delivery_method'] === 'pickup') {
@@ -70,7 +75,7 @@ class OrderController extends Controller
             }
             $assignedWorkerId = $nearestWorker->id;
             $statusId = Status::where('name', 'waiting_keliling')->value('id');
-        } else { // drop-off/mangkal
+        } else { 
             $statusId = Status::where('name', 'waiting_mangkal')->value('id');
         }
 
@@ -91,7 +96,6 @@ class OrderController extends Controller
             'payment_status' => 'pending',
         ]);
 
-        // Midtrans
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
         \Midtrans\Config::$isSanitized = true;
@@ -125,12 +129,10 @@ class OrderController extends Controller
 
     private function findNearestAvailableWorker($customerLat, $customerLng)
     {
-        // Dapatkan ID status yang sudah selesai/dibatalkan
         $excludedStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
 
         $availableWorkers = Worker::where('worker_type', 'Keliling')
             ->where('is_active', true)
-            // Cek apakah worker TIDAK punya order dengan status yang BUKAN selesai/batal
             ->whereDoesntHave('orders', function ($query) use ($excludedStatusIds) {
                 $query->whereNotIn('status_id', $excludedStatusIds);
             })
@@ -171,19 +173,16 @@ class OrderController extends Controller
         $activePromos = Promo::where('is_active', true)->latest()->get();
         $activeAnnouncements = Announcement::where('is_active', true)->orderBy('order', 'asc')->get();
 
-        // Dapatkan ID untuk setiap grup status
         $pendingStatusId = Status::where('name', 'pending')->value('id');
         $inProgressStatusIds = Status::whereIn('name', ['waiting', 'on-the-way', 'diproses'])->pluck('id');
         $readyStatusId = Status::where('name', 'ready for pickup')->value('id');
 
-        // Gunakan ID status dalam query
         $countPending = Order::where('user_id', $userId)->where('status_id', $pendingStatusId)->count();
         $countInProgress = Order::where('user_id', $userId)->whereIn('status_id', $inProgressStatusIds)->count();
         $countReady = Order::where('user_id', $userId)->where('status_id', $readyStatusId)->count();
 
         $recentOrders = Order::with(['service', 'status'])->where('user_id', $userId)->orderBy('created_at', 'desc')->take(3)->get();
 
-        // ... (sisa method dashboard Anda sudah benar)
         $activeWorkers = Worker::with('user')
             ->where('is_active', true)
             ->where('worker_type', 'Mangkal')
@@ -194,9 +193,11 @@ class OrderController extends Controller
         $serviceArea = ServiceArea::where('is_active', true)->first();
         $polygonForLeaflet = [];
         if ($serviceArea) {
-            $coordsFromDb = json_decode($serviceArea->polygon_coordinates, true)[0];
-            foreach ($coordsFromDb as $coord) {
-                $polygonForLeaflet[] = [$coord[1], $coord[0]];
+            $geojson = json_decode($serviceArea->polygon_coordinates, true);
+            if (!empty($geojson['features'][0]['geometry']['coordinates'][0])) {
+                foreach ($geojson['features'][0]['geometry']['coordinates'][0] as $coord) {
+                    $polygonForLeaflet[] = [$coord[1], $coord[0]];
+                }
             }
         }
 
@@ -242,12 +243,11 @@ class OrderController extends Controller
     {
         $userId = Auth::id();
 
-        // Dapatkan ID status yang dianggap sebagai riwayat
         $historyStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
 
         $history = Order::with(['service', 'worker', 'status'])
             ->where('user_id', $userId)
-            ->whereIn('status_id', $historyStatusIds) // Gunakan status_id
+            ->whereIn('status_id', $historyStatusIds) 
             ->orderBy('created_at', 'desc')
             ->get();
 

@@ -61,7 +61,6 @@
                                     @if ($order->status)
                                         {!! $order->status->getBadgeHtml() !!}
                                     @else
-                                        {{-- Tampilan fallback jika status tidak ada --}}
                                         <span class="text-sm text-gray-800 bg-gray-100 px-3 py-1 rounded-full font-semibold">
                                             Tanpa Status
                                         </span>
@@ -90,7 +89,6 @@
         </div>
     </div>
 
-    {{-- MODAL DETAIL PESANAN (Sekarang dengan ID untuk data dinamis) --}}
     <div id="order-detail-modal"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl transform transition-all">
@@ -126,7 +124,6 @@
                             Pesanan</label>
                         <select id="modal-status-select" name="status_id"
                             class="w-full px-4 py-2 border border-blue-pale rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-medium">
-                            {{-- Opsi status akan diisi oleh JavaScript --}}
                         </select>
                     </form>
                 </div>
@@ -144,7 +141,6 @@
 @endsection
 
 @push('scripts')
-    {{-- Tambahkan meta tag untuk CSRF token agar AJAX aman --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script>
@@ -158,15 +154,12 @@
 
             const showModal = () => modal.classList.remove('hidden');
             const hideModal = () => modal.classList.add('hidden');
-
-            // Event untuk membuka modal dan mengambil data
             openModalButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     currentOrderId = this.dataset.id;
                     fetch(`/admin/pesanan/${currentOrderId}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Isi data ke dalam modal
                             document.getElementById('modal-title').textContent = `Detail Pesanan #${data.order_id}`;
                             document.getElementById('modal-customer-name').textContent = data.user?.name || 'N/A';
                             document.getElementById('modal-customer-email').textContent = data.user?.email || 'N/A';
@@ -178,9 +171,8 @@
                             document.getElementById('modal-payment-status').textContent = data.payment_status?.toUpperCase() || 'N/A';
                             document.getElementById('modal-total-price').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.total_price);
 
-                            // Isi dropdown status
                             const statusSelect = document.getElementById('modal-status-select');
-                            statusSelect.innerHTML = ''; // Kosongkan dulu
+                            statusSelect.innerHTML = ''; 
                             allStatuses.forEach(status => {
                                 const option = document.createElement('option');
                                 option.value = status.id;
@@ -197,7 +189,6 @@
                 });
             });
 
-            // Event untuk menyimpan status baru
             saveStatusBtn.addEventListener('click', function () {
                 const statusSelect = document.getElementById('modal-status-select');
                 const newStatusId = statusSelect.value;
@@ -213,7 +204,6 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Update badge status di tabel tanpa refresh halaman
                             const orderRow = document.getElementById(`order-row-${currentOrderId}`);
                             if (orderRow) {
                                 const statusCell = orderRow.querySelector('.status-badge-cell');
@@ -228,7 +218,6 @@
                     .catch(error => console.error('Error:', error));
             });
 
-            // Events untuk menutup modal
             closeModalButtons.forEach(button => button.addEventListener('click', hideModal));
             modal.addEventListener('click', function (event) {
                 if (event.target === modal) {

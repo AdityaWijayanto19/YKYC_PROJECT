@@ -16,14 +16,12 @@ class OrderPaid implements ShouldBroadcast
 
     public function __construct($order)
     {
-        $this->order = $order; // bisa isi id order, status, worker_id, dsb.
+        $this->order = $order; 
     }
 
     public function broadcastOn()
     {
-        // channel broadcast (public/private)
         return new Channel('orders');  
-        // kalau worker spesifik: return new PrivateChannel('worker.'.$this->order->worker_id);
     }
 
     public function broadcastAs()

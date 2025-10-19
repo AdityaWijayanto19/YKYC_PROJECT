@@ -40,10 +40,9 @@
 
                             <div class="w-full md:w-auto flex-1 px-4 md:px-0">
                                 @php
-                                    // Tentukan status sesuai delivery method
                                     if ($order->delivery_method == 'pickup') {
                                         $statuses = ['waiting_keliling', 'on-the-way', 'diproses', 'ready for pickup', 'completed'];
-                                    } else { // drop-off / mangkal
+                                    } else { 
                                         $statuses = ['waiting_mangkal', 'diproses', 'ready for pickup', 'completed'];
                                     }
 

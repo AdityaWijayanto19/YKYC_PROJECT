@@ -47,7 +47,7 @@ class AuthController extends Controller
             'address' => $request->address,
         ]);
 
-        event(new Registered($user));
+        // event(new Registered($user));
 
         Auth::login($user);
 

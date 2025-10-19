@@ -2,10 +2,8 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    {{-- Kontainer utama untuk konten halaman dengan padding --}}
     <div class="p-8">
 
-        <!-- Header Konten -->
         <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-navy-dark">Selamat Datang, {{ Auth::user()->name }}!</h1>
@@ -18,14 +16,8 @@
                 </div>
             </div>
         </header>
-
-        {{-- Grid Layout Utama --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            {{-- KOLOM KONTEN KIRI (2/3) --}}
             <div class="lg:col-span-2 space-y-8">
-
-                <!-- Banner Statistik -->
                 <section class="bg-navy-primary p-6 rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-6 text-white shadow-lg">
                     <div>
                         <p class="text-sm text-blue-pale">Hari ini</p>
@@ -41,7 +33,6 @@
                     </div>
                 </section>
 
-                <!-- Grafik Pendapatan -->
                 <section class="bg-white p-6 rounded-2xl shadow-md">
                     <h2 class="text-xl font-bold text-navy-dark mb-4">Grafik Pendapatan (6 Bulan Terakhir)</h2>
                     <div>
@@ -49,7 +40,6 @@
                     </div>
                 </section>
 
-                <!-- Transaction History -->
                 <section>
                     <h2 class="text-xl font-bold text-navy-dark mb-4">Transaksi Terakhir Hari Ini</h2>
                     <div class="bg-white p-6 rounded-2xl shadow-md overflow-x-auto">
@@ -93,11 +83,7 @@
                 </section>
             </div>
 
-            {{-- =============================================== --}}
-            {{-- SIDEBAR KANAN (1/3) --}}
-            {{-- =============================================== --}}
             <aside class="lg:col-span-1 space-y-8">
-                <!-- Calendar -->
                 <div id="calendar-widget" class="bg-white p-6 rounded-2xl shadow-md">
                     <div class="flex justify-between items-center mb-4">
                         <h3 id="month-year" class="text-lg font-bold text-navy-dark">October 2023</h3>
@@ -110,21 +96,15 @@
                         <span class="py-2">Sen</span><span class="py-2">Sel</span><span class="py-2">Rab</span><span
                             class="py-2">Kam</span><span class="py-2">Jum</span><span class="py-2">Sab</span><span
                             class="py-2">Min</span>
-                        <!-- Tanggal akan di-generate oleh JavaScript -->
                     </div>
                 </div>
 
-                <!-- Meetings / Schedule -->
                 <div class="bg-white p-6 rounded-2xl shadow-md space-y-4">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold text-navy-dark">Schedule</h3>
-                        {{-- TODO: Buat route untuk halaman tambah jadwal --}}
                         <a href="#" class="flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 text-blue-medium font-bold text-xl leading-none">+</a>
                     </div>
-
-                    {{-- Logika untuk menampilkan jadwal atau pesan kosong --}}
                     @if(empty($schedules))
-                        <!-- Konten Saat Jadwal Kosong -->
                         <div class="text-center py-10 px-4 border-2 border-dashed rounded-xl">
                             <div class="text-4xl text-slate-300 mb-2">
                                 <i class="fas fa-calendar-alt"></i>
@@ -133,7 +113,6 @@
                             <p class="text-sm text-blue-medium">Klik tombol '+' untuk menambahkan jadwal baru.</p>
                         </div>
                     @else
-                        {{-- Lakukan looping jika variabel $schedules ada isinya --}}
                         @foreach($schedules as $schedule)
                             <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50">
                                 <div class="bg-white p-3 rounded-full text-lg"><i class="fas fa-file-invoice text-navy-primary"></i></div>
@@ -153,11 +132,9 @@
 @endsection
 
 @push('scripts')
-    {{-- Library untuk Grafik --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Script untuk Kalender
         document.addEventListener('DOMContentLoaded', function () {
               const monthYearElement = document.getElementById('month-year');
             const prevMonthButton = document.getElementById('prev-month');
@@ -167,7 +144,6 @@
             let currentDate = new Date();
 
             function renderCalendar() {
-                // Mengatur ulang grid kalender
                 calendarGrid.innerHTML = `
                                     <span class="py-2">Sen</span><span class="py-2">Sel</span><span class="py-2">Rab</span>
                                     <span class="py-2">Kam</span><span class="py-2">Jum</span><span class="py-2">Sab</span>
@@ -177,16 +153,11 @@
                 const today = new Date();
                 const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
                 const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
-                // Menampilkan bulan dan tahun saat ini
                 monthYearElement.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-                // Menambahkan spasi untuk hari pertama dalam seminggu
-                // getDay() mengembalikan 0 untuk Minggu, 1 untuk Senin, dst.
-                // Kita sesuaikan agar Senin menjadi hari pertama (0)
                 let startingDay = firstDayOfMonth.getDay();
-                if (startingDay === 0) { // Jika hari pertama adalah Minggu
-                    startingDay = 6; // Ubah menjadi 6 agar sesuai dengan grid (Mon-Sun)
+                if (startingDay === 0) {
+                    startingDay = 6; 
                 } else {
                     startingDay -= 1;
                 }
@@ -196,14 +167,11 @@
                     emptySpan.className = 'py-2 text-slate-400';
                     calendarGrid.appendChild(emptySpan);
                 }
-
-                // Mengisi tanggal dalam bulan
                 for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
                     const dateSpan = document.createElement('span');
                     dateSpan.className = 'py-2 cursor-pointer relative';
                     dateSpan.textContent = day;
 
-                    // Menambahkan penanda untuk hari ini
                     if (day === today.getDate() &&
                         currentDate.getMonth() === today.getMonth() &&
                         currentDate.getFullYear() === today.getFullYear()) {
@@ -211,7 +179,7 @@
                         const todayMarker = document.createElement('span');
                         todayMarker.className = 'absolute inset-0 w-8 h-8 mx-auto bg-navy-primary text-white rounded-full flex items-center justify-center';
                         todayMarker.textContent = day;
-                        dateSpan.textContent = ''; // Hapus teks tanggal asli
+                        dateSpan.textContent = ''; 
                         dateSpan.appendChild(todayMarker);
                     }
 
@@ -219,23 +187,19 @@
                 }
             }
 
-            // Event listener untuk tombol bulan sebelumnya
             prevMonthButton.addEventListener('click', () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar();
             });
 
-            // Event listener untuk tombol bulan berikutnya
             nextMonthButton.addEventListener('click', () => {
                 currentDate.setMonth(currentDate.getMonth() + 1);
                 renderCalendar();
             });
 
-            // Render kalender saat pertama kali halaman dimuat
             renderCalendar();
         });
 
-        // Script untuk Grafik Pendapatan
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
         const revenueChart = new Chart(revenueCtx, {
             type: 'bar',
@@ -244,7 +208,7 @@
                 datasets: [{
                     label: 'Pendapatan',
                     data: @json($chartData),
-                    backgroundColor: 'rgba(5, 38, 89, 0.8)', // Warna navy-primary dengan opacity
+                    backgroundColor: 'rgba(5, 38, 89, 0.8)', 
                     borderColor: 'rgba(5, 38, 89, 1)',
                     borderWidth: 1,
                     borderRadius: 8,

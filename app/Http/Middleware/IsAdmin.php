@@ -15,8 +15,6 @@ class IsAdmin
             return $next($request);
         }
 
-        // Jika user bukan admin, kembalikan ke halaman login
-        // Di aplikasi nyata, mungkin lebih baik redirect ke halaman yang sesuai dengan role user
         return redirect('/login')->with('error', 'Anda tidak memiliki hak akses.');
     }
 }

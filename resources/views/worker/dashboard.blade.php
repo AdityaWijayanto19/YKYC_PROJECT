@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50 px-4 py-8">
-    {{-- Header Umum untuk Kedua Tipe Worker --}}
     <header class="mb-8">
         <div class="flex flex-col md:flex-row md:justify-between md:items-center">
             <div>
@@ -19,7 +18,6 @@
                 </p>
             </div>
 
-            {{-- Toggle Aktif/Non-Aktif (Berbeda Label) --}}
             <div class="flex items-center mt-4 md:mt-0">
                 <span id="status-text" class="mr-3 font-semibold {{ $worker->is_active ? 'text-green-600' : 'text-gray-500' }}">
                     {{ $worker->is_active ? ($worker->worker_type === 'Keliling' ? 'Online' : 'Kios Buka') : ($worker->worker_type === 'Keliling' ? 'Offline' : 'Kios Tutup') }}
@@ -37,12 +35,7 @@
     </header>
 
     @if ($worker->worker_type === 'Keliling')
-
-        {{-- ============================================= --}}
-        {{-- TAMPILAN UNTUK WORKER KELILING (MAP-CENTRIC) --}}
-        {{-- ============================================= --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Kolom Peta (Utama) -->
             <div class="lg:col-span-2">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 h-full">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -55,7 +48,6 @@
                 </div>
             </div>
 
-            <!-- Kolom Info & Aksi (Samping) -->
             <div class="space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -67,7 +59,6 @@
                             {{ $worker->is_active ? 'Anda sedang aktif dan terlihat oleh customer.' : 'Anda sedang offline. Aktifkan untuk menerima pesanan.' }}
                         </p>
                     </div>
-                     {{-- Kode di bawah ini sudah benar, tidak perlu diubah --}}
                     <a href="{{ route('worker.pesanan-actived.active') }}" class="mt-4 flex items-center justify-center gap-2 w-full text-center bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">
                         <i data-lucide="clipboard-list" class="w-5 h-5"></i>
                         {{ $orders->count() > 0 ? 'Lihat Tugas Saat Ini' : 'Belum Ada Tugas' }}
@@ -96,13 +87,8 @@
 
     @else
 
-        {{-- =========================================== --}}
-        {{-- TAMPILAN UNTUK WORKER MANGKAL (MANAGEMENT) --}}
-        {{-- =========================================== --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Kolom utama (Kiri) -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- Ringkasan Kios -->
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
                      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i data-lucide="store" class="w-5 h-5 text-green-600"></i>
@@ -110,19 +96,16 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
                         <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                            {{-- PERBAIKAN 1: Menggunakan 'status.name' untuk menghitung jumlah --}}
                             <p class="text-4xl font-bold text-blue-600">{{ $orders->where('status.name', 'diproses')->count() }}</p>
                             <p class="text-sm text-gray-600 mt-1">Pesanan Sedang Dikerjakan</p>
                         </div>
                         <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-                            {{-- PERBAIKAN 2: Menggunakan 'status.name' untuk menghitung jumlah --}}
                             <p class="text-4xl font-bold text-yellow-600">{{ $orders->where('status.name', 'ready for pickup')->count() }}</p>
                             <p class="text-sm text-gray-600 mt-1">Pesanan Siap Diambil</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Daftar Tugas Aktif -->
                  <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -141,7 +124,6 @@
                                         <p class="font-semibold text-gray-800">{{ $order->service->name }}</p>
                                         <p class="text-sm text-gray-500">ID: {{ $order->order_id }} oleh {{ $order->user->name }}</p>
                                     </div>
-                                    {{-- PERBAIKAN 3: Menggunakan 'status->name' untuk kondisi dan menampilkan 'status->label' --}}
                                     <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full {{ $order->status->name === 'ready for pickup' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700' }}">
                                         {{ $order->status->label ?? $order->status->name }}
                                     </span>
@@ -154,7 +136,6 @@
                 </div>
             </div>
 
-            <!-- Kolom Aksi Cepat (Kanan) -->
             <div class="space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -179,18 +160,15 @@
 @endsection
 
 @push('scripts')
-{{-- Tidak ada perubahan di bagian SCRIPT, semuanya sudah benar --}}
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 lucide.createIcons();
-// ... (Sisa script Anda tetap sama)
 document.addEventListener('DOMContentLoaded', function() {
     const toggle = document.getElementById('active-toggle');
     const statusText = document.getElementById('status-text');
     const workerId = {{ Auth::user()->worker->id }};
     const workerType = '{{ $worker->worker_type }}';
 
-    // Logika toggle status, berlaku untuk keduanya
     toggle.addEventListener('change', function() {
         const isActive = this.checked;
         fetch('{{ route("worker.status.toggle") }}', {
@@ -201,14 +179,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // Update teks status
                 const activeText = workerType === 'Keliling' ? 'Online' : 'Kios Buka';
                 const inactiveText = workerType === 'Keliling' ? 'Offline' : 'Kios Tutup';
                 statusText.textContent = data.is_active ? activeText : inactiveText;
                 statusText.classList.toggle('text-green-600', data.is_active);
                 statusText.classList.toggle('text-gray-500', !data.is_active);
 
-                // Jika worker keliling, jalankan fungsi peta
                 if (workerType === 'Keliling') {
                     const statusInfo = document.getElementById('status-info-text');
                     statusInfo.textContent = data.is_active ? 'Anda sedang aktif dan terlihat oleh customer.' : 'Anda sedang offline. Aktifkan untuk menerima pesanan.';
@@ -218,9 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ==============================================================
-    // SCRIPT PETA INI HANYA AKAN DIJALANKAN JIKA WORKER TIPE KELILING
-    // ==============================================================
     if (workerType === 'Keliling') {
         const mapContainer = document.getElementById('map');
         let watchId = null;
@@ -228,16 +201,16 @@ document.addEventListener('DOMContentLoaded', function() {
         let workerMarker = null;
 
         const setupMap = (isActive) => {
-            if (isActive && !map) { // Hanya inisialisasi jika aktif dan peta belum ada
+            if (isActive && !map) { 
                 mapContainer.innerHTML = '';
-                map = L.map('map').setView([-7.9539, 112.6173], 15); // Ganti dengan lokasi default
+                map = L.map('map').setView([-7.9539, 112.6173], 15); 
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
                 startTracking();
-            } else if (!isActive && map) { // Hancurkan peta jika non-aktif dan peta ada
+            } else if (!isActive && map) { 
                 stopTracking();
                 map.remove();
                 map = null;
@@ -262,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const newLatLng = [latitude, longitude];
                     if (!workerMarker) {
                         workerMarker = L.marker(newLatLng).addTo(map).bindPopup('Posisi Anda');
-                        map.setView(newLatLng, 16); // Pusatkan peta saat lokasi pertama kali didapat
+                        map.setView(newLatLng, 16); 
                     } else {
                         workerMarker.setLatLng(newLatLng);
                     }
@@ -279,7 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
 
-        // Inisialisasi peta jika status worker sudah aktif saat halaman dimuat
         if (toggle.checked) {
             setupMap(true);
         }
