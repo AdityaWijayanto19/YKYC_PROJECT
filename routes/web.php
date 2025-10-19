@@ -26,6 +26,8 @@ use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\WorkerManagementController;
 use App\Http\Controllers\Admin\ServiceController;
 
+use App\Http\Controllers\NotificationController;
+
 // ===================================================================
 //                              LANDING PAGE
 // ===================================================================
@@ -81,36 +83,35 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('dashboard');
 
+    // ⚠️ TARUH SEMUA ROUTE STATIS DULU (tanpa parameter dinamis)
+    Route::middleware(['auth', 'verified'])->group(function () {
+        // Route statis untuk order
+        Route::get('/order-status', [CustomerOrderController::class, 'status'])
+            ->name('order.status');
+
+        Route::get('/history', [CustomerOrderController::class, 'history'])
+            ->name('history');
+
+        Route::get('/notifications', [NotificationController::class, 'index'])
+            ->name('notifications');
+
+        Route::get('/profile', [CustomerProfileController::class, 'edit'])
+            ->name('profile.edit');
+
+        Route::patch('/profile', [CustomerProfileController::class, 'update'])
+            ->name('profile.update');
+    });
+
+    // Route untuk create order
     Route::get('/order', [CustomerOrderController::class, 'create'])
-        ->middleware(['auth', 'verified', 'profile.complete']) 
-        ->name('order.create'); 
+        ->middleware(['auth', 'verified', 'profile.complete'])
+        ->name('order.create');
 
     Route::post('/order', [CustomerOrderController::class, 'store'])
         ->middleware(['auth', 'verified'])
         ->name('order.store');
 
-    Route::get('/order/payment/{order}', [CustomerOrderController::class, 'payment'])
-        ->middleware(['auth', 'verified'])
-        ->name('order.payment');
-
-    Route::middleware(['auth', 'verified'])->group(function () {
-        Route::get('/order-status', [CustomerOrderController::class, 'status'])
-            ->name('order.status');
-    });
-
-    Route::get('/order/{order}/track', [CustomerOrderController::class, 'track'])
-        ->middleware(['auth', 'verified'])
-        ->name('order.track');
-
-    Route::middleware(['auth', 'verified'])->group(function () {
-        Route::get('/history', [CustomerOrderController::class, 'history'])
-            ->name('history');
-    });
-
-    Route::get('/notifications', function () {
-        return view('customer.notifications');
-    })->middleware(['auth', 'verified'])->name('notifications');
-
+    // Route untuk feedback (statis, taruh sebelum route dinamis)
     Route::get('/feedback/create/{orderId}', [FeedbackController::class, 'create'])
         ->middleware(['auth', 'verified'])
         ->name('feedback.create');
@@ -119,13 +120,16 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('feedback.store');
 
-    Route::get('/profile', [CustomerProfileController::class, 'edit'])
+    // ⚠️ ROUTE DENGAN PARAMETER DINAMIS TARUH PALING BAWAH
+    // Route payment harus sebelum track karena lebih spesifik
+    Route::get('/order/payment/{order}', [CustomerOrderController::class, 'payment'])
         ->middleware(['auth', 'verified'])
-        ->name('profile.edit');
+        ->name('order.payment');
 
-    Route::patch('/profile', [CustomerProfileController::class, 'update'])
+    // Route track
+    Route::get('/order/{order}/track', [CustomerOrderController::class, 'track'])
         ->middleware(['auth', 'verified'])
-        ->name('profile.update');
+        ->name('order.track');
 });
 
 // ===================================================================
@@ -144,7 +148,8 @@ Route::prefix('worker')->name('worker.')->middleware(['auth', 'is_worker'])->gro
     Route::put('/profil', [WorkerProfileController::class, 'update'])->name('profil.update');
 
     Route::get('/location-chart', fn() => view('worker.location-chart'))->name('location.chart');
-    Route::get('/notifications', fn() => view('worker.notifications'))->name('notifications');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 
     Route::post('/logout', [DashboardController::class, 'destroy'])->name('logout');
 
@@ -179,23 +184,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
     });
 
     Route::prefix('service')->name('service.')->controller(ServiceController::class)->group(function () {
-        Route::get('/', 'index')->name('index'); 
-        Route::get('/tambah', 'create')->name('tambah'); 
-        Route::post('/', 'store')->name('store'); 
-        Route::get('/{service}/edit', 'edit')->name('edit'); 
+        Route::get('/', 'index')->name('index');
+        Route::get('/tambah', 'create')->name('tambah');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{service}/edit', 'edit')->name('edit');
         Route::put('/{service}', 'update')->name('update');
-        Route::delete('/{service}', 'destroy')->name('destroy'); 
+        Route::delete('/{service}', 'destroy')->name('destroy');
     });
 
     Route::resource('promo', PromoController::class)->except(['show']);
 
     Route::prefix('announcement')->name('announcement.')->controller(AnnouncementController::class)->group(function () {
-        Route::get('/', 'index')->name('index');                           
-        Route::get('/tambah', 'create')->name('tambah');                      
-        Route::post('/', 'store')->name('store');                          
-        Route::get('/{announcement}/edit', 'edit')->name('edit');           
-        Route::put('/{announcement}', 'update')->name('update');            
-        Route::delete('/{announcement}', 'destroy')->name('destroy');       
+        Route::get('/', 'index')->name('index');
+        Route::get('/tambah', 'create')->name('tambah');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{announcement}/edit', 'edit')->name('edit');
+        Route::put('/{announcement}', 'update')->name('update');
+        Route::delete('/{announcement}', 'destroy')->name('destroy');
     });
 
     Route::prefix('pesanan')->name('pesanan.')->controller(OrderController::class)->group(function () {
@@ -204,8 +209,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
         Route::post('/{order}/update-status', 'updateStatus')->name('updateStatus');
     });
 
-     Route::get('/peraturan', [AdminDashboardController::class, 'peraturan'])->name('peraturan.index');
+    Route::get('/peraturan', [AdminDashboardController::class, 'peraturan'])->name('peraturan.index');
 });
+
+// ===================================================================
+//                              NOTIFIKASI
+// ===================================================================
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
+    Route::post('/notifications/mark-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAsRead');
+});
+
 
 // ===================================================================
 //                             Midtrans

@@ -64,7 +64,6 @@ class DashboardController extends Controller
 
         $order->load('status');
 
-        OrderStatusUpdated::dispatch($order);
 
         return redirect()->back()->with('success', 'Status pesanan berhasil diubah!');
     }
@@ -88,9 +87,9 @@ class DashboardController extends Controller
             ->whereIn('status_id', $trackableStatusIds) 
             ->first();
 
-        if ($activeOrder) {
-            WorkerLocationUpdated::dispatch($activeOrder, $worker->current_latitude, $worker->current_longitude);
-        }
+        // if ($activeOrder) {
+        //     WorkerLocationUpdated::dispatch($activeOrder, $worker->current_latitude, $worker->current_longitude);
+        // }
 
         return response()->json(['success' => true]);
     }

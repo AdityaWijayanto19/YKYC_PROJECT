@@ -73,15 +73,6 @@
                         <i data-lucide="clock" class="w-5 h-5"></i> Lihat Riwayat Pesanan
                     </a>
                 </div>
-                  <div class="mt-auto pt-4 border-t border-gray-200">
-                    <form method="POST" action="{{ route('worker.logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            <i data-lucide="log-out" class="w-5 h-5"></i>
-                            <span>Keluar (Logout)</span>
-                        </button>
-                    </form>
-                </div>
             </div>
         </div>
 

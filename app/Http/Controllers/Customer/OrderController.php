@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Events\NewOrderAssigned;
 use App\Models\Service;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\Worker;
 use App\Models\ServiceArea;
 use App\Models\Promo;
-
-use App\Helpers\LocationHelper;
 
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
@@ -34,7 +31,7 @@ class OrderController extends Controller
                 $coordinates = $geojson['features'][0]['geometry']['coordinates'][0];
                 foreach ($coordinates as $coord) {
                     if (isset($coord[0], $coord[1])) {
-                        $polygonForLeaflet[] = [$coord[1], $coord[0]]; 
+                        $polygonForLeaflet[] = [$coord[1], $coord[0]];
                     }
                 }
             }
@@ -52,81 +49,133 @@ class OrderController extends Controller
             'customerLocation' => $customerLocation,
         ]);
     }
-
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'service_id' => ['required', 'exists:services,id'],
-            'delivery_method' => ['required', Rule::in(['drop-off', 'pickup'])],
-            'worker_id' => ['nullable', 'exists:workers,id'],
-        ]);
+        // Log input yang diterima
+        \Log::info('Order Store - Input:', $request->all());
 
-        $pendingStatus = Status::where('name', 'pending')->firstOrFail();
-        $waitingStatus = Status::where('name', 'waiting')->firstOrFail();
+        try {
+            $validated = $request->validate([
+                'service_id' => ['required', 'exists:services,id'],
+                'delivery_method' => ['required', Rule::in(['drop-off', 'pickup'])],
+                'worker_id' => ['nullable', 'exists:workers,id'],
+            ]);
 
-        $assignedWorkerId = $validated['worker_id'] ?? null;
-        $statusId = $pendingStatus->id; 
-        $nearestWorker = null;
+            \Log::info('Order Store - Validated:', $validated);
 
-        if ($validated['delivery_method'] === 'pickup') {
-            $nearestWorker = $this->findNearestAvailableWorker($request->customer_lat, $request->customer_lng);
-            if (!$nearestWorker) {
-                return back()->withErrors(['error' => 'Maaf, tidak ada driver yang tersedia...'])->withInput();
+            $pendingStatus = Status::where('name', 'pending')->first();
+            $waitingStatus = Status::where('name', 'waiting')->first();
+
+            if (!$pendingStatus) {
+                \Log::error('Status "pending" not found in database');
+                return back()->withErrors(['error' => 'Status pending tidak ditemukan di database.'])->withInput();
             }
-            $assignedWorkerId = $nearestWorker->id;
-            $statusId = Status::where('name', 'waiting_keliling')->value('id');
-        } else { 
-            $statusId = Status::where('name', 'waiting_mangkal')->value('id');
+
+            \Log::info('Order Store - Pending Status:', ['id' => $pendingStatus->id]);
+
+            $assignedWorkerId = $validated['worker_id'] ?? null;
+            $statusId = $pendingStatus->id;
+            $nearestWorker = null;
+
+            if ($validated['delivery_method'] === 'pickup') {
+                $nearestWorker = $this->findNearestAvailableWorker($request->customer_lat, $request->customer_lng);
+                if (!$nearestWorker) {
+                    \Log::warning('No available driver found');
+                    return back()->withErrors(['error' => 'Maaf, tidak ada driver yang tersedia...'])->withInput();
+                }
+                $assignedWorkerId = $nearestWorker->id;
+                $statusId = Status::where('name', 'waiting_keliling')->value('id');
+            } else {
+                $statusId = Status::where('name', 'waiting_mangkal')->value('id');
+            }
+
+            if (!$statusId) {
+                \Log::error('Status ID not found for delivery method: ' . $validated['delivery_method']);
+                return back()->withErrors(['error' => 'Status tidak valid.'])->withInput();
+            }
+
+            $service = Service::find($validated['service_id']);
+
+            if (!$service) {
+                \Log::error('Service not found:', ['service_id' => $validated['service_id']]);
+                return back()->withErrors(['error' => 'Layanan tidak ditemukan.'])->withInput();
+            }
+
+            $deliveryFee = ($validated['delivery_method'] === 'pickup') ? 15000 : 0;
+
+            $orderData = [
+                'user_id' => Auth::id(),
+                'service_id' => $validated['service_id'],
+                'delivery_method' => $validated['delivery_method'],
+                'worker_id' => $assignedWorkerId,
+                'customer_lat' => $request->customer_lat ?? null,
+                'customer_lng' => $request->customer_lng ?? null,
+                'service_price' => $service->price,
+                'delivery_fee' => $deliveryFee,
+                'total_price' => $service->price + $deliveryFee,
+                'status_id' => $statusId,
+                'payment_status' => 'pending',
+            ];
+
+            \Log::info('Order Store - Creating order with data:', $orderData);
+
+            $order = Order::create($orderData);
+
+            \Log::info('Order Store - Order created:', ['id' => $order->id]);
+
+            // Midtrans Configuration
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $uniqueOrderId = 'YKYC-' . $order->id . '-' . Str::random(5);
+            $order->order_id = $uniqueOrderId;
+            $order->save();
+
+            \Log::info('Order Store - Order ID updated:', ['order_id' => $uniqueOrderId]);
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $order->order_id,
+                    'gross_amount' => $order->total_price,
+                ],
+                'customer_details' => [
+                    'first_name' => Auth::user()->name,
+                    'email' => Auth::user()->email,
+                ],
+            ];
+
+            try {
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+                $order->snap_token = $snapToken;
+                $order->save();
+
+                \Log::info('Order Store - Snap token generated:', ['token' => substr($snapToken, 0, 20) . '...']);
+            } catch (\Exception $e) {
+                \Log::error('Midtrans Snap Token Error: ' . $e->getMessage());
+                return back()->withErrors(['error' => 'Gagal membuat token pembayaran. Silakan coba lagi.'])->withInput();
+            }
+
+            if ($nearestWorker) {
+                // NewOrderAssigned::dispatch($order, $nearestWorker);
+            }
+
+            \Log::info('Order Store - Redirecting to payment:', ['order_id' => $order->id]);
+
+            return redirect()->route('customer.order.payment', ['order' => $order->id]);
+        } catch (\Exception $e) {
+            \Log::error('Order Store - Exception:', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
-
-        $service = Service::find($validated['service_id']);
-        $deliveryFee = ($validated['delivery_method'] === 'pickup') ? 15000 : 0;
-
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'service_id' => $validated['service_id'],
-            'delivery_method' => $validated['delivery_method'],
-            'worker_id' => $assignedWorkerId,
-            'customer_lat' => $request->customer_lat ?? null,
-            'customer_lng' => $request->customer_lng ?? null,
-            'service_price' => $service->price,
-            'delivery_fee' => $deliveryFee,
-            'total_price' => $service->price + $deliveryFee,
-            'status_id' => $statusId,
-            'payment_status' => 'pending',
-        ]);
-
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
-
-        $uniqueOrderId = 'YKYC-' . $order->id . '-' . Str::random(5);
-        $order->order_id = $uniqueOrderId;
-        $order->save();
-
-        $params = [
-            'transaction_details' => [
-                'order_id' => $order->order_id,
-                'gross_amount' => $order->total_price,
-            ],
-            'customer_details' => [
-                'first_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-            ],
-        ];
-
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        $order->snap_token = $snapToken;
-        $order->save();
-
-        if ($nearestWorker) {
-            NewOrderAssigned::dispatch($order, $nearestWorker);
-        }
-
-        return redirect()->route('customer.order.payment', $order);
     }
-
+    
     private function findNearestAvailableWorker($customerLat, $customerLng)
     {
         $excludedStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
@@ -215,12 +264,17 @@ class OrderController extends Controller
 
     public function payment(Order $order)
     {
+        // Cek authorization
         if (!Auth::check() || $order->user_id !== Auth::id()) {
             abort(403, 'ANDA TIDAK DIIZINKAN MENGAKSES HALAMAN INI.');
         }
+
+        // Cek jika sudah dibayar
         if ($order->payment_status === 'paid') {
-            return redirect()->route('customer.order-status')->with('success', 'Pesanan dengan ID ' . $order->order_id . ' sudah lunas.');
+            return redirect()->route('customer.order.status')
+                ->with('success', 'Pesanan dengan ID ' . $order->order_id . ' sudah lunas.');
         }
+
         return view('customer.order-payment', ['order' => $order]);
     }
 
@@ -247,7 +301,7 @@ class OrderController extends Controller
 
         $history = Order::with(['service', 'worker', 'status'])
             ->where('user_id', $userId)
-            ->whereIn('status_id', $historyStatusIds) 
+            ->whereIn('status_id', $historyStatusIds)
             ->orderBy('created_at', 'desc')
             ->get();
 

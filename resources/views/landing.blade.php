@@ -8,7 +8,7 @@
     <meta name="description"
         content="YKYc adalah jasa laundry sepatu portabel dengan konsep gerobak. Cepat, bersih, dan dekat dengan Anda.">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -129,7 +129,6 @@
             transform: translateY(0);
         }
 
-        /* === GAYA CAROUSEL === */
         #about-gallery-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -195,7 +194,6 @@
             opacity: 1;
         }
 
-        /* === STYLE MODAL/POPUP === */
         #modal-container {
             transition: opacity 0.3s ease-in-out;
         }
@@ -207,7 +205,7 @@
 </head>
 
 <body class="bg-white text-gray-800">
-
+    <x-toastify></x-toastify>
     <header id="main-header"
         class="fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300 nav-glassmorphism">
         <nav class="container mx-auto px-6 py-4">
@@ -613,7 +611,7 @@
     <div id="modal-container"
         class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
         <div id="modal-box" class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden transform scale-95">
-           
+
             <div class="grid md:grid-cols-2">
                 <div class="p-8 order-2 md:order-1 flex flex-col">
                     <div class="flex-grow">
@@ -640,7 +638,7 @@
             if (gallery && galleryWrapper) {
                 const originalCards = Array.from(gallery.children);
                 originalCards.forEach(card => {
-                    gallery.appendChild(card.cloneNode(true)); 
+                    gallery.appendChild(card.cloneNode(true));
                 });
 
                 let isPaused = false;
@@ -672,7 +670,7 @@
                     galleryWrapper.classList.add('cursor-grabbing');
                     startX = e.pageX - galleryWrapper.offsetLeft;
                     scrollLeft = galleryWrapper.scrollLeft;
-                    isPaused = true; 
+                    isPaused = true;
                 });
 
                 galleryWrapper.addEventListener('mouseleave', () => {

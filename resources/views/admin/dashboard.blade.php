@@ -10,7 +10,7 @@
                 <p class="text-blue-medium mt-1">Semoga hari Anda produktif dalam mengelola sistem hari ini.</p>
             </div>
             <div class="flex items-center gap-3 mt-4 sm:mt-0">
-                <img src="{{ Auth::user()->avatar ?? 'https://i.pravatar.cc/40?u=' . Auth::user()->email }}" class="w-10 h-10 rounded-full object-cover" alt="User Avatar">
+                 <img src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : Avatar::create(Auth::user()->name)->toBase64() }}" class="w-10 h-10 rounded-full object-cover" alt="User Avatar">
                 <div>
                     <span class="font-semibold text-navy-dark">{{ Auth::user()->name }}</span>
                 </div>

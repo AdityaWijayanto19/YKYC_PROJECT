@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SocialiteController extends Controller
 {
@@ -21,31 +24,38 @@ class SocialiteController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
-
             $user = User::where('email', $googleUser->email)->first();
 
-            if ($user) {
-                if (is_null($user->google_id)) {
-                    $user->update([
-                        'name' => $googleUser->name,
-                        'avatar' => $googleUser->avatar,
-                        'google_id' => $googleUser->id,
-                        'google_token' => $googleUser->token,
-                        'google_refresh_token' => $googleUser->refreshToken,
-                    ]);
+            $avatarPath = null;
+            if ($googleUser->getAvatar()) {
+                try {
+                    $response = Http::get($googleUser->getAvatar());
+                    if ($response->successful()) {
+                        $fileName = 'avatars/' . Str::random(40) . '.jpg';
+                        Storage::disk('public')->put($fileName, $response->body());
+                        $avatarPath = $fileName; 
+                    }
+                } catch (Exception $e) {
                 }
+            }
+            if ($user) {
+                $user->update([
+                    'google_id' => $user->google_id ?? $googleUser->id,
+                    'google_token' => $googleUser->token,
+                    'avatar' => $avatarPath ?? $user->avatar, 
+                ]);
             } else {
-                $user = DB::transaction(function () use ($googleUser) {
+                $user = DB::transaction(function () use ($googleUser, $avatarPath) {
                     $newUser = User::create([
                         'name' => $googleUser->name,
                         'email' => $googleUser->email,
                         'google_id' => $googleUser->id,
                         'password' => null,
-                        'avatar' => $googleUser->avatar,
+                        'avatar' => $avatarPath,
                         'google_token' => $googleUser->token,
                         'google_refresh_token' => $googleUser->refreshToken,
                         'role' => 'customer',
-                        'email_verified_at' => now(),
+                        'email_verified_at' => now(), 
                     ]);
 
                     Customer::create([
@@ -57,7 +67,7 @@ class SocialiteController extends Controller
             }
 
             if ($user->status === 'diblokir') {
-                return redirect('/login')->with('error', 'Akun Anda telah diblokir. Silakan hubungi customer service untuk informasi lebih lanjut.');
+                return redirect('/login')->with('error', 'Akun Anda telah diblokir...');
             }
 
             Auth::login($user);

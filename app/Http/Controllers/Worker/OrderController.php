@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Status; 
+use App\Http\Traits\Notifiable;
 
 class OrderController extends Controller
 {

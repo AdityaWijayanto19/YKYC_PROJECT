@@ -10,34 +10,16 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'navy-dark': '#021024',
-                        'navy-primary': '#052659',
-                        'blue-medium': '#5483B3',
-                        'blue-light': '#7DA0CA',
-                        'blue-pale': '#C1E8FF',
-                        'status-success': '#10B981',
-                        'status-pending': '#F59E0B',
-                    }
-                }
-            }
-        }
-    </script>
-
+    @stack('sytles')
     <style>
         .submenu {
             transition: max-height 0.3s ease-in-out;
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @stack('styles')
 </head>
 
 <body class="bg-slate-100 font-sans">
@@ -129,6 +111,17 @@
                     </a>
                 </div>
             </nav>
+            <div class="mt-auto">
+                <form method="POST" action="{{ route('logout.post') }}">
+                    @csrf
+                    <a href="{{ route('logout.post') }}"
+                        onclick="event.preventDefault(); this.closest('form').submit();"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50">
+                        <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                        <span>Logout</span>
+                    </a>
+                </form>
+            </div>
         </aside>
 
         <main class="flex-1 overflow-y-auto">
@@ -145,7 +138,7 @@
                     const submenu = toggle.nextElementSibling;
                     const arrow = toggle.querySelector('.dropdown-arrow');
                     const hasActiveLink = submenu.querySelector('.font-bold.text-navy-primary');
-                    
+
                     if (hasActiveLink) {
                         submenu.style.maxHeight = submenu.scrollHeight + "px";
                         arrow.classList.add('rotate-180');

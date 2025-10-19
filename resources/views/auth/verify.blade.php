@@ -38,7 +38,7 @@
 </head>
 
 <body class="font-sans">
-
+    <x-toastify></x-toastify>
     <div class="min-h-screen md:flex">
 
         <div class="hidden md:block md:w-1/2 relative h-screen">
@@ -113,12 +113,12 @@
     <script>
         const swiper = new Swiper('.swiper', {
             loop: true,
-            effect: 'fade', 
+            effect: 'fade',
             fadeEffect: {
                 crossFade: true
             },
             autoplay: {
-                delay: 4000, 
+                delay: 4000,
                 disableOnInteraction: false,
             },
         });

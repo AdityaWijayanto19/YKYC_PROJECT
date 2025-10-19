@@ -6,12 +6,12 @@
     function getStatusClass($statusName) 
     {
         return match ($statusName) { 
-            'waiting', 'pending' => 'bg-yellow-100 text-yellow-800',
+            'waiting_mangkal', 'waiting_keliling', 'pending' => 'bg-yellow-100 text-yellow-800',
             'on-the-way' => 'bg-indigo-100 text-indigo-800', 
             'diproses' => 'bg-blue-100 text-blue-800',
-            'ready for pickup' => 'bg-purple-100 text-purple-800',
+            'ready for pick up' => 'bg-purple-100 text-purple-800',
             'completed' => 'bg-green-100 text-green-800',
-            'cancelled' => 'bg-red-100 text-red-800',
+            'cancelled', 'dibatalkan' => 'bg-red-100 text-red-800',
             default => 'bg-gray-100 text-gray-800'
         };
     }
@@ -70,12 +70,34 @@
                             <a href="tel:{{ $order->user->number_phone }}" class="flex items-center justify-center gap-2 w-full text-center bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition"><i data-lucide="phone" class="w-5 h-5"></i> Telepon</a>
                         </div>
                         <div class="p-4 bg-gray-50">
-                            @if($order->status->name === 'waiting')
-                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">@csrf<input type="hidden" name="status" value="on-the-way"><button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition text-lg">Berangkat Menuju Lokasi</button></form>
+                            @if($order->status->name === 'waiting_keliling')
+                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="status" value="on-the-way">
+                                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition text-lg">
+                                        Berangkat Menuju Lokasi
+                                    </button>
+                                </form>
                             @elseif($order->status->name === 'on-the-way')
-                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">@csrf<input type="hidden" name="status" value="diproses"><button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition text-lg">Konfirmasi Pengambilan Sepatu</button></form>
+                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="status" value="diproses">
+                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition text-lg">
+                                        Konfirmasi Pengambilan Sepatu
+                                    </button>
+                                </form>
                             @elseif($order->status->name === 'diproses')
-                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">@csrf<input type="hidden" name="status" value="completed"><button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition text-lg">Tandai Pesanan Selesai</button></form>
+                                <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="status" value="completed">
+                                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition text-lg">
+                                        Tandai Pesanan Selesai
+                                    </button>
+                                </form>
+                            @else
+                                <div class="text-center text-gray-500 py-4">
+                                    Status: {{ $order->status->label }}
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -119,24 +141,26 @@
                         <div class="p-4 bg-gray-50 border-t flex items-center justify-end">
                             <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
                                 @csrf
-                                @if($order->status->name === 'waiting')
+                                @if($order->status->name === 'waiting_mangkal')
                                     <input type="hidden" name="status" value="diproses">
                                     <button type="submit"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition">
                                         Mulai Kerjakan
                                     </button>
                                 @elseif($order->status->name === 'diproses')
-                                    <input type="hidden" name="status" value="ready for pickup">
+                                    <input type="hidden" name="status" value="ready for pick up">
                                     <button type="submit"
                                         class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition">
                                         Tandai Siap Diambil
                                     </button>
-                                @elseif($order->status->name === 'ready for pickup')
+                                @elseif($order->status->name === 'ready for pick up')
                                     <input type="hidden" name="status" value="completed">
                                     <button type="submit"
                                         class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition">
                                         Konfirmasi Selesai
                                     </button>
+                                @else
+                                    <span class="text-gray-500 text-sm">Status: {{ $order->status->label }}</span>
                                 @endif
                             </form>
                         </div>

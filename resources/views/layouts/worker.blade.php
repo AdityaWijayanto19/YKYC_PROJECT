@@ -13,6 +13,10 @@
         body {
             background-color: #f9fafb;
         }
+
+        #profile-dropdown {
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -63,6 +67,7 @@
                 </div>
 
                 <div class="hidden md:flex items-center space-x-5">
+                    {{-- Notifikasi --}}
                     <div class="relative group">
                         <button class="relative text-gray-600 hover:text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
@@ -94,14 +99,52 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('worker.profil.show') }}">
-                        <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-300 hover:border-blue-500"
-                            src="{{ $worker && $worker->profile_image
-    ? asset('storage/' . $worker->profile_image)
-    : Avatar::create($worker?->name ?? Auth::user()->name)->toBase64() }}" alt="Profil">
-                    </a>
+                    {{-- Dropdown Profil --}}
+                    <div class="relative">
+                        <button id="profile-button"
+                            class="block rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-300 hover:border-blue-500"
+                                src="{{ $worker && $worker->profile_image
+                                    ? asset('storage/' . $worker->profile_image)
+                                    : Avatar::create($worker?->name ?? Auth::user()->name)->toBase64() }}"
+                                alt="Profil">
+                        </button>
+
+                        <div id="profile-dropdown"
+                            class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50 hidden origin-top-right">
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <p class="text-sm font-semibold text-gray-800">{{ $worker?->name ?? $user->name }}</p>
+                                <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                            </div>
+                            <a href="{{ route('worker.profil.show') }}"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                Profil Saya
+                            </a>
+                            <div class="border-t border-gray-100 my-1"></div>
+                            <form method="POST" action="{{ route('logout.post') }}"
+                                class="flex items-center px-4 py-2 text-sm text-danger hover:bg-red-50">
+                                @csrf
+                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                    </path>
+                                </svg>
+                                <a class="dropdown-item" href="{{ route('logout.post') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                    Logout
+                                </a>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
+                {{-- Tombol Mobile --}}
                 <div class="flex md:hidden items-center space-x-4">
                     <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,6 +156,7 @@
             </div>
         </div>
 
+        {{-- Menu Mobile --}}
         <div id="mobile-menu"
             class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out md:hidden bg-white px-4 space-y-2 border-t">
             <a href="{{ route('worker.dashboard') }}"
@@ -133,6 +177,7 @@
     @stack('scripts')
 
     <script>
+        // Toggle Mobile Menu
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         if (mobileMenuButton) {
@@ -144,8 +189,41 @@
                 mobileMenu.classList.toggle('py-4');
             });
         }
+
+        // Dropdown Profil (mirip Customer)
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileButton = document.getElementById('profile-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            let isDropdownOpen = false;
+
+            const toggleDropdown = (forceClose = false) => {
+                if (forceClose || isDropdownOpen) {
+                    profileDropdown.classList.add('hidden');
+                    isDropdownOpen = false;
+                } else {
+                    profileDropdown.classList.remove('hidden');
+                    isDropdownOpen = true;
+                }
+            };
+
+            profileButton.addEventListener('click', function (event) {
+                event.stopPropagation();
+                toggleDropdown();
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                    toggleDropdown(true);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    toggleDropdown(true);
+                }
+            });
+        });
     </script>
 
 </body>
-
 </html>
