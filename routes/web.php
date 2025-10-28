@@ -83,9 +83,8 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('dashboard');
 
-    // ⚠️ TARUH SEMUA ROUTE STATIS DULU (tanpa parameter dinamis)
     Route::middleware(['auth', 'verified'])->group(function () {
-        // Route statis untuk order
+     
         Route::get('/order-status', [CustomerOrderController::class, 'status'])
             ->name('order.status');
 
@@ -102,7 +101,6 @@ Route::prefix('customer')->name('customer.')->group(function () {
             ->name('profile.update');
     });
 
-    // Route untuk create order
     Route::get('/order', [CustomerOrderController::class, 'create'])
         ->middleware(['auth', 'verified', 'profile.complete'])
         ->name('order.create');
@@ -111,7 +109,6 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('order.store');
 
-    // Route untuk feedback (statis, taruh sebelum route dinamis)
     Route::get('/feedback/create/{orderId}', [FeedbackController::class, 'create'])
         ->middleware(['auth', 'verified'])
         ->name('feedback.create');
@@ -120,13 +117,10 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->middleware(['auth', 'verified'])
         ->name('feedback.store');
 
-    // ⚠️ ROUTE DENGAN PARAMETER DINAMIS TARUH PALING BAWAH
-    // Route payment harus sebelum track karena lebih spesifik
     Route::get('/order/payment/{order}', [CustomerOrderController::class, 'payment'])
         ->middleware(['auth', 'verified'])
         ->name('order.payment');
 
-    // Route track
     Route::get('/order/{order}/track', [CustomerOrderController::class, 'track'])
         ->middleware(['auth', 'verified'])
         ->name('order.track');

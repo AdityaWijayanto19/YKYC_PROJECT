@@ -36,7 +36,7 @@
 </head>
 
 <body class="h-full font-sans overflow-hidden">
-
+    <x-toastify></x-toastify>
     <div class="min-h-screen flex">
 
         <div class="hidden lg:flex w-1/2 bg-secondary items-center justify-center p-12 relative overflow-hidden">

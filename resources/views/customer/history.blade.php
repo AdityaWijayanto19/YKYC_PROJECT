@@ -9,11 +9,11 @@
             <p class="text-gray-500 mb-8">Lihat semua transaksimu yang telah lalu.</p>
 
             <div class="flex space-x-2 md:space-x-4 mb-6">
-                <button class="filter-btn active hover:underline text-primary hover:text-secondary"
+                <button class="filter-btn active hover:underline text-primary hover:text-teal-medium"
                     data-filter="semua">Semua</button>
-                <button class="filter-btn hover:underline text-primary hover:text-secondary"
+                <button class="filter-btn hover:underline text-primary hover:text-teal-medium"
                     data-filter="completed">Selesai</button>
-                <button class="filter-btn hover:underline text-primary hover:text-secondary"
+                <button class="filter-btn hover:underline text-primary hover:text-teal-medium"
                     data-filter="cancelled">Dibatalkan</button>
             </div>
 

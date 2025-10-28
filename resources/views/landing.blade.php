@@ -55,11 +55,13 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .service-card {
+        .service-card,
+        .testimonial-card {
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
-        .service-card:hover {
+        .service-card:hover,
+        .testimonial-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
@@ -219,8 +221,10 @@
                         src="/images/favicon-dark.svg" alt="YKYc Logo"></a>
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="#home" class="hover:text-deep-teal transition">Home</a>
-                    <a href="#aboutus" class="hover:text-deep-teal transition">About Us</a>
+                    <a href="#aboutus" class="hover:text-deep-teal transition">Tentang Kami</a>
+                    <a href="#how-it-works" class="hover:text-deep-teal transition">Cara Kerja</a>
                     <a href="#layanan" class="hover:text-deep-teal transition">Layanan</a>
+                    <a href="#testimonials" class="hover:text-deep-teal transition">Testimoni</a>
                     <a href="#faq" class="hover:text-deep-teal transition">FAQ</a>
                     <a href="#kontak" class="hover:text-deep-teal transition">Kontak</a>
                     <div class="flex items-center space-x-2 pl-4">
@@ -234,13 +238,17 @@
                             class="fas fa-bars text-2xl"></i></button></div>
             </div>
             <div id="mobile-menu" class="hidden md:hidden mt-4 bg-black bg-opacity-80 backdrop-blur-sm rounded-lg p-4">
-                <a href="#home" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Home</a><a href="#layanan"
-                    class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Layanan</a><a href="#faq"
-                    class="block py-2 px-3 text-white hover:bg-gray-700 rounded">FAQ</a><a href="#kontak"
-                    class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Kontak</a>
-                <div class="mt-4 pt-4 border-t border-gray-600"><a href="/login"
-                        class="block w-full text-center px-4 py-2 text-deep-teal border border-deep-teal rounded-md hover:bg-deep-teal hover:text-white transition mb-2">Login</a><a
-                        href="/register"
+                <a href="#home" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Home</a>
+                <a href="#aboutus" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Tentang Kami</a>
+                <a href="#how-it-works" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Cara Kerja</a>
+                <a href="#layanan" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Layanan</a>
+                <a href="#testimonials" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Testimoni</a>
+                <a href="#faq" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">FAQ</a>
+                <a href="#kontak" class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Kontak</a>
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <a href="/login"
+                        class="block w-full text-center px-4 py-2 text-deep-teal border border-deep-teal rounded-md hover:bg-deep-teal hover:text-white transition mb-2">Login</a>
+                    <a href="/register"
                         class="block w-full text-center px-4 py-2 bg-deep-teal text-white rounded-md hover:bg-opacity-80 transition">Register</a>
                 </div>
             </div>
@@ -284,7 +292,6 @@
 
                         <div id="about-gallery-wrapper">
                             <div id="about-gallery">
-                                <!-- Galeri Kartu -->
                                 <div class="gallery-card">
                                     <div
                                         class="bg-primary/10 backdrop-blur-lg border border-primary/20 flex items-center h-full p-4">
@@ -374,13 +381,51 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="layanan" class="py-20 px-6 bg-gray-50">
+        <section id="how-it-works" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Hanya 3 Langkah Mudah</h2>
+                    <p class="text-lg text-gray-600 mt-2">Proses cepat dan simpel untuk sepatu bersih maksimal.</p>
+                    <div class="w-24 h-1 bg-deep-teal mx-auto mt-4"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                    <div class="text-center fade-in">
+                        <div
+                            class="w-24 h-24 mx-auto bg-deep-teal/10 text-deep-teal rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-map-marker-alt text-4xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">1. Temukan Kami</h3>
+                        <p class="text-gray-600">Cek lokasi gerobak terdekat kami melalui update harian di Instagram
+                            Story atau Google Maps.</p>
+                    </div>
+                    <div class="text-center fade-in">
+                        <div
+                            class="w-24 h-24 mx-auto bg-deep-teal/10 text-deep-teal rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-shoe-prints text-4xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">2. Pilih Layanan</h3>
+                        <p class="text-gray-600">Pilih paket perawatan yang paling sesuai dengan kondisi dan jenis
+                            sepatu kesayangan Anda.</p>
+                    </div>
+                    <div class="text-center fade-in">
+                        <div
+                            class="w-24 h-24 mx-auto bg-deep-teal/10 text-deep-teal rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-hand-sparkles text-4xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">3. Sepatu Kinclong!</h3>
+                        <p class="text-gray-600">Tunggu 15-45 menit, dan sepatu Anda akan kembali bersih, wangi, dan
+                            siap dipakai beraktivitas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="layanan" class="py-20 px-6 bg-white">
             <div class="container mx-auto">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Layanan & Harga Kami</h2>
@@ -411,7 +456,7 @@
                                 Sekarang</a></div>
                     </div>
                     <div
-                        class="service-card relative bg-deep-teal rounded-lg shadow-2xl shadow-cyan-glow/50 p-8 text-white flex flex-col h-full lg:scale-105 fade-in">
+                        class="service-card relative bg-deep-teal rounded-lg shadow-2xl shadow-cyan-500/30 p-8 text-white flex flex-col h-full lg:scale-105 fade-in">
                         <div
                             class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-400 text-gray-900 font-semibold px-4 py-1 rounded-full text-sm">
                             Paling Populer</div>
@@ -464,6 +509,81 @@
                 </div>
             </div>
         </section>
+
+        <!-- TESTIMONIALS SECTION -->
+        <section id="testimonials" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Apa Kata Mereka?</h2>
+                    <p class="text-lg text-gray-600 mt-2">Kami bangga bisa membuat para pelanggan kami tersenyum puas.
+                    </p>
+                    <div class="w-24 h-1 bg-deep-teal mx-auto mt-4"></div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                    <div class="testimonial-card bg-white p-8 rounded-lg border border-gray-200 shadow-sm fade-in">
+                        <div class="flex items-center mb-4 text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <blockquote class="text-gray-600 italic mb-6">"Gila, sepatu lari gue yang udah buluk jadi kayak
+                            baru lagi! Prosesnya cepet banget, ngga nyangka. Recommended!"</blockquote>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-gray-100">
+                                <i class="fas fa-user-circle text-2xl text-gray-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Daffa Ahmad</p>
+                                <p class="text-sm text-gray-500">Mahasiswa</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card bg-white p-8 rounded-lg border border-gray-200 shadow-sm fade-in">
+                        <div class="flex items-center mb-4 text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <blockquote class="text-gray-600 italic mb-6">"Pelayanannya ramah dan hasilnya memuaskan.
+                            Sneakers putihku balik kinclong lagi. Pasti bakal balik lagi ke sini."</blockquote>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-gray-100">
+                                <i class="fas fa-user-circle text-2xl text-gray-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Anisa Wijayanto</p>
+                                <p class="text-sm text-gray-500">Pekerja Kantoran</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card bg-white p-8 rounded-lg border border-gray-200 shadow-sm fade-in">
+                        <div class="flex items-center mb-4 text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <blockquote class="text-gray-600 italic mb-6">"Konsep gerobaknya keren, jadi gampang
+                            dijangkau. Harganya juga worth it banget sama kualitasnya."</blockquote>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-gray-100">
+                                <i class="fas fa-user-circle text-2xl text-gray-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Donny Imanuel</p>
+                                <p class="text-sm text-gray-500">Pecinta Sneakers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="faq" class="py-20 bg-white">
             <div class="container mx-auto px-6 max-w-5xl">
                 <div class="text-center mb-12">
@@ -496,14 +616,15 @@
                                 cara melakukan pembayaran?</span><i class="fas fa-chevron-down"></i></button>
                         <div class="faq-content">
                             <div class="p-5 pt-0 text-gray-600">
-                                <p>Kami menerima pembayaran tunai dan non-tunai melalui QRIS di semua gerobak kami yang
-                                    aktif.</p>
+                                <p>Kami memiliki fitur payment gateway, yang dapat memudahkan pengguna dalam
+                                    bertransaksi.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
         <section id="kontak" class="py-20 px-6 bg-gray-50">
             <div class="container mx-auto">
                 <div class="text-center mb-16">

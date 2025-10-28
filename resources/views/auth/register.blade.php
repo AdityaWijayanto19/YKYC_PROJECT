@@ -36,14 +36,14 @@
 </head>
 
 <body class="font-sans bg-white">
-
+    <x-toastify></x-toastify>
     <div class="flex min-h-screen">
 
         <div class="hidden lg:flex w-1/2 bg-secondary items-center justify-center p-12 relative h-screen sticky top-0">
             <div class="relative w-full max-w-lg text-center">
                 <div class="animate-float">
                     <img src="{{ asset('images/vector-login.svg') }}" alt="Ilustrasi vektor sepatu bersih"
-                        class="w-96 h-auto mx-auto">
+                        class="w-80 h-auto mx-auto">
                 </div>
                 <div class="mt-8 relative">
                     <h1 class="text-3xl font-bold text-primary">Mulai Petualangan Bersih Anda.</h1>
