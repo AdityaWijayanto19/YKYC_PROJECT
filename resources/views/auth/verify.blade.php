@@ -7,23 +7,26 @@
     <title>Verifikasi Email - Ya Kotor Ya Cuci</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#3490dc',
+                        'primary': '#004D40', // Deep Teal
+                        'primary-hover': '#00382E', // Darker Deep Teal
+                        'secondary': '#E0F2F1', // Light Teal background
                     },
                     fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
+                        'sans': ['Poppins', 'sans-serif'],
                     }
                 }
             }
@@ -37,68 +40,67 @@
     </style>
 </head>
 
-<body class="font-sans">
-    <x-toastify></x-toastify>
-    <div class="min-h-screen md:flex">
+<body class="font-sans bg-white">
 
-        <div class="hidden md:block md:w-1/2 relative h-screen">
-            <div class="swiper h-full w-full">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"
-                        style="background-image: url('https://images.unsplash.com/photo-1582735689369-4fe89db7957e?q=80&w=1887&auto=format&fit=crop');">
-                    </div>
-                    <div class="swiper-slide"
-                        style="background-image: url('https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?q=80&w=1887&auto=format&fit=crop');">
-                    </div>
-                    <div class="swiper-slide"
-                        style="background-image: url('https://images.unsplash.com/photo-1601121141499-17ae80afc03a?q=80&w=1887&auto=format&fit=crop');">
-                    </div>
+    <div class="flex min-h-screen">
+
+        <!-- Left Panel (Sticky with Slideshow) -->
+        <div class="hidden lg:flex w-1/2 bg-secondary items-center justify-center p-12 relative overflow-hidden">
+            <div class="relative w-full max-w-lg text-center">
+                <div class="animate-float">
+                    <img src="{{ asset('images/vector-login.svg') }}" alt="Ilustrasi vektor sepatu bersih dan mengkilap"
+                        class="w-80 h-auto mx-auto">
                 </div>
-            </div>
 
-            <div class="absolute inset-0 bg-black opacity-25"></div>
-            <div class="absolute inset-0 p-12 flex flex-col justify-end">
-                <div class="relative z-10">
-                    <h2 class="text-4xl font-bold text-white leading-tight">Satu Langkah Lagi Menuju Akun Aktif.</h2>
-                    <p class="text-white text-opacity-90 mt-2 text-lg">Kami perlu memastikan email ini benar-benar milik
-                        Anda.</p>
+                <div class="mt-10 relative">
+                    <h1 class="text-3xl font-bold text-primary">Sepatu Bersih, Hati Senang.</h1>
+                    <p class="text-gray-600 mt-2 max-w-md mx-auto">Kami merawat sepatu kesayangan Anda dengan sentuhan
+                        profesional.</p>
                 </div>
             </div>
         </div>
 
-        <div class="w-full md:w-1/2 bg-white flex flex-col justify-center h-screen overflow-y-auto">
-            <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Verifikasi Alamat Email Anda</h1>
+        <!-- Right Panel (Scrollable) -->
+        <div class="w-full lg:w-1/2 bg-white flex flex-col">
+            <div class="p-8 md:p-12 lg:p-16 w-full max-w-md mx-auto my-auto text-center">
+
+                <!-- Icon -->
+                <div class="mb-6">
+                    <i class="fas fa-envelope-open-text text-6xl text-primary"></i>
+                </div>
+
+                <h1 class="text-3xl font-bold text-gray-800">Verifikasi Email Anda</h1>
                 <p class="text-gray-600 mt-4">
-                    Sebelum melanjutkan, mohon periksa kotak masuk email Anda untuk link verifikasi.
+                    Kami telah mengirimkan tautan verifikasi ke alamat email Anda. Silakan cek kotak masuk (atau folder
+                    spam) untuk melanjutkan.
                 </p>
 
                 @if (session('resent'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg my-4 text-sm"
+                    <div class="bg-green-50 border-l-4 border-green-400 text-green-800 p-4 mt-6 text-left rounded-md"
                         role="alert">
-                        Link verifikasi baru telah berhasil dikirimkan ke alamat email Anda.
+                        <p class="font-semibold">Berhasil!</p>
+                        <p class="text-sm">Tautan verifikasi baru telah dikirimkan ke alamat email Anda.</p>
                     </div>
                 @endif
 
 
                 <div class="mt-8 text-gray-600">
-                    Jika Anda tidak menerima email,
-
-                    <form class="inline" method="POST" action="{{ route('verification.send') }}">
+                    <p>Tidak menerima email?</p>
+                    <form class="inline mt-2" method="POST" action="{{ route('verification.send') }}">
                         @csrf
                         <button type="submit"
-                            class="font-semibold text-primary hover:underline p-0 m-0 bg-transparent border-none cursor-pointer">
-                            klik di sini untuk meminta lagi
+                            class="font-semibold text-primary hover:underline p-0 m-0 bg-transparent border-none cursor-pointer hover:text-primary-hover transition">
+                            Kirim ulang tautan verifikasi
                         </button>.
                     </form>
                 </div>
 
                 @auth
-                    <div class="mt-6">
+                    <div class="mt-10 w-full">
                         <form method="POST" action="{{ route('logout.post') }}">
                             @csrf
                             <button type="submit"
-                                class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                                class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
                                 Logout
                             </button>
                         </form>
@@ -118,7 +120,7 @@
                 crossFade: true
             },
             autoplay: {
-                delay: 4000,
+                delay: 5000,
                 disableOnInteraction: false,
             },
         });

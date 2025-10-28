@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ya Kotor Ya Cuci (YKYc) - Jasa Laundry Sepatu Profesional</title>
+    <title>Ya Kotor Ya Cuci (YKYC) - Jasa Laundry Sepatu Profesional</title>
     <meta name="description"
         content="YKYc adalah jasa laundry sepatu portabel dengan konsep gerobak. Cepat, bersih, dan dekat dengan Anda.">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -27,20 +28,24 @@
             background-color: #333;
         }
 
-        .text-cyan-custom {
-            color: #00B2EE;
+        .text-deep-teal {
+            color: #004D40;
         }
 
-        .bg-cyan-custom {
-            background-color: #00B2EE;
+        .bg-deep-teal {
+            background-color: #004D40;
         }
 
-        .bg-cyan-custom:hover {
-            background-color: #009BD6;
+        .bg-deep-teal:hover {
+            background-color: #00382e;
         }
 
-        .border-cyan-custom {
-            border-color: #00B2EE;
+        .border-deep-teal {
+            border-color: #004D40;
+        }
+
+        .ring-deep-teal:focus {
+            --tw-ring-color: #004D40;
         }
 
         .nav-glassmorphism {
@@ -213,16 +218,16 @@
                 <a href="#home"><img id="header-logo" class="h-10 brightness-0 invert transition-all duration-300"
                         src="/images/favicon-dark.svg" alt="YKYc Logo"></a>
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="#home" class="hover:text-cyan-custom transition">Home</a>
-                    <a href="#aboutus" class="hover:text-cyan-custom transition">About Us</a>
-                    <a href="#layanan" class="hover:text-cyan-custom transition">Layanan</a>
-                    <a href="#faq" class="hover:text-cyan-custom transition">FAQ</a>
-                    <a href="#kontak" class="hover:text-cyan-custom transition">Kontak</a>
+                    <a href="#home" class="hover:text-deep-teal transition">Home</a>
+                    <a href="#aboutus" class="hover:text-deep-teal transition">About Us</a>
+                    <a href="#layanan" class="hover:text-deep-teal transition">Layanan</a>
+                    <a href="#faq" class="hover:text-deep-teal transition">FAQ</a>
+                    <a href="#kontak" class="hover:text-deep-teal transition">Kontak</a>
                     <div class="flex items-center space-x-2 pl-4">
                         <a href="/login"
                             class="px-5 py-2 border rounded-full hover:bg-white hover:text-black transition text-sm font-semibold">Login</a>
                         <a href="/register"
-                            class="px-5 py-2 bg-cyan-custom text-white rounded-full hover:bg-opacity-80 transition text-sm font-semibold">Register</a>
+                            class="px-5 py-2 bg-deep-teal text-white rounded-full hover:bg-opacity-80 transition text-sm font-semibold">Register</a>
                     </div>
                 </div>
                 <div class="md:hidden"><button id="mobile-menu-button" class="focus:outline-none"><i
@@ -234,9 +239,9 @@
                     class="block py-2 px-3 text-white hover:bg-gray-700 rounded">FAQ</a><a href="#kontak"
                     class="block py-2 px-3 text-white hover:bg-gray-700 rounded">Kontak</a>
                 <div class="mt-4 pt-4 border-t border-gray-600"><a href="/login"
-                        class="block w-full text-center px-4 py-2 text-cyan-custom border border-cyan-custom rounded-md hover:bg-cyan-custom hover:text-white transition mb-2">Login</a><a
+                        class="block w-full text-center px-4 py-2 text-deep-teal border border-deep-teal rounded-md hover:bg-deep-teal hover:text-white transition mb-2">Login</a><a
                         href="/register"
-                        class="block w-full text-center px-4 py-2 bg-cyan-custom text-white rounded-md hover:bg-opacity-80 transition">Register</a>
+                        class="block w-full text-center px-4 py-2 bg-deep-teal text-white rounded-md hover:bg-opacity-80 transition">Register</a>
                 </div>
             </div>
         </nav>
@@ -258,7 +263,7 @@
                 <p class="mt-4 text-xl md:text-2xl font-semibold max-w-3xl mx-auto">Solusi laundry sepatu cepat dan
                     praktis langsung dari gerobak portabel kami. Sepatu bersih kinclong dalam sekejap!</p>
                 <a href="#layanan"
-                    class="mt-8 inline-block bg-cyan-custom text-white font-bold py-3 px-10 rounded-full transition">Lihat
+                    class="mt-8 inline-block bg-deep-teal text-white font-bold py-3 px-10 rounded-full transition hover:bg-opacity-90">Lihat
                     Layanan Kami</a>
             </div>
         </section>
@@ -282,18 +287,18 @@
                                 <!-- Galeri Kartu -->
                                 <div class="gallery-card">
                                     <div
-                                        class="bg-black/10 backdrop-blur-lg border border-white/20 flex items-center h-full p-4">
+                                        class="bg-primary/10 backdrop-blur-lg border border-primary/20 flex items-center h-full p-4">
                                         <div class="gallery-card-image-wrapper">
                                             <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop"
                                                 alt="Gerobak Listrik YKYC" class="gallery-card-image">
                                         </div>
-                                        <div class="gallery-card-content pl-5 text-blue-400">
+                                        <div class="gallery-card-content pl-5 text-primary">
                                             <h4 class="font-semibold text-lg">Gerobak Listrik YKYC</h4>
-                                            <p class="text-sm text-blue-400 mt-2">Inovasi ramah lingkungan untuk cuci
+                                            <p class="text-sm text-primary/80 mt-2">Inovasi ramah lingkungan untuk cuci
                                                 sepatu praktis, cepat, dan peduli bumi.</p>
                                             <button
-                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-blue-400/40 flex items-center justify-center hover:bg-blue-400/20 transition"
-                                                data-image="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop"
+                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-primary/40 text-primary flex items-center justify-center hover:bg-primary/20 transition"
+                                                data-image="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format=fit=crop"
                                                 data-title="Gerobak Listrik Ramah Lingkungan"
                                                 data-description="Gerobak kami ditenagai sepenuhnya oleh listrik, mengurangi emisi karbon dan polusi suara. Desainnya yang ringkas memungkinkan kami menjangkau Anda di mana saja, membawa layanan cuci sepatu profesional langsung ke depan pintu Anda tanpa merusak lingkungan.">
                                                 <i class="fas fa-arrow-right"></i>
@@ -304,17 +309,17 @@
 
                                 <div class="gallery-card">
                                     <div
-                                        class="bg-black/10 backdrop-blur-lg border border-white/20 flex items-center h-full p-4">
+                                        class="bg-primary/10 backdrop-blur-lg border border-primary/20 flex items-center h-full p-4">
                                         <div class="gallery-card-image-wrapper">
                                             <img src="https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg"
                                                 alt="Foam Cuci Sepatu" class="gallery-card-image">
                                         </div>
-                                        <div class="gallery-card-content pl-5 text-blue-400">
+                                        <div class="gallery-card-content pl-5 text-primary">
                                             <h4 class="font-semibold text-lg">Pembersih Premium</h4>
-                                            <p class="text-sm text-blue-400 mt-2">Bahan terbaik yang aman untuk semua
+                                            <p class="text-sm text-primary/80 mt-2">Bahan terbaik yang aman untuk semua
                                                 jenis sepatu kesayangan Anda.</p>
                                             <button
-                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-blue-400/40 flex items-center justify-center hover:bg-blue-400/20 transition"
+                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-primary/40 text-primary flex items-center justify-center hover:bg-primary/20 transition"
                                                 data-image="https://i.pinimg.com/1200x/a3/e1/ce/a3e1ceb20b3cb96d1317472e1aa8235a.jpg"
                                                 data-title="Cairan Pembersih Organik & Efektif"
                                                 data-description="Kami hanya menggunakan cairan pembersih premium yang terbuat dari bahan-bahan organik dan biodegradable. Formula ini dirancang khusus untuk mengangkat noda membandel tanpa merusak warna atau tekstur sepatu.">
@@ -326,18 +331,18 @@
 
                                 <div class="gallery-card">
                                     <div
-                                        class="bg-black/10 backdrop-blur-lg border border-white/20 flex items-center h-full p-4">
+                                        class="bg-primary/10 backdrop-blur-lg border border-primary/20 flex items-center h-full p-4">
                                         <div class="gallery-card-image-wrapper">
-                                            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format&fit=crop"
+                                            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format=fit=crop"
                                                 alt="Hemat Waktu & Tenaga" class="gallery-card-image">
                                         </div>
-                                        <div class="gallery-card-content pl-5 text-blue-400">
+                                        <div class="gallery-card-content pl-5 text-primary">
                                             <h4 class="font-semibold text-lg">Cepat & Efisien</h4>
-                                            <p class="text-sm text-blue-400 mt-2">Hemat waktu dan tenaga Anda, biarkan
+                                            <p class="text-sm text-primary/80 mt-2">Hemat waktu dan tenaga Anda, biarkan
                                                 kami yang mengurus sepatu kotor Anda.</p>
                                             <button
-                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-blue-400/40 flex items-center justify-center hover:bg-blue-400/20 transition"
-                                                data-image="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format&fit=crop"
+                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-primary/40 text-primary flex items-center justify-center hover:bg-primary/20 transition"
+                                                data-image="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1974&auto=format=fit=crop"
                                                 data-title="Proses Cepat, Hasil Maksimal"
                                                 data-description="Dengan teknik pembersihan modern dan peralatan efisien, kami dapat menyelesaikan layanan Quick Clean hanya dalam 15-20 menit.">
                                                 <i class="fas fa-arrow-right"></i>
@@ -348,18 +353,18 @@
 
                                 <div class="gallery-card">
                                     <div
-                                        class="bg-black/10 backdrop-blur-lg border border-white/20 flex items-center h-full p-4">
+                                        class="bg-primary/10 backdrop-blur-lg border border-primary/20 flex items-center h-full p-4">
                                         <div class="gallery-card-image-wrapper">
-                                            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop"
+                                            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format=fit=crop"
                                                 alt="Perlindungan Ekstra" class="gallery-card-image">
                                         </div>
-                                        <div class="gallery-card-content pl-5 text-blue-400">
+                                        <div class="gallery-card-content pl-5 text-primary">
                                             <h4 class="font-semibold text-lg">Perlindungan Ekstra</h4>
-                                            <p class="text-sm text-blue-400 mt-2">Lapisan pelindung anti air dan noda
+                                            <p class="text-sm text-primary/80 mt-2">Lapisan pelindung anti air dan noda
                                                 untuk sepatu Anda.</p>
                                             <button
-                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-blue-400/40 flex items-center justify-center hover:bg-blue-400/20 transition"
-                                                data-image="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop"
+                                                class="gallery-modal-trigger mt-4 w-10 h-10 rounded-full border border-primary/40 text-primary flex items-center justify-center hover:bg-primary/20 transition"
+                                                data-image="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format=fit=crop"
                                                 data-title="Water Repellent Coating"
                                                 data-description="Setelah dibersihkan, tambahkan layanan lapisan pelindung (coating) agar sepatu tetap bersih lebih lama.">
                                                 <i class="fas fa-arrow-right"></i>
@@ -380,7 +385,7 @@
                 <div class="text-center mb-16">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Layanan & Harga Kami</h2>
                     <p class="text-lg text-gray-600 mt-2">Pilih paket yang paling sesuai dengan kebutuhan sepatumu.</p>
-                    <div class="w-24 h-1 bg-cyan-custom mx-auto mt-4"></div>
+                    <div class="w-24 h-1 bg-deep-teal mx-auto mt-4"></div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start max-w-7xl mx-auto">
                     <div
@@ -393,7 +398,7 @@
                             <div class="w-full h-px bg-gray-200 mb-8"></div>
                             <p class="font-semibold text-gray-700 mb-4">Yang Anda dapatkan:</p>
                             <ul class="space-y-3 text-gray-600">
-                                <li class="flex items-center"><i class="fas fa-check-circle text-cyan-custom w-6"></i>
+                                <li class="flex items-center"><i class="fas fa-check-circle text-deep-teal w-6"></i>
                                     Cuci Upper & Midsole</li>
                                 <li class="flex items-center"><i class="fas fa-times-circle text-gray-400 w-6"></i> Cuci
                                     Outsole</li>
@@ -402,11 +407,11 @@
                             </ul>
                         </div>
                         <div class="mt-10"><a href="/login"
-                                class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg border-2 border-cyan-custom transition hover:bg-cyan-custom hover:text-white">Pesan
+                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg border-2 border-deep-teal transition hover:bg-deep-teal hover:text-white">Pesan
                                 Sekarang</a></div>
                     </div>
                     <div
-                        class="service-card relative bg-cyan-custom rounded-lg shadow-2xl shadow-cyan-glow/50 p-8 text-white flex flex-col h-full lg:scale-105 fade-in">
+                        class="service-card relative bg-deep-teal rounded-lg shadow-2xl shadow-cyan-glow/50 p-8 text-white flex flex-col h-full lg:scale-105 fade-in">
                         <div
                             class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-400 text-gray-900 font-semibold px-4 py-1 rounded-full text-sm">
                             Paling Populer</div>
@@ -416,7 +421,7 @@
                             </p>
                             <div class="text-4xl font-extrabold mb-1">Rp 45.000</div>
                             <p class="text-gray-300 mb-8">/pasang</p>
-                            <div class="w-full h-px bg-cyan-400 mb-8"></div>
+                            <div class="w-full h-px bg-teal-400 mb-8"></div>
                             <p class="font-semibold mb-4">Yang Anda dapatkan:</p>
                             <ul class="space-y-3">
                                 <li class="flex items-center"><i class="fas fa-check-circle text-white w-6"></i> Cuci
@@ -430,7 +435,7 @@
                             </ul>
                         </div>
                         <div class="mt-10"><a href="/login"
-                                class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg transition hover:bg-gray-100">Pesan
+                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg transition hover:bg-gray-100">Pesan
                                 Sekarang</a></div>
                     </div>
                     <div
@@ -444,7 +449,7 @@
                             <div class="w-full h-px bg-gray-200 mb-8"></div>
                             <p class="font-semibold text-gray-700 mb-4">Yang Anda dapatkan:</p>
                             <ul class="space-y-3 text-gray-600">
-                                <li class="flex items-center"><i class="fas fa-check-circle text-cyan-custom w-6"></i>
+                                <li class="flex items-center"><i class="fas fa-check-circle text-deep-teal w-6"></i>
                                     Treatment Midsole Kuning</li>
                                 <li class="flex items-center"><i class="fas fa-info-circle text-gray-400 w-6"></i> Bukan
                                     paket cuci</li>
@@ -453,7 +458,7 @@
                             </ul>
                         </div>
                         <div class="mt-10"><a href="/login"
-                                class="block w-full text-center bg-white text-cyan-custom font-bold py-3 px-6 rounded-lg border-2 border-cyan-custom transition hover:bg-cyan-custom hover:text-white">Pesan
+                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg border-2 border-deep-teal transition hover:bg-deep-teal hover:text-white">Pesan
                                 Sekarang</a></div>
                     </div>
                 </div>
@@ -505,26 +510,26 @@
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Kami Siap Mendengar dari Anda</h2>
                     <p class="text-lg text-gray-600 mt-2">Punya pertanyaan, saran, atau ide kolaborasi? Jangan ragu
                         hubungi kami.</p>
-                    <div class="w-24 h-1 bg-cyan-custom mx-auto mt-4"></div>
+                    <div class="w-24 h-1 bg-deep-teal mx-auto mt-4"></div>
                 </div>
                 <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden fade-in">
                     <div class="grid grid-cols-1 lg:grid-cols-2">
-                        <div class="bg-cyan-custom text-white p-8 md:p-10 flex flex-col justify-center">
+                        <div class="bg-deep-teal text-white p-8 md:p-10 flex flex-col justify-center">
                             <div>
                                 <h3 class="text-3xl font-bold mb-4">Info Kontak</h3>
-                                <p class="text-cyan-100 mb-8 max-w-md">Anda bisa menghubungi kami langsung melalui
+                                <p class="text-teal-100 mb-8 max-w-md">Anda bisa menghubungi kami langsung melalui
                                     telepon atau email selama jam operasional kami.</p>
                                 <div class="space-y-6">
                                     <div class="flex items-center"><i class="fas fa-phone-alt w-6 h-6 text-2xl"></i>
                                         <div class="ml-4">
                                             <h4 class="font-semibold text-lg">Telepon</h4>
-                                            <p class="text-cyan-200">+62 812-3456-7890</p>
+                                            <p class="text-teal-200">+62 812-3456-7890</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center"><i class="fas fa-envelope w-6 h-6 text-2xl"></i>
                                         <div class="ml-4">
                                             <h4 class="font-semibold text-lg">Email</h4>
-                                            <p class="text-cyan-200">yakotoryacuci@gmail.com</p>
+                                            <p class="text-teal-200">yakotoryacuci@gmail.com</p>
                                         </div>
                                     </div>
                                 </div>
@@ -536,21 +541,21 @@
                                 <div class="mb-5"><label for="nama_saran"
                                         class="block text-gray-700 font-semibold mb-2">Nama Anda</label><input
                                         type="text" id="nama_saran" name="nama_saran"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ring-cyan-custom transition"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ring-deep-teal transition"
                                         placeholder="Tulis nama lengkap Anda"></div>
                                 <div class="mb-5"><label for="email_saran"
                                         class="block text-gray-700 font-semibold mb-2">Alamat Email</label><input
                                         type="email" id="email_saran" name="email_saran"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ring-cyan-custom transition"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ring-deep-teal transition"
                                         placeholder="Contoh: email@anda.com"></div>
                                 <div class="mb-6"><label for="pesan_saran"
                                         class="block text-gray-700 font-semibold mb-2">Pesan Anda</label><textarea
                                         id="pesan_saran" name="pesan_saran" rows="5"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ring-cyan-custom transition"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ring-deep-teal transition"
                                         placeholder="Tuliskan pesan, saran, atau pertanyaan Anda di sini..."
                                         required></textarea></div>
                                 <button type="submit"
-                                    class="w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90">Kirim
+                                    class="w-full bg-deep-teal text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90">Kirim
                                     Pesan</button>
                             </form>
                         </div>
@@ -573,18 +578,18 @@
                 <div class="md:col-span-4 lg:col-span-2">
                     <h3 class="font-bold text-lg mb-4 text-white tracking-wider">Tautan Cepat</h3>
                     <ul class="space-y-3">
-                        <li><a href="#home" class="hover:text-cyan-custom transition-colors duration-300">Home</a></li>
-                        <li><a href="#layanan" class="hover:text-cyan-custom transition-colors duration-300">Layanan</a>
+                        <li><a href="#home" class="hover:text-deep-teal transition-colors duration-300">Home</a></li>
+                        <li><a href="#layanan" class="hover:text-deep-teal transition-colors duration-300">Layanan</a>
                         </li>
-                        <li><a href="#faq" class="hover:text-cyan-custom transition-colors duration-300">FAQ</a></li>
-                        <li><a href="#kontak" class="hover:text-cyan-custom transition-colors duration-300">Kontak</a>
+                        <li><a href="#faq" class="hover:text-deep-teal transition-colors duration-300">FAQ</a></li>
+                        <li><a href="#kontak" class="hover:text-deep-teal transition-colors duration-300">Kontak</a>
                         </li>
                     </ul>
                 </div>
                 <div class="md:col-span-4 lg:col-span-3">
                     <h3 class="font-bold text-lg mb-4 text-white tracking-wider">Kantor Pusat</h3>
                     <div class="flex text-gray-400"><i
-                            class="fas fa-map-marker-alt w-5 mr-3 mt-1 text-cyan-custom"></i><span>Jalan Bunga Coklat
+                            class="fas fa-map-marker-alt w-5 mr-3 mt-1 text-deep-teal"></i><span>Jalan Bunga Coklat
                             No. 10, Jatimulyo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141</span></div>
                 </div>
             </div>
@@ -595,13 +600,13 @@
                 <p class="text-sm text-gray-500 mb-4 md:mb-0">&copy; 2025 Ya Kotor Ya Cuci. All Rights Reserved.</p>
                 <div class="flex space-x-4">
                     <a href="#"
-                        class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-cyan-custom transition-colors duration-300"><i
+                        class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-deep-teal transition-colors duration-300"><i
                             class="fab fa-facebook-f"></i></a>
                     <a href="#"
-                        class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-cyan-custom transition-colors duration-300"><i
+                        class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-deep-teal transition-colors duration-300"><i
                             class="fab fa-instagram"></i></a>
                     <a href="#"
-                        class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-cyan-custom transition-colors duration-300"><i
+                        class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-deep-teal transition-colors duration-300"><i
                             class="fab fa-twitter"></i></a>
                 </div>
             </div>
@@ -619,7 +624,7 @@
                         <p id="modal-description" class="text-gray-600 leading-relaxed"></p>
                     </div>
                     <button id="modal-close-button"
-                        class="mt-8 w-full bg-cyan-custom text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90 flex-shrink-0">Tutup</button>
+                        class="mt-8 w-full bg-deep-teal text-white font-bold py-3 px-6 rounded-lg transition hover:bg-opacity-90 flex-shrink-0">Tutup</button>
                 </div>
                 <div class="order-1 md:order-2">
                     <img id="modal-image" src="" alt="Detail Gambar" class="w-full h-64 md:h-[450px] object-cover">
