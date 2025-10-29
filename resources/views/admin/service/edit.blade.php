@@ -50,7 +50,7 @@
                 <a href="{{ route('admin.service.index') }}" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors">
                     Batal
                 </a>
-                <button type="submit" class="bg-navy-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">
+                <button type="submit" class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">
                     Simpan Perubahan
                 </button>
             </div>

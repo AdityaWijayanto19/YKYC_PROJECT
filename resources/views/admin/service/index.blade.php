@@ -10,7 +10,7 @@
             <p class="text-blue-medium mt-1">Lihat, tambah, dan ubah layanan yang ditawarkan.</p>
         </div>
         <div>
-            <a href="{{ route('admin.service.tambah') }}" class="bg-navy-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">
+            <a href="{{ route('admin.service.tambah') }}" class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">
                 + Tambah Layanan
             </a>
         </div>
@@ -33,7 +33,7 @@
                                 <p class="font-semibold text-navy-dark">{{ $service->name }}</p>
                                 <p class="text-sm text-blue-medium mt-1">{{ Str::limit($service->description, 70) }}</p>
                             </td>
-                            <td class="py-4 px-4 font-semibold text-navy-primary">Rp {{ number_format($service->price, 0, ',', '.') }}</td>
+                            <td class="py-4 px-4 font-semibold text-primary">Rp {{ number_format($service->price, 0, ',', '.') }}</td>
                             <td class="py-4 px-4 text-center">
                                 <div class="flex justify-center items-center gap-2">
                                     <a href="{{ route('admin.service.edit', $service->id) }}" class="flex items-center justify-center gap-1.5 bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold px-3 py-1 rounded-md text-sm transition-colors" title="Edit Layanan">

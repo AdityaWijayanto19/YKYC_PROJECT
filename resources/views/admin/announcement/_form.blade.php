@@ -1,15 +1,15 @@
 <style>
     .toggle-checkbox:checked {
         right: 0;
-        border-color: #1a3a64;
+        border-color: #004D40;
     }
 
     .toggle-checkbox:checked+.toggle-label {
-        background-color: #1a3a64;
+        background-color: #004D40;
     }
 
     .file-drop-area.is-dragging {
-        border-color: #1a3a64;
+        border-color: #004D40;
         background-color: #f0f4f8;
     }
 </style>
@@ -89,7 +89,7 @@
     <a href="{{ route('admin.announcement.index') }}"
         class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors">Batal</a>
     <button type="submit"
-        class="bg-navy-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">Simpan
+        class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">Simpan
         Pengumuman</button>
 </div>
 

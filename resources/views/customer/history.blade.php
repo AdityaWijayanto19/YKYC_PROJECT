@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         
-                        @if (strtolower($order->status->name) == 'completed')
+                        @if (strtolower($order->status->name) == 'completed'  && !$order->feedback)
                             <div class="mt-5">
                               <a href="{{ route('customer.feedback.create', ['orderId' => $order->id]) }}"
                                 class="block w-full text-primary border border-primary hover:bg-primary/10 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition">

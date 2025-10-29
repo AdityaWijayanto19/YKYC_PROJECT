@@ -39,11 +39,11 @@
                                 <td class="px-4">
                                     @if ($customer->status == 'aktif')
                                         <span
-                                            class="text-sm text-green-800 bg-green-100 px-3 py-1 rounded-full font-semibold">&#9679;
+                                            class="text-xs text-green-800 bg-green-100 px-2 py-1 rounded-full font-semibold">&#9679;
                                             Aktif</span>
                                     @else
-                                        <span class="text-xs text-red-800 bg-red-100 px-3 py-1 rounded-full font-semibold">&#9679;
-                                            Diblokir</span>
+                                        <span class="text-xs text-red-800 bg-red-100 px-1 py-1 rounded-full font-semibold">&#9679;
+                                            Blokir</span>
                                     @endif
                                 </td>
                                 <td class="px-4 text-blue-medium">{{ $customer->created_at->format('d M Y') }}</td>

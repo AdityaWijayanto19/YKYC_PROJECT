@@ -19,6 +19,7 @@ class OrderController extends Controller
 
         $query = Order::with('user', 'service', 'status')
             ->where('worker_id', $worker->id)
+            ->where('payment_status', 'paid')
             ->whereNotIn('status_id', $excludedStatusIds) 
             ->orderBy('created_at', 'desc');
 

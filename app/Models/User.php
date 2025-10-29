@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class  User extends Authenticatable implements MustVerifyEmail
+class  User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -23,6 +23,9 @@ class  User extends Authenticatable implements MustVerifyEmail
         'google_token',
         'google_refresh_token',
         'avatar',
+        'verification_code',
+        'verification_code_expires_at',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -49,7 +52,7 @@ class  User extends Authenticatable implements MustVerifyEmail
         }
         if ($this->customer) {
             if (!empty($this->customer->address)) $score++;
-           
+
             if (!empty($this->customer->latitude) && !empty($this->customer->longitude)) {
                 $score++;
             }
@@ -85,8 +88,8 @@ class  User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Order::class);
     }
 
-     public function notifications()
+    public function notifications()
     {
-        return $this->hasMany(Notification::class)->latest(); 
+        return $this->hasMany(Notification::class)->latest();
     }
 }

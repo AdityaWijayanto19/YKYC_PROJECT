@@ -31,7 +31,7 @@
             </div>
             <div class="mt-8 flex justify-end gap-4">
                 <a href="{{ route('admin.service.index') }}" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300">Batal</a>
-                <button type="submit" class="bg-navy-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90">Simpan Layanan</button>
+                <button type="submit" class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90">Simpan Layanan</button>
             </div>
         </form>
     </div>

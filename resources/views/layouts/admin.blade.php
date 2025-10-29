@@ -32,18 +32,18 @@
                 <div class="w-10 h-10 flex items-center justify-center">
                     <img src="/images/favicon-dark.svg" alt="Logo">
                 </div>
-                <span class="text-2xl font-bold text-navy-dark">AdminApp</span>
+                <span class="text-2xl font-bold text-dark">AdminApp</span>
             </div>
 
             <nav class="flex-1 space-y-2 overflow-y-auto">
                 <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/dashboard*') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
+                    class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/dashboard*') ? 'bg-primary text-white font-semibold' : 'text-gray-600 hover:bg-slate-100' }}">
                     <i class="fas fa-home w-5 text-center"></i> Dashboard
                 </a>
 
                 <div>
                     <button type="button"
-                        class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-blue-medium hover:bg-slate-100 focus:outline-none">
+                        class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-slate-100 focus:outline-none">
                         <span class="flex items-center gap-3">
                             <i class="fas fa-user-cog w-5 text-center"></i> Worker
                         </span>
@@ -51,17 +51,17 @@
                     </button>
                     <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
                         <a href="{{ route('admin.worker.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/worker') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            class="block text-sm py-2 text-gray-600 hover:text-dark {{ request()->is('admin/worker') ? 'font-bold text-primary' : '' }}">Kelola
                             Worker</a>
                         <a href="{{ route('admin.worker.location-chart') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/worker/location-chart') ? 'font-bold text-navy-primary' : '' }}">Lokasi
+                            class="block text-sm py-2 text-gray-600 hover:text-dark {{ request()->is('admin/worker/location-chart') ? 'font-bold text-primary' : '' }}">Lokasi
                             Worker</a>
                     </div>
                 </div>
 
                 <div>
                     <button type="button"
-                        class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-blue-medium hover:bg-slate-100 focus:outline-none">
+                        class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-slate-100 focus:outline-none">
                         <span class="flex items-center gap-3">
                             <i class="fas fa-users w-5 text-center"></i> Customer
                         </span>
@@ -69,45 +69,29 @@
                     </button>
                     <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
                         <a href="{{ route('admin.customer.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/customer') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            class="block text-sm py-2 text-gray-600 hover:text-dark {{ request()->is('admin/customer') ? 'font-bold text-primary' : '' }}">Kelola
                             Customer</a>
                         <a href="{{ route('admin.service.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/service') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            class="block text-sm py-2 text-gray-600 hover:text-dark {{ request()->is('admin/service') ? 'font-bold text-primary' : '' }}">Kelola
                             Service</a>
                         <a href="{{ route('admin.promo.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/promo') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            class="block text-sm py-2 text-gray-600 hover:text-dark {{ request()->is('admin/promo') ? 'font-bold text-primary' : '' }}">Kelola
                             Promo</a>
                         <a href="{{ route('admin.announcement.index') }}"
-                            class="block text-sm py-2 text-blue-medium hover:text-navy-dark {{ request()->is('admin/announcement') ? 'font-bold text-navy-primary' : '' }}">Kelola
+                            class="block text-sm py-2 text-gray-600 hover:text-dark {{ request()->is('admin/announcement') ? 'font-bold text-primary' : '' }}">Kelola
                             Pengumuman</a>
                     </div>
                 </div>
 
                 <a href="{{ route('admin.pesanan.index') }}"
-                    class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/pesanan*') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
+                    class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/pesanan*') ? 'bg-primary text-white font-semibold' : 'text-gray-600 hover:bg-slate-100' }}">
                     <i class="fas fa-shopping-bag w-5 text-center"></i> Pesanan
                 </a>
-                {{-- <div>
-                    <button type="button"
-                        class="dropdown-toggle w-full flex items-center justify-between gap-3 px-4 py-2 rounded-lg text-blue-medium hover:bg-slate-100 focus:outline-none">
-                        <span class="flex items-center gap-3">
-                            <i class="fas fa-shopping-bag w-5 text-center"></i> Pesanan
-                        </span>
-                        <i class="dropdown-arrow fas fa-chevron-down text-xs transition-transform duration-300"></i>
-                    </button>
-                    Submenu untuk Pesanan
-                    <div class="submenu max-h-0 overflow-hidden pl-8 space-y-2">
-                        <a href="#" class="block text-sm py-2 text-blue-medium hover:text-navy-dark">Semua Pesanan</a>
-                        <a href="#" class="block text-sm py-2 text-blue-medium hover:text-navy-dark">Pesanan Masuk</a>
-                        <a href="#" class="block text-sm py-2 text-blue-medium hover:text-navy-dark">Pesanan
-                            Dibatalkan</a>
-                    </div>
-                </div> --}}
 
                 <div class="pt-6">
-                    <h3 class="px-4 text-xs font-bold uppercase text-blue-light">System</h3>
+                    <h3 class="px-4 text-xs font-bold uppercase text-gray-500">System</h3>
                     <a href="{{ route('admin.peraturan.index') }}"
-                        class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/peraturan') ? 'bg-navy-primary text-white font-semibold' : 'text-blue-medium hover:bg-slate-100' }}">
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg {{ request()->is('admin/peraturan') ? 'bg-primary text-white font-semibold' : 'text-gray-600 hover:bg-slate-100' }}">
                         <i class="fas fa-shield-alt w-5 text-center"></i> Peraturan
                     </a>
                 </div>
@@ -138,7 +122,8 @@
                 dropdownToggles.forEach(toggle => {
                     const submenu = toggle.nextElementSibling;
                     const arrow = toggle.querySelector('.dropdown-arrow');
-                    const hasActiveLink = submenu.querySelector('.font-bold.text-navy-primary');
+
+                    const hasActiveLink = submenu.querySelector('.font-bold.text-primary');
 
                     if (hasActiveLink) {
                         submenu.style.maxHeight = submenu.scrollHeight + "px";

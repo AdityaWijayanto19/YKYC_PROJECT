@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\SendVerificationCodeMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -24,16 +26,19 @@ class AuthController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'number_phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
+            'terms' => 'accepted', 
         ], [
             'email.unique' => 'Email sudah terdaftar. Silakan gunakan email lain.',
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+            'terms.accepted' => 'Anda harus menyetujui Syarat & Ketentuan untuk melanjutkan.',
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        $verificationCode = rand(100000, 999999);
+        $expiresAt = now()->addMinutes(10);
 
         $user = User::create([
             'name'         => $request->name,
@@ -41,24 +46,24 @@ class AuthController extends Controller
             'password'     => Hash::make($request->password),
             'number_phone' => $request->number_phone,
             'role'         => 'customer',
+            'verification_code' => $verificationCode,
+            'verification_code_expires_at' => $expiresAt,
         ]);
 
         $user->customer()->create([
             'address' => $request->address,
         ]);
 
-        // event(new Registered($user));
+        Mail::to($user->email)->send(new SendVerificationCodeMail($verificationCode));
 
-        Auth::login($user);
-
-        return redirect()->route('verification.notice');
+        return redirect()->route('verification.notice')->with('email', $user->email);
     }
 
     public function showLoginForm()
     {
         return view('auth.login');
     }
-    
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -69,29 +74,35 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user(); 
 
-            if ($user->status === 'diblokir') {
+            if ($user->email_verified_at === null) {
                 Auth::logout(); 
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return back()->with('error', 'Akun Anda telah diblokir. Silakan hubungi customer service untuk informasi lebih lanjut.');
+                return redirect()->route('verification.notice')
+                    ->with('email', $user->email) 
+                    ->with('error', 'Akun Anda belum aktif. Silakan masukkan kode verifikasi yang telah kami kirimkan.');
+            }
+           
+            if ($user->status === 'diblokir') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->with('error', 'Akun Anda telah diblokir. Silakan hubungi customer service.');
             }
 
             $request->session()->regenerate();
 
-            $redirectRoute = 'customer.dashboard'; 
+            $redirectRoute = 'customer.dashboard';
             if ($user->role === 'worker') {
                 $redirectRoute = 'worker.dashboard';
             } elseif ($user->role === 'admin') {
                 $redirectRoute = 'admin.dashboard';
             }
-
             $redirectResponse = redirect()->route($redirectRoute);
-
             if ($user->role === 'customer') {
                 $redirectResponse->with('show_announcement_modal', true);
             }
-
             return $redirectResponse;
         }
 

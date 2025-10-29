@@ -9,7 +9,7 @@
                 <p class="text-blue-medium mt-1">Kelola promo dan himbauan untuk dashboard customer.</p>
             </div>
             <a href="{{ route('admin.promo.create') }}"
-                class="bg-navy-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">+
+                class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">+
                 Tambah Promo</a>
         </header>
 

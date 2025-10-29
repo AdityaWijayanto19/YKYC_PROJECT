@@ -20,7 +20,7 @@
 
             <div class="flex items-center mt-4 md:mt-0">
                 <span id="status-text" class="mr-3 font-semibold {{ $worker->is_active ? 'text-green-600' : 'text-gray-500' }}">
-                    {{ $worker->is_active ? ($worker->worker_type === 'Keliling' ? 'Online' : 'Kios Buka') : ($worker->worker_type === 'Keliling' ? 'Offline' : 'Kios Tutup') }}
+                    {{ $worker->is_active ? ($worker->worker_type === 'Keliling' ? 'Online' : 'Online') : ($worker->worker_type === 'Keliling' ? 'Offline' : 'Offline') }}
                 </span>
                 <label for="active-toggle" class="inline-flex relative items-center cursor-pointer group">
                     <input type="checkbox" id="active-toggle" class="sr-only peer" {{ $worker->is_active ? 'checked' : '' }}>
@@ -83,7 +83,7 @@
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
                      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i data-lucide="store" class="w-5 h-5 text-green-600"></i>
-                        Ringkasan Kios Anda
+                        Ringkasan Kegiatan Anda
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
                         <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -91,7 +91,7 @@
                             <p class="text-sm text-gray-600 mt-1">Pesanan Sedang Dikerjakan</p>
                         </div>
                         <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-                            <p class="text-4xl font-bold text-yellow-600">{{ $orders->where('status.name', 'ready for pickup')->count() }}</p>
+                            <p class="text-4xl font-bold text-yellow-600">{{ $orders->where('status.name', 'ready for pick up')->count() }}</p>
                             <p class="text-sm text-gray-600 mt-1">Pesanan Siap Diambil</p>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                                         <p class="font-semibold text-gray-800">{{ $order->service->name }}</p>
                                         <p class="text-sm text-gray-500">ID: {{ $order->order_id }} oleh {{ $order->user->name }}</p>
                                     </div>
-                                    <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full {{ $order->status->name === 'ready for pickup' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700' }}">
+                                    <span class="text-xs font-semibold capitalize px-2 py-1 rounded-full {{ $order->status->name === 'ready for pick up' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700' }}">
                                         {{ $order->status->label ?? $order->status->name }}
                                     </span>
                                 </div>
@@ -170,8 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                const activeText = workerType === 'Keliling' ? 'Online' : 'Kios Buka';
-                const inactiveText = workerType === 'Keliling' ? 'Offline' : 'Kios Tutup';
+                const activeText = workerType === 'Keliling' ? 'Online' : 'Online';
+                const inactiveText = workerType === 'Keliling' ? 'Offline' : 'Offline';
                 statusText.textContent = data.is_active ? activeText : inactiveText;
                 statusText.classList.toggle('text-green-600', data.is_active);
                 statusText.classList.toggle('text-gray-500', !data.is_active);
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 map.remove();
                 map = null;
                 workerMarker = null;
-                mapContainer.innerHTML = '<p class="text-gray-500 text-sm">🗺️ Aktifkan status untuk memulai pelacakan di peta.</p>';
+                mapContainer.innerHTML = '<p class="text-gray-500 text-sm"> Aktifkan status untuk memulai pelacakan di peta.</p>';
             }
         };
 

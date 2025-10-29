@@ -32,7 +32,7 @@
                         <input type="date" name="date" value="{{ request('date') }}"
                             class="border border-blue-pale rounded-lg py-2 px-3 focus:outline-none text-blue-medium">
                         <button type="submit"
-                            class="bg-navy-primary text-white font-semibold px-4 rounded-lg hover:bg-opacity-90">Filter</button>
+                            class="bg-primary text-white font-semibold px-4 rounded-lg hover:bg-opacity-90">Filter</button>
                     </div>
                 </div>
             </form>
@@ -67,7 +67,7 @@
                                     @endif
                                 </td>
                                 <td class="px-4 text-center">
-                                    <button class="open-detail-modal text-blue-medium hover:text-navy-primary p-2 text-sm"
+                                    <button class="open-detail-modal text-blue-medium hover:text-primary p-2 text-sm"
                                         data-id="{{ $order->id }}">
                                         <i class="fas fa-eye mr-1"></i> Detail
                                     </button>
@@ -115,7 +115,7 @@
                         <p><strong>Tgl Pesan:</strong> <span id="modal-order-date">-</span></p>
                         <p><strong>Pembayaran:</strong> <span id="modal-payment-status">-</span></p>
                         <p><strong>Total Harga:</strong> <span id="modal-total-price"
-                                class="font-bold text-navy-primary">-</span></p>
+                                class="font-bold text-primary">-</span></p>
                     </div>
                 </div>
                 <div class="md:col-span-2">
@@ -133,7 +133,7 @@
                 <button
                     class="close-modal bg-slate-200 text-slate-800 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300">Tutup</button>
                 <button id="save-status-btn"
-                    class="bg-navy-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90">Simpan
+                    class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90">Simpan
                     Perubahan</button>
             </div>
         </div>

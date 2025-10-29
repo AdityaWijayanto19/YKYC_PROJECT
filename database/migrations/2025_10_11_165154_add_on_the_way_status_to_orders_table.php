@@ -15,7 +15,7 @@ return new class extends Migration
                 'on the way', 
                 'diproses', 
                 'In Progress', 
-                'ready for pickup', 
+                'ready for pick up', 
                 'Siap Ambil', 
                 'completed', 
                 'cancelled', 

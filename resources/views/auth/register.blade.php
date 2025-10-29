@@ -88,7 +88,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('register.post') }}" class="mt-8 space-y-5">
+                <form method="POST" action="{{ route('register.post') }}" class="mt-8 space-y-5" data-no-ajax="true">
                     @csrf
 
                     <div class="relative">

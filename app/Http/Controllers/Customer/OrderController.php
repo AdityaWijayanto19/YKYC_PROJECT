@@ -81,7 +81,7 @@ class OrderController extends Controller
                 $nearestWorker = $this->findNearestAvailableWorker($request->customer_lat, $request->customer_lng);
                 if (!$nearestWorker) {
                     \Log::warning('No available driver found');
-                    return back()->withErrors(['error' => 'Maaf, tidak ada driver yang tersedia...'])->withInput();
+                    return back()->withErrors(['error' => 'Maaf, tidak ada worker keliling yang tersedia...'])->withInput();
                 }
                 $assignedWorkerId = $nearestWorker->id;
                 $statusId = Status::where('name', 'waiting_keliling')->value('id');
@@ -135,14 +135,34 @@ class OrderController extends Controller
 
             \Log::info('Order Store - Order ID updated:', ['order_id' => $uniqueOrderId]);
 
+            $item_details = [
+                [
+                    'id' => 'SERVICE-' . $order->service->id,
+                    'price' => (int) $order->service_price,
+                    'quantity' => 1,
+                    'name' => $order->service->name,
+                ]
+            ];
+
+            if ($order->delivery_method === 'pickup' && $order->delivery_fee > 0) {
+                $item_details[] = [
+                    'id' => 'ONGKIR-01',
+                    'price' => (int) $order->delivery_fee,
+                    'quantity' => 1,
+                    'name' => 'Biaya Jemput & Antar',
+                ];
+            }
+
             $params = [
                 'transaction_details' => [
                     'order_id' => $order->order_id,
-                    'gross_amount' => $order->total_price,
+                    'gross_amount' => (int) $order->total_price,
                 ],
+                'item_details' => $item_details,
                 'customer_details' => [
                     'first_name' => Auth::user()->name,
                     'email' => Auth::user()->email,
+                    'phone' => Auth::user()->number_phone ?? '',
                 ],
             ];
 
@@ -175,7 +195,7 @@ class OrderController extends Controller
             return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
     }
-    
+
     private function findNearestAvailableWorker($customerLat, $customerLng)
     {
         $excludedStatusIds = Status::whereIn('name', ['completed', 'cancelled', 'dibatalkan'])->pluck('id');
@@ -224,7 +244,7 @@ class OrderController extends Controller
 
         $pendingStatusId = Status::where('name', 'pending')->value('id');
         $inProgressStatusIds = Status::whereIn('name', ['waiting', 'on-the-way', 'diproses'])->pluck('id');
-        $readyStatusId = Status::where('name', 'ready for pickup')->value('id');
+        $readyStatusId = Status::where('name', 'ready for pick up')->value('id');
 
         $countPending = Order::where('user_id', $userId)->where('status_id', $pendingStatusId)->count();
         $countInProgress = Order::where('user_id', $userId)->whereIn('status_id', $inProgressStatusIds)->count();

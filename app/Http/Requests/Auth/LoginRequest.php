@@ -30,7 +30,7 @@ class LoginRequest extends FormRequest
 
         if ($user && is_null($user->password) && !is_null($user->google_id)) {
             throw ValidationException::withMessages([
-                'email' => 'Akun ini terdaftar melalui Google. Silakan login menggunakan tombol Google atau buat password baru.',
+                'email' => 'Akun ini terdaftar melalui Google. Silakan login menggunakan tombol Google.',
             ]);
         }
 
@@ -39,10 +39,16 @@ class LoginRequest extends FormRequest
                 'email' => __('auth.failed'),
             ]);
         }
+
+        $authenticatedUser = Auth::user();
+        if ($authenticatedUser->email_verified_at === null) {
+            Auth::logout(); 
+           
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda belum aktif. Silakan cek email Anda untuk kode verifikasi.',
+            ]);
+        }
     }
 
-    protected function ensureIsNotRateLimited(): void
-    {
-
-    }
+    protected function ensureIsNotRateLimited(): void {}
 }

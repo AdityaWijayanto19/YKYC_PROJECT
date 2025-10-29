@@ -103,7 +103,7 @@
                                 </div>
 
                                 <div class="pt-4">
-                                    <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-primary hover:bg-secondary">
+                                    <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-primary hover:bg-teal-700">
                                         Konfirmasi & Lanjutkan Pembayaran
                                     </button>
                                 </div>

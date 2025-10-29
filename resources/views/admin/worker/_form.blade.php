@@ -20,7 +20,7 @@
                 <label for="photo" class="block text-sm font-medium text-blue-medium mb-2">Upload Foto</label>
                 <input type="file" id="photo" name="photo" class="w-full text-sm text-slate-500
                     file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
-                    file:bg-blue-pale file:text-navy-primary hover:file:bg-blue-light"/>
+                    file:bg-blue-pale file:text-primary hover:file:bg-blue-light"/>
                 <p class="text-xs text-blue-light mt-2">Format: JPG, PNG. Maks: 2MB.</p>
             </div>
         </div>
@@ -68,7 +68,7 @@
         <a href="{{ route('admin.worker.index') }}" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors">
             Batal
         </a>
-        <button type="submit" class="bg-navy-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">
+        <button type="submit" class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors">
             {{ $isEdit ? 'Simpan Perubahan' : 'Simpan Worker' }}
         </button>
     </div>

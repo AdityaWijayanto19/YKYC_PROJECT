@@ -41,9 +41,9 @@
                             <div class="w-full md:w-auto flex-1 px-4 md:px-0">
                                 @php
                                     if ($order->delivery_method == 'pickup') {
-                                        $statuses = ['waiting_keliling', 'on-the-way', 'diproses', 'ready for pickup', 'completed'];
+                                        $statuses = ['waiting_keliling', 'on-the-way', 'diproses', 'ready for pick up', 'completed'];
                                     } else { 
-                                        $statuses = ['waiting_mangkal', 'diproses', 'ready for pickup', 'completed'];
+                                        $statuses = ['waiting_mangkal', 'diproses', 'ready for pick up', 'completed'];
                                     }
 
                                     $currentStatus = $order->status->name;
@@ -56,7 +56,7 @@
                                         'waiting_mangkal' => 'Menunggu',
                                         'on-the-way' => 'Penjemputan',
                                         'diproses' => 'Proses Cuci',
-                                        'ready for pickup' => 'Siap Diambil',
+                                        'ready for pick up' => 'Siap Diambil',
                                         'completed' => 'Selesai',
                                     ];
                                 @endphp

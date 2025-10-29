@@ -279,8 +279,9 @@
         <section id="aboutus" class="py-20 bg-white">
             <div class="container mx-auto">
                 <div class="relative rounded-2xl bg-white overflow-hidden">
-                    <div class="absolute inset-0 bg-cover bg-center z-0"
-                        style="background-image: url('https://i.imgur.com/u5ppt3s.png'); opacity: 0.7;"></div>
+                    {{-- <div class="absolute inset-0 bg-cover bg-center z-0"
+                        style="background-image: url('https://images.unsplash.com/photo-1554147090-e1221a04a025?q=80&w=2070&auto=format&fit=crop'); opacity: 0.1;">
+                    </div> --}}
                     <div class="relative z-10 p-8 md:p-12">
                         <div class="flex justify-between items-center mb-12 px-4 flex-col md:flex-row">
                             <div class="text-center md:text-left max-w-2xl mb-6 md:mb-0">
@@ -452,7 +453,7 @@
                             </ul>
                         </div>
                         <div class="mt-10"><a href="/login"
-                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg border-2 border-deep-teal transition hover:bg-deep-teal hover:text-white">Pesan
+                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg border-2 border-deep-teal transition hover:bg-deep-teal ">Pesan
                                 Sekarang</a></div>
                     </div>
                     <div
@@ -503,7 +504,7 @@
                             </ul>
                         </div>
                         <div class="mt-10"><a href="/login"
-                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg border-2 border-deep-teal transition hover:bg-deep-teal hover:text-white">Pesan
+                                class="block w-full text-center bg-white text-deep-teal font-bold py-3 px-6 rounded-lg border-2 border-deep-teal transition hover:bg-deep-teal">Pesan
                                 Sekarang</a></div>
                     </div>
                 </div>

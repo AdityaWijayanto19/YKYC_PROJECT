@@ -2,12 +2,22 @@
 
 @section('title', 'Tugas Aktif')
 
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+
+    <style>
+        .leaflet-routing-container {
+            display: none !important;
+        }
+    </style>
+@endpush
+`   
 @php
-    function getStatusClass($statusName) 
+    function getStatusClass($statusName)
     {
-        return match ($statusName) { 
+        return match ($statusName) {
             'waiting_mangkal', 'waiting_keliling', 'pending' => 'bg-yellow-100 text-yellow-800',
-            'on-the-way' => 'bg-indigo-100 text-indigo-800', 
+            'on-the-way' => 'bg-indigo-100 text-indigo-800',
             'diproses' => 'bg-blue-100 text-blue-800',
             'ready for pick up' => 'bg-purple-100 text-purple-800',
             'completed' => 'bg-green-100 text-green-800',
@@ -54,27 +64,44 @@
                         <div class="p-5 border-b border-gray-200">
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-xl text-gray-800">Misi: #{{ $order->order_id }}</h3>
-                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full {{ getStatusClass($order->status->name) }}">
+                                <span
+                                    class="px-2.5 py-1 text-xs font-semibold rounded-full {{ getStatusClass($order->status->name) }}">
                                     {{ $order->status->label }}
                                 </span>
                             </div>
-                            <p class="text-sm text-gray-500 mt-1">Status saat ini: <span class="font-medium text-gray-700">{{ $order->status->label }}</span></p>
+                            <p class="text-sm text-gray-500 mt-1">Status saat ini: <span
+                                    class="font-medium text-gray-700">{{ $order->status->label }}</span></p>
                         </div>
                         <div class="p-5 space-y-4">
-                            <div><p class="text-sm text-gray-500">Pelanggan:</p><p class="font-semibold text-lg text-gray-800">{{ $order->user->name }}</p></div>
-                            <div><p class="text-sm text-gray-500">Layanan:</p><p class="font-medium text-gray-900">{{ $order->service->name }}</p></div>
-                            <div><p class="text-sm text-gray-500">Alamat Penjemputan:</p><p class="text-gray-700">{{ $order->customer_address ?? 'Tidak ada alamat' }}</p></div>
+                            <div>
+                                <p class="text-sm text-gray-500">Pelanggan:</p>
+                                <p class="font-semibold text-lg text-gray-800">{{ $order->user->name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Layanan:</p>
+                                <p class="font-medium text-gray-900">{{ $order->service->name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Alamat Penjemputan:</p>
+                                <p class="text-gray-700">{{ $order->customer_address ?? 'Tidak ada alamat' }}</p>
+                            </div>
                         </div>
                         <div class="p-4 bg-gray-50 border-t grid grid-cols-2 gap-3">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination={{ $order->customer_lat }},{{ $order->customer_lng }}" target="_blank" class="flex items-center justify-center gap-2 w-full text-center bg-gray-800 text-white font-semibold py-3 rounded-lg hover:bg-gray-900 transition"><i data-lucide="navigation" class="w-5 h-5"></i> Buka Gmaps</a>
-                            <a href="tel:{{ $order->user->number_phone }}" class="flex items-center justify-center gap-2 w-full text-center bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition"><i data-lucide="phone" class="w-5 h-5"></i> Telepon</a>
+                            <a href="https://www.google.com/maps/dir/?api=1&destination={{ $order->customer_lat }},{{ $order->customer_lng }}"
+                                target="_blank"
+                                class="flex items-center justify-center gap-2 w-full text-center bg-gray-800 text-white font-semibold py-3 rounded-lg hover:bg-gray-900 transition"><i
+                                    data-lucide="navigation" class="w-5 h-5"></i> Buka Gmaps</a>
+                            <a href="tel:{{ $order->user->number_phone }}"
+                                class="flex items-center justify-center gap-2 w-full text-center bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition"><i
+                                    data-lucide="phone" class="w-5 h-5"></i> Telepon</a>
                         </div>
                         <div class="p-4 bg-gray-50">
                             @if($order->status->name === 'waiting_keliling')
                                 <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="status" value="on-the-way">
-                                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition text-lg">
+                                    <button type="submit"
+                                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition text-lg">
                                         Berangkat Menuju Lokasi
                                     </button>
                                 </form>
@@ -82,7 +109,8 @@
                                 <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="status" value="diproses">
-                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition text-lg">
+                                    <button type="submit"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition text-lg">
                                         Konfirmasi Pengambilan Sepatu
                                     </button>
                                 </form>
@@ -90,7 +118,8 @@
                                 <form action="{{ route('worker.order.updateStatus', $order) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="status" value="completed">
-                                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition text-lg">
+                                    <button type="submit"
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition text-lg">
                                         Tandai Pesanan Selesai
                                     </button>
                                 </form>
@@ -103,7 +132,13 @@
                     </div>
                 </div>
             @else
-                <div class="text-center bg-white p-10 rounded-2xl shadow-md border"><i data-lucide="coffee" class="w-16 h-16 mx-auto text-green-500"></i><h3 class="mt-4 text-xl font-bold text-gray-800">Anda Siap Menerima Tugas!</h3><p class="mt-1 text-gray-500">Pastikan status Anda <a href="{{ route('worker.dashboard') }}" class="font-semibold text-green-600 hover:underline">'Online'</a> di halaman Dashboard untuk mulai menerima pesanan.</p></div>
+                <div class="text-center bg-white p-10 rounded-2xl shadow-md border"><i data-lucide="coffee"
+                        class="w-16 h-16 mx-auto text-green-500"></i>
+                    <h3 class="mt-4 text-xl font-bold text-gray-800">Anda Siap Menerima Tugas!</h3>
+                    <p class="mt-1 text-gray-500">Pastikan status Anda <a href="{{ route('worker.dashboard') }}"
+                            class="font-semibold text-green-600 hover:underline">'Online'</a> di halaman Dashboard untuk mulai
+                        menerima pesanan.</p>
+                </div>
             @endif
 
         @else
@@ -116,7 +151,8 @@
                                 <h3 class="font-bold text-lg text-gray-800">Pesanan #{{ $order->order_id }}</h3>
                                 <p class="text-sm text-gray-500">Oleh: {{ $order->user->name }}</p>
                             </div>
-                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full capitalize {{ getStatusClass($order->status->name) }}">
+                            <span
+                                class="px-2.5 py-1 text-xs font-semibold rounded-full capitalize {{ getStatusClass($order->status->name) }}">
                                 {{ $order->status->label ?? $order->status->name }}
                             </span>
                         </div>
@@ -199,6 +235,8 @@
                     const workerLng = position.coords.longitude;
                     L.Routing.control({
                         waypoints: [L.latLng(workerLat, workerLng), L.latLng(customerLat, customerLng)],
+                        show: false, addWaypoints: false, routeWhileDragging: false,
+                        fitSelectedRoutes: true,
                         routeWhileDragging: false, show: false, fitSelectedRoutes: true,
                         lineOptions: { styles: [{ color: '#1D4ED8', opacity: 0.9, weight: 7 }] },
                         createMarker: function (i, waypoint, n) {
@@ -213,6 +251,6 @@
                     mapElement.innerHTML = '<p class="text-center text-red-600 font-medium">Gagal mendapatkan lokasi Anda. Pastikan izin lokasi/GPS sudah aktif.</p>';
                 });
             @endif
-        }
+                    }
     </script>
 @endpush

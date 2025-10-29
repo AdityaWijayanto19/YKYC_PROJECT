@@ -8,7 +8,7 @@
             <h1 class="text-3xl font-bold text-navy-dark">Manajemen Pengumuman</h1>
             <p class="text-blue-medium mt-1">Kelola pengumuman modal yang tampil setelah customer login.</p>
         </div>
-        <a href="{{ route('admin.announcement.tambah') }}" class="bg-navy-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">+ Tambah Pengumuman</a>
+        <a href="{{ route('admin.announcement.tambah') }}" class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">+ Tambah Pengumuman</a>
     </header>
 
     <div class="bg-white p-6 rounded-2xl shadow-md">

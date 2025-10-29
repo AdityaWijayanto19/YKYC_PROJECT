@@ -25,7 +25,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\WorkerManagementController;
 use App\Http\Controllers\Admin\ServiceController;
-
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\NotificationController;
 
 // ===================================================================
@@ -59,19 +59,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout.post');
 //                              EMAIL
 // ===================================================================
 
-Route::get('/email/verify', function () {
-    return view('auth.verify');
-})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('customer/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('resent', 'Link verifikasi baru telah dikirimkan ke alamat email Anda.');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+Route::post('/email/verify', [VerificationController::class, 'verify'])->name('verification.verify');
 
 // ===================================================================
 //                           HALAMAN CUSTOMER
@@ -84,7 +74,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         ->name('dashboard');
 
     Route::middleware(['auth', 'verified'])->group(function () {
-     
+
         Route::get('/order-status', [CustomerOrderController::class, 'status'])
             ->name('order.status');
 
